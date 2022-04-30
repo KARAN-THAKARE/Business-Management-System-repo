@@ -1,0 +1,872 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script src="/static/js/display bill controller/display bill for purchase controller.js"></script>
+
+    <style media="screen">
+    @font-face {
+      font-family: SourceSansPro;
+      src: url('http://127.0.0.1:5000/static/fonts/invoice font/SourceSansPro-Regular.ttf');
+    }
+    body{
+          overflow-x: hidden;
+          overflow-y: hidden;
+    }
+
+    .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    #logo {
+      float: left;
+      margin-top: 8px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #logo img {
+      height: 70px;
+    }
+
+    #company {
+      float: right;
+      text-align: right;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+
+    #details {
+      margin-bottom: 50px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #client {
+      padding-left: 6px;
+      border-left: 4px solid #848484;
+      float: left;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #client .to {
+      color: #777777;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    h2.name {
+      font-size: 1.7em;
+      font-weight: 700;
+      margin: 0;
+      text-transform: capitalize;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+    }
+
+    #invoice {
+      float: right;
+      text-align: right;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #invoice h3 {
+      color: #656565;
+      font-size: 1.3em;
+      font-weight: 600;
+      margin: 0  0 10px 0;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+
+    }
+
+    #invoice .date {
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+      font-size: 1em;
+      color: #000;
+    }
+
+    table {
+
+    }
+
+
+
+    table th {
+      white-space: nowrap;
+      font-weight: 700;
+        background: #EEE;
+        font-family: Arial, sans-serif;
+        padding: 6px;
+        font-family: SourceSansPro;
+    }
+
+
+
+    table td h3{
+      color: #000;
+      font-size: 1.2em;
+      font-weight: 700;
+      margin: 0 0 0.2em 0;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+
+    }
+
+    table .no {
+      color: #FFFFFF;
+      font-size: 1.6em;
+      background: #000;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    table .desc {
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.8em;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      border-bottom: 1px solid #eee;
+
+    }
+
+    table .desc h3{
+      text-align: left;
+      font-weight: 600;
+      font-size: 1.2em;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+    }
+
+
+    table .unit {
+      background: #FFF;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    table .qty {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+          color:#000;
+    }
+
+    table .total {
+      background: #FFF;
+      color: #000;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    table td.unit,
+    table td.qty,
+    table td.total {
+      font-size: 0.9em;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+      color:#000;
+      border-bottom: 1px solid #eee;
+    }
+
+
+
+    table tfoot td {
+      padding: 10px 20px;
+      background: #FFFFFF;
+      border: 1px solid #eee;
+      font-size: 0.9em;
+      white-space: nowrap;
+      border-top: 1px solid #000;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+    }
+
+    table tfoot tr:first-child td {
+      font-size: 0.9em;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    table tfoot tr:last-child td {
+      color: #000;
+      font-size: 1.2em;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+      background: #EEE;
+
+    }
+
+    table tfoot tr td:first-child {
+
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #thanks{
+      font-size: 2em;
+      margin-bottom: 50px;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #notices{
+      padding-left: 6px;
+      border-left: 6px solid #000;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    #notices .notice {
+      font-size: 0.9em;
+      font-family: Arial, sans-serif;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+    footer {
+      color: #777777;
+      width: 100%;
+      height: 30px;
+      position: absolute;
+      bottom: 0;
+      border-top: 1px solid #AAAAAA;
+      padding: 8px 0;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-family: SourceSansPro;
+      font-weight:600;
+    }
+
+  .liftUP:hover{
+      position: relative;
+      top: -5px;
+  }
+
+    .nav > .nav-item > .active  {
+    color: #000;
+    font-weight:600;
+    border-bottom: 4px solid #000;
+  }
+
+  .scroll {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height:500px;
+    }
+    .scroll::-webkit-scrollbar {
+        width: 1px;
+        background-color: #373d4b;
+
+    }
+
+    .scroll::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    .scroll::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+
+    .custom-control-input:checked~.custom-control-label::before {
+        color: #fff;
+        border-color: reeg;
+        background-color:#000;
+    }
+
+    .Custo_Table{
+      background:#EEE;
+      color:#000;
+    }
+
+    #exchange {
+      -moz-transition: transform 1s;
+      -webkit-transition: transform 1s;
+      transition: transform 1s;
+    }
+    .flip {
+      transform: rotate(-180deg);
+    }
+    </style>
+  {% endblock %}
+
+  {% block body %}
+
+    <div class="page" ng-controller="DISPLAY_BILL_PURCHASE-CONTROLLER">
+      <input type="hidden" name="" value="{{ID}}" id="Purchase_NO">
+      <input type="hidden" name="" value="{{TYPE}}" id="Type">
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                   
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                  <a href="/Setting/User Profile" class="text-decoration-none"><h1 class="h4 text-capitalize" id="OWNER_NAME"></h1></a>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li class="active"><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+          <!-- ================================================================================================================================================= -->
+          <!-- ================================================================= Dashboard  START =================================================================== -->
+
+
+
+<div class="content-inner bg-white scroll" >
+  <header class="page-header pr-5" style="height:78px">
+    <div class="container-fluid">
+      <h1 class="no-margin-bottom text-center" >
+        <a href="#" class="pl-5" style="float:left;" ng-click="SwitchInvoice()"><img src="/static/img/exchange.png" id='exchange' style="width:45px;height:45px;" data-toggle="tooltip" data-placement="right" title="Click here to switch Invoice." ></a>
+        <span class="pt-2" style="font-weight:500">PURCHASE ORDER</span>
+        <a href=..PDF_GENRATOR_URL.. style="float:right;" data-toggle="tooltip" data-placement="bottom" title="Export invoice to PDF"><img class="liftUP" src="/static/img/pdf.svg" style="width:45px;height:45px;"></a>
+        <a href="#" style="float:right;padding-right:10px" data-toggle="tooltip" data-placement="bottom" title="Click here to print invoice"><img class="liftUP" src="/static/img/printer.png" style="width:45px;height:45px;" ng-click="PrintPurchase({{ID}})"></a>
+        <a href="#" style="float:right;" data-toggle="tooltip" data-placement="bottom" title="Click here to delete Purchase Order." ng-click="DeletePurchase()"><img class="liftUP mr-2" src="/static/img/delete.png" style="width:45px;height:45px;"></a>
+        <a href="/EditPurchaseOrder.do/{{ID}}" style="float:right;" data-toggle="tooltip" data-placement="bottom" title="Click here to edit Purchase Order." ng-repeat="each in Purchase_Info" ng-show="each.isReturn!='true'" ><img class="liftUP " src="/static/img/edit.png" style="width:45px;height:45px;"></a>
+        <a href="#" style="float:right;" data-toggle="tooltip" data-placement="bottom" title="Click here to return Purchase Order."  ng-repeat="each in Purchase_Info" ng-show="each.isReturn!='true'" ><img class="liftUP mr-2" src="/static/img/product-return.png" style="width:45px;height:45px;" data-toggle="modal" data-target="#ReturnPurchaseRemark"></a>
+        <a href="/PAY_Bill_For_Purchase.do/{{ID}}" ng-repeat="each in Purchase_Info" ng-show="each.Status!='Complete'" style="float:right;" data-toggle="tooltip" data-placement="bottom" title="Click here to pay remaining amount."   ng-repeat="each in Purchase_Info" ng-show="each.isReturn!='true'" ><img class="liftUP mr-2" src="/static/img/pay-bills.png" style="width:45px;height:45px;"></a>
+      </h1>
+    </div>
+  </header>
+
+
+<div class="container px-0 mt-5" >
+
+   <div ng-show="ShowInvoice"> <!-- ORIGINAL INVOICE SECTION -->
+            <main>
+              <div id="details" class="clearfix">
+                <div id="client" ng-repeat="each in Purchase_Info">
+                  <div class="to">INVOICE TO : </div>
+                  <h2 class="name">..each.SupplierName..</h2>
+                  <div class="address">..each.address..</div>
+                  <div class="address">..each.city.., ..each.state.. . ..each.pincode..</div>
+                  <div class="address">..each.contact_no..  <span ng-if="each.email!=none && each.email!=''">| ..each.email..</span></div>
+                  <div style="font-weight:600;color:#575757;font-size:14px"><span ng-if="each.PAN_NO!=none && each.PAN_NO!=''">PAN No. &nbsp;&nbsp;&nbsp;: ..each.PAN_NO..</span></div>
+                  <!-- IF GSTIN card data is empty -->
+                  <div style="font-weight:600;color:#575757;font-size:14px"><span ng-if="each.PAN_NO==none || each.PAN_NO==''">PAN No. &nbsp;&nbsp;&nbsp;: NA</span></div>
+                  <div style="font-weight:600;color:#575757;font-size:14px"> <span ng-if="each.GSTIN!=none && each.GSTIN!=''">GSTN No. : ..each.GSTIN..</span></div>
+                  <!-- IF GSTIN  data is empty -->
+                  <div style="font-weight:600;color:#575757;font-size:14px"> <span ng-if="each.GSTIN==none || each.GSTIN==''">GSTN No. : NA  </span></div>
+                </div>
+
+              <img class="liftUP mr-2" src="/static/img/returned.png" style="width:130px;height:110px;position:relative;left:200px;top:20px"   ng-repeat="each in Purchase_Info" ng-show="each.isReturn=='true'">
+
+
+                <div id="invoice"  ng-repeat="each in Purchase_Info">
+                  <h3>PO-INVOICE ..each.P_Bill_NO..</h3>
+                    <div class="date">Purchase Order No. : ..each.P_Order_NO..</div>
+                   <div class="date">Date of Invoice : ..each.Purchase_Order_Date..</div>
+                  <div class="date">Due Date : ..each.Due_Date..</div>
+                  <div class="date"><span ng-if="status=='Complete'" class="text-white px-2 rounded "  style="font-size:14px;background:#0cc712">Invoice Status : ..status..</span>  <span ng-if="status!='Complete'" class="text-white px-2 rounded "  style="font-size:14px;background:red">Invoice Status : ..status..</span> </div>
+                </div>
+              </div>
+              <table border="0" cellspacing="0" cellpadding="0" style=" font-family: Arial, sans-serif;font-size: 16px;font-family: SourceSansPro;font-weight:600;width: 100%;border-collapse: collapse;border-spacing: 0;margin-bottom: 20px;text-align:center">
+                <thead>
+                  <tr>
+                    <th ></th>
+                    <th class="qty" >ITEM</th>
+                    <th class="qty">PRICE</th>
+                    <th class="qty">QTY.</th>
+                    <th class="qty">CGST</th>
+                    <th class="qty">SGST</th>
+                    <th class="qty">IGST</th>
+                    <th class="qty">Cess</th>
+                    <th class="qty">DISC.</th>
+                    <th class="qty">TOTAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr  ng-repeat="each in Bucket_Item">
+                    <td class="desc">..each.SrNo..</td>
+                    <td class="desc"><h3>..each.Stock_Name..</h3><span ng-if="each.Stock_Discription!=null">..each.Stock_Discription..</span><span ng-if="each.Stock_Discription==null">NA</span></td>
+                    <td class="unit">₹..each.Purchase_Price..</td>
+                    <td class="qty">..each.Qty..</td>
+                    <td class="qty">..each.CGST..%</td>
+                    <td class="qty">..each.SGST..%</td>
+                    <td class="qty">..each.IGST..%</td>
+                    <td class="qty">..each.Cess..%</td>
+                    <td class="qty">..each.Discount..%</td>
+                    <td class="total" style="text-align:left;color:#000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;₹..each.Amount..</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr >
+                  <td colspan="6" style="color:#000;font-size:0.8em;text-align:left;border-bottom:1px solid #fff;" ng-if="Record_Count_for_PaymentInfo!=0"  ng-repeat="each in PaymentInfo" >Mode Of Payment : <span class="text-white px-2 rounded "  style="background:#0cc712;"> ..each.Payment_Mode.. </span> </td>
+                  <td colspan="6" style="color:#000;font-size:0.8em;text-align:left;border-bottom:1px solid #fff;"  ng-if="Record_Count_for_PaymentInfo==0">Mode Of Payment : NA </td>
+
+
+                  <td colspan="3" style="text-align:right;color:#000">TOTAL</td>
+
+                  <td style="text-align:left;color:#000;color:#000" >₹..Total..</td>
+
+
+                  </tr>
+
+                  <tr >
+                    <td  colspan="6" style="color:#000;font-size:0.8em;text-align:left;" ng-repeat="each in PaymentInfo" ng-if="Record_Count_for_PaymentInfo!=0"> Transaction No. &nbsp;&nbsp;&nbsp; : ..each.Txn_NO..</td>
+                    <td  colspan="6" style="color:#000;font-size:0.8em;text-align:left;" ng-if="Record_Count_for_PaymentInfo==0"> Transaction No. &nbsp;&nbsp;&nbsp; : NA</td>
+
+                  <td colspan="3" style="text-align:right;color:#000">DISCOUNT</td>
+
+                  <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info" ng-if="each.Apply_Discount=='false'">0% OFF</td>
+
+                  <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info"  ng-if="each.Apply_Discount=='true' && each.Dis_in_amount!=0 && each.Dis_in_percent==0">₹..each.Dis_in_amount.. OFF</td>
+
+                  <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info" ng-if="each.Apply_Discount=='true' && each.Dis_in_amount==0 && each.Dis_in_percent!=0">..each.Dis_in_percent..% OFF</td>
+
+                  <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info" ng-if="each.Apply_Discount=='true' && each.Dis_in_amount==0 && each.Dis_in_percent==0">0% OFF</td>
+
+
+                  </tr>
+                  <tr>
+                    <td  colspan="6" ></td>
+                    <td colspan="3" style="text-align:right;color:#000">SHIPPING </td>
+
+                    <td style="text-align:left;color:#000" ng-repeat="each in Purchase_Info"  ng-if="each.Apply_Shipping=='true'">₹..each.Shipping_Amount..</td>
+
+                    <td style="text-align:left;color:#000" ng-repeat="each in Purchase_Info" ng-if="each.Apply_Shipping=='false'">₹0</td>
+
+                  </tr>
+                  <tr>
+                    <td colspan="6"></td>
+                    <td colspan="3" style="text-align:right;color:#000">SUBTOTAL</td>
+                    <td style="text-align:left;color:#000;color:#000" ng-repeat="each in Purchase_Info">₹..each.Sub_Total_Amount..</td>
+
+                  </tr>
+                  <tr>
+                    <td colspan="6" style="color:#000;font-size:0.8em;text-align:left"  ng-repeat="each in Purchase_Info">Amt. in Words : ..each.AmountInWords.. only</td>
+                    <td colspan="3" style="text-align:right">GRAND TOTAL</td>
+
+                    <td style="text-align:left;color:#000" ng-repeat="each in Purchase_Info" >₹..each.Total_Amount..</td>
+
+                  </tr>
+                </tfoot>
+              </table>
+
+            </main>
+
+   </div> <!-- *******  ORIGINAL INVOICE SECTION END END  ******* -->
+
+
+     <div ng-show="!ShowInvoice"> <!-- DETAILED INVOICE SECTION -->
+              <main>
+                <div id="details" class="clearfix">
+                  <div id="client" ng-repeat="each in Purchase_Info">
+                    <div class="to">INVOICE TO :</div>
+                    <h2 class="name">..each.SupplierName..</h2>
+                    <div class="address">..each.address..</div>
+                    <div class="address">..each.city.., ..each.state.. . ..each.pincode..</div>
+                    <div class="address">..each.contact_no..  <span ng-if="each.email!=none && each.email!=''">| ..each.email..</span></div>
+                    <div style="font-weight:600;color:#575757;font-size:14px"><span ng-if="each.PAN_NO!=none && each.PAN_NO!=''">PAN No. &nbsp;&nbsp;&nbsp;: ..each.PAN_NO..</span></div>
+                    <!-- IF GSTIN card data is empty -->
+                    <div style="font-weight:600;color:#575757;font-size:14px"><span ng-if="each.PAN_NO==none || each.PAN_NO==''">PAN No. &nbsp;&nbsp;&nbsp;: NA</span></div>
+                    <div style="font-weight:600;color:#575757;font-size:14px"> <span ng-if="each.GSTIN!=none && each.GSTIN!=''">GSTN No. : ..each.GSTIN..</span></div>
+                    <!-- IF GSTIN  data is empty -->
+                    <div style="font-weight:600;color:#575757;font-size:14px"> <span ng-if="each.GSTIN==none || each.GSTIN==''">GSTN No. : NA</span></div>
+                </div>
+
+                <img class="liftUP mr-2" src="/static/img/returned.png" style="width:130px;height:110px;position:relative;left:200px;top:20px"   ng-repeat="each in Purchase_Info" ng-show="each.isReturn=='true'">
+
+                  <div id="invoice"  ng-repeat="each in Purchase_Info">
+                    <h3>PO-INVOICE ..each.P_Bill_NO..</h3>
+                      <div class="date">Purchase Order No. : ..each.P_Order_NO..</div>
+                     <div class="date">Date of Invoice : ..each.Purchase_Order_Date..</div>
+                    <div class="date">Due Date : ..each.Due_Date..</div>
+                    <div class="date"><span ng-if="status=='Complete'" class="text-white px-2 rounded "  style="font-size:14px;background:#0cc712">Invoice Status : ..status..</span>  <span ng-if="status!='Complete'" class="text-white px-2 rounded "  style="font-size:14px;background:red">Invoice Status : ..status..</span> </div>
+                  </div>
+                </div>
+                <table border="0" cellspacing="0" cellpadding="0" style=" font-family: Arial, sans-serif;font-size: 16px;font-family: SourceSansPro;font-weight:600;width: 100%;border-collapse: collapse;border-spacing: 0;margin-bottom: 20px;text-align:center">
+                  <thead>
+                    <tr>
+                      <th ></th>
+                      <th class="qty" >ITEM</th>
+                      <th class="qty">PRICE</th>
+                      <th class="qty">QTY.</th>
+                      <th class="qty">CGST</th>
+                      <th class="qty">SGST</th>
+                      <th class="qty">IGST</th>
+                      <th class="qty">Cess</th>
+                      <th class="qty">DISC.</th>
+                      <th class="qty">TOTAL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr  ng-repeat="each in Bucket_Item">
+                      <td class="desc">..each.SrNo..</td>
+                      <td class="desc"><h3>..each.Stock_Name..</h3><span ng-if="each.Stock_Discription!=null">..each.Stock_Discription..</span><span ng-if="each.Stock_Discription==null">NA</span></td>
+                      <td class="unit">₹..each.Purchase_Price..</td>
+                      <td class="qty">..each.Qty..</td>
+                      <td class="qty">..each.CGST..%</td>
+                      <td class="qty">..each.SGST..%</td>
+                      <td class="qty">..each.IGST..%</td>
+                      <td class="qty">..each.Cess..%</td>
+                      <td class="qty">..each.Discount..%</td>
+                      <td class="total" style="text-align:left;color:#000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;₹..each.Amount..</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                       <td colspan="6" ></td>
+                      <td colspan="3" style="text-align:right;color:#000">TOTAL</td>
+
+                      <td style="text-align:left;color:#000;color:#000" >₹..Total..</td>
+                    </tr>
+
+                    <tr style="  border-top: 1px solid #000;">
+                      <td colspan="6" ></td>
+                      <td colspan="3"  style="border:1px solid #eee;color:#000;text-align:right">DISCOUNT</td>
+                      <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info" ng-if="each.Apply_Discount=='false'">0% OFF</td>
+
+                      <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info"  ng-if="each.Apply_Discount=='true' && each.Dis_in_amount!=0 && each.Dis_in_percent==0">₹..each.Dis_in_amount.. OFF</td>
+
+                      <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info" ng-if="each.Apply_Discount=='true' && each.Dis_in_amount==0 && each.Dis_in_percent!=0">..each.Dis_in_percent..% OFF</td>
+
+                      <td style="text-align:left;color:#000;color:#000"  ng-repeat="each in Purchase_Info" ng-if="each.Apply_Discount=='true' && each.Dis_in_amount==0 && each.Dis_in_percent==0">0% OFF</td>
+
+                    </tr>
+
+                    <tr>
+                      <td colspan="6"></td>
+                      <td colspan="3" style="text-align:right;color:#000">SHIPPING </td>
+
+                      <td style="text-align:left;color:#000" ng-repeat="each in Purchase_Info"  ng-if="each.Apply_Shipping=='true'">₹..each.Shipping_Amount..</td>
+
+                      <td style="text-align:left;color:#000" ng-repeat="each in Purchase_Info" ng-if="each.Apply_Shipping=='false'">₹0</td>
+
+                    </tr>
+
+                    <tr>
+                      <td colspan="6" ></td>
+                      <td colspan="3" style="border:1px solid #eee;color:#000;text-align:right">SUBTOTAL</td>
+                      <td   style="border:1px solid #eee;border-top:1px solid #000;text-align:left;color:#000" ng-repeat="each in Purchase_Info">₹..each.Sub_Total_Amount..</td>
+                    </tr>
+
+                    <tr>
+                    <td colspan="6" style="color:#000;font-size:13px;text-align:left;background:#eee" ng-repeat="each in Purchase_Info">Amt. In Words : ..each.AmountInWords.. Only</td>
+                      <td colspan="3" style="border:1px solid #eee;color:#000;text-align:right;background:#eee" >NET PAYABLE</td>
+                      <td  style="border:1px solid #eee;text-align:left;color:#000;background:#eee"  ng-repeat="each in Purchase_Info" >₹..each.Total_Amount..</td>
+                    </tr>
+
+                    <tr>
+                      <td colspan="6"></td>
+                      <td colspan="3" style="border:1px solid #eee;text-align:right;color:green;background:#FFF">AMOUNT PAID</td>
+                      <td style="border:1px solid #eee;text-align:left;color:#000;color:green;background:#FFF" ng-repeat="each in Purchase_Info" >- ₹..each.Amount_Paid..</td>
+                    </tr>
+
+                    <tr>
+                      <td colspan="6" style="background:#FFF"></td>
+                      <td colspan="3" style="border:1px solid #eee;text-align:right;color:#bf2020;background:#FFF;font-size:0.9em;">BALANCE AMOUNT</td>
+                      <td style="border:1px solid #eee;text-align:left;color:#000;color:#bf2020;background:#FFF;font-size:1em;" ng-repeat="each in Purchase_Info" >₹..each.Balance_Amount..</td>
+                    </tr>
+
+                  </tfoot>
+                </table>
+
+              </main>
+              <br>
+              <span class="text-white px-2 rounded py-1 my-1 " style="font-size:14px;background:#000;"> PAYMENT INFORMATION </span>
+                     <table  style="border: 2px solid #EEE;font-family: Arial, sans-serif;font-size: 16px;font-family: SourceSansPro;font-weight:600;width: 100%;border-collapse: collapse;border-spacing: 0;margin-bottom: 20px;text-align:center">
+                    <thead >
+                      <tr >
+                        <th style="font-size:14px" class="Custo_Table" >Payment No.</th>
+                        <th style="font-size:14px" class="Custo_Table">Payment Mode</th>
+                        <th style="font-size:14px" class="Custo_Table">Txn No.</th>
+                        <th style="font-size:14px" class="Custo_Table">Amount Paid</th>
+                        <th style="font-size:14px" class="Custo_Table">Paid On</th>
+                        <th style="font-size:14px" class="Custo_Table">Payment Remark</th>
+                        <th style="font-size:14px" class="Custo_Table"></th>
+                        <th style="font-size:14px" class="Custo_Table"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="each in Payment_info" style="color:#000;font-size:10px">
+                        <td style=" font-size:1.4em">..each.SrNo..</td>
+                        <td style=" font-size:1.4em" ng-if="each.Payment_Mode!=''">..each.Payment_Mode..</td>  <td ng-if="each.Payment_Mode==''">-</td>
+                        <td style=" font-size:1.4em" ng-if="each.Txn_NO!=''">..each.Txn_NO..</td>   <td ng-if="each.Txn_NO==''">-</td>
+                        <td style="text-align:left;color:#000; font-size:1.4em">&nbsp;&nbsp; &nbsp;₹..each.Amount_Paid..</td>
+                          <td style=" font-size:1.4em">..each.Paid_on | date:'dd-MM-yyyy '..</td>
+                            <td style=" font-size:1.4em">..each.Remarks..</td>
+                            <td><span class="text-white px-2 rounded " style="font-size:12px;background:#0cc712;">Paid <i class="fa fa-check" aria-hidden="true"></i></span></td>
+                            <td> <a href="/DOWNLOAD_PAYSLIP_PURCHASE/{{ID}}/ ..each.Invoice_ID.." data-toggle="tooltip" data-placement="left" title="Download Payment Slip"><img class="liftUP" src="/static/img/pdf.svg" style="width:25px;height:25px;"></a></td>
+                      </tr>
+                      <tr ng-show='PaymentHistory==0'>
+                        <td colspan=8 style="font-size:0.9em;background:#dedede5c"> No Payment Done Yet  </td>
+                      </tr>
+                    </tbody>
+                  </table>
+<br><br>
+     </div> <!-- ******* DETAILED INVOICE SECTION END ******-->
+
+
+  </div>
+</div></div>
+
+
+<div class="modal fade" id="DeletePurchase" tabindex="-1" role="dialog" aria-labelledby="DeleteQuotation" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered rounded" role="document">
+    <div class="modal-content rounded">
+
+      <div class="modal-body rounded">
+            <img src="/static/img/delete.gif" style="width:150px;height:120px" >
+             <span class="text-danger h4" style="position:relative;right:17px"> Successfully Deleted !!! </span>  <button type="button" class="btn btn-danger ml-3" ng-click="CloseDeleteModel()">Done</button>
+      </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal fade" id="ReturnPurchase" tabindex="-1" role="dialog" aria-labelledby="DeleteQuotation" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered rounded" role="document">
+      <div class="modal-content rounded">
+
+        <div class="modal-body rounded" style="background:#f8f4f4">
+              <img src="/static/img/successful.gif" style="width:150px;height:120px" >
+               <span class="text-success h4" style="position:relative;right:11px"> Successfully Returned !!! </span>  <button type="button" class="btn btn-success ml-3"  ng-click="CloseReturnModel()">Done</button>
+        </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+      <div class="modal fade" id="ReturnPurchaseRemark" tabindex="-1" role="dialog" aria-labelledby="ReturnPurchaseRemark" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" style="border-radius:25px">
+            <div class="modal-header py-2">
+              <h5 class="modal-title" id="exampleModalLongTitle">Remarks</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <textarea class="form-control form-control-sm rounded" name="name" rows="5" cols="56"   ng-model="remark" placeholder="Please enter the return remark"></textarea>
+            </div>
+            <div class="modal-footer py-1">
+              <button type="button" class="btn btn-success py-0" ng-click="ReturnPurchase()" style="background:#1c9015">Return <i class="fa fa-reply  ml-1" style="background:#1c9015"></i></button>
+                <button type="button" class="btn btn-dark py-0" data-dismiss="modal" style="background:#000">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+</div>
+
+
+
+
+
+    <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
+  {% endblock %}

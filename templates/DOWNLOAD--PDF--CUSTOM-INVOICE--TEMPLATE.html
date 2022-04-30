@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Spacters Invoice Design</title>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/static/css/invoice.css" media="all" />
+
+
+  </head>
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+    <img src="http://127.0.0.1:5000/static/img/logo.png">
+      </div>
+      <div id="company">
+        {% for each in SHOP_DEATILS_FOR_HEADER_INFORMATION %}
+        <h2 class="name">{{each["Shop_Name"]}}</h2>
+        <div>{{each["Address"]}}</div>
+        <div>{{each["City"]}}, {{each["State"]}} {{each["PinCode"]}} </div>
+        <div> {% if each["Contact_No1"] is not none and each["Contact_No1"]!='' %} {{each["Contact_No1"]}}   {% endif %} {% if   each["Contact_No2"] is not none and each["Contact_No2"]!='' %} | {{each["Contact_No2"]}}  {% endif %}</div>
+        <div> {% if each["Email"] is not none and each["Email"]!='' %}  {{each["Email"]}} {% endif %}</div>
+        <div>GSTN No. : {{each["GSTIN"]}}</div>
+        {% endfor %}
+      </div>
+      </div>
+    </header>
+    <main>
+      <div id="details" class="clearfix">
+        <div id="client">
+          {% for each in CUSTOM_INVOICE_INFO %}
+          <div class="to">INVOICE TO :</div>
+          <h2 class="name">{{each["ClientName"]}}</h2>
+          <div class="address">{{each["ClientAddress"]}} </div>
+          <div class="address">{{each["ClientCity"]}},{{each["ClientState"]}}.{{each["ClientZipCode"]}}</div>
+          <div class="address">{{each["ClientContactNo"]}}   {% if   each["ClientEmail"] is not none and each["ClientEmail"]!='' %} | {{each["ClientEmail"]}}  {% endif %}</div>
+          <div style="font-weight:500;color:#575757">   {% if  each["ClientPAN"] is not none and each["ClientPAN"]!='' %} PAN No. &nbsp;&nbsp;&nbsp;:&nbsp; {{each["ClientPAN"]}} {% endif %}</div>
+          <div style="font-weight:500;color:#575757">   {% if each["ClientGSTIN"] is not none and each["ClientGSTIN"]!='' %} GSTN No. : {{each["ClientGSTIN"]}} {% endif %}</div>
+          {% endfor %}
+        </div>
+        <div id="invoice">
+          {% for each in CUSTOM_INVOICE_INFO %}
+          <h3>INVOICE {{each["Invoice_NO"]}}</h3>
+          <div class="date">Date of Invoice : {{each["Custom_Invoice_Date"]}}</div>
+          <div class="date">Place of supply : {{each["POS"]}}</div>
+          {% endfor %}
+        </div>
+      </div>
+      <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th ></th>
+            <th class="qty" >ITEM</th>
+            <th class="qty">PRICE</th>
+            <th class="qty">QTY.</th>
+            <th class="qty">TAX TYPE</th>
+            <th class="qty">TAX</th>
+            <th class="qty">DISCOUNT</th>
+            <th class="qty">TOTAL</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for each in BUCKET_ITEM_FOR_CUSTOM_INVOICE %}
+          <tr>
+            <td >{{each["SrNo"]}}</td>
+            <td class="desc"><h3>{{each["ItemName"]}}</h3></td>
+            <td class="unit">₹ {{each["ItemPrice"]}}</td>
+            <td class="qty">{{each["ItemQty"]}}</td>
+            <td class="qty">{{each["Tax_Type"]}}</td>
+            <td class="qty">{{each["Tax"]}}%</td>
+            <td class="qty">{{each["Discount"]}}%</td>
+            <td class="qty">₹ {{each["TotalAmount"]}} </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+        <tfoot>
+
+         <tr class="random_border">
+            <td colspan="6"></td>
+            <td  class="random_border">DISCOUNT</td>
+          {% for each in CUSTOM_INVOICE_INFO %}
+            <td style="text-align:left"> {{each["Discount"]}} %</td>
+          {% endfor %}
+          </tr>
+          <tr class="random_border">
+             <td colspan="6"></td>
+             <td  class="random_border">SHIPPING</td>
+           {% for each in CUSTOM_INVOICE_INFO %}
+             <td style="text-align:left">₹ {{each["Shipping"]}}</td>
+           {% endfor %}
+           </tr>
+           <tr class="random_border">
+              <td colspan="6"></td>
+              <td  class="random_border">SUBTOTAL</td>
+            {% for each in CUSTOM_INVOICE_INFO %}
+              <td style="text-align:left">₹ {{each["SubTotal"]}}</td>
+            {% endfor %}
+            </tr>
+
+          <tr class="random_border">
+            <td colspan="6" style="font-size:13px;text-align:left">Amt. in words : {{AmountInWords}} Only</td>
+            <td   style="background:#EEE">GRAND TOTAL</td>
+            {% for each in CUSTOM_INVOICE_INFO %}
+            <td style="text-align:left;background:#EEE">₹ {{each["NetAmount"]}}</td>
+            {% endfor %}
+          </tr>
+        </tfoot>
+
+   </table>
+
+      <br><br>
+      <div id="thanks">Thank you!</div>
+      <h4 style="text-align:right;margin-right:50px;"><span style="border-top:2px solid #000">Authorised Signature</span></h4>
+      <div id="notices">
+        <div>Terms & Conditions:</div>
+        <div class="notice">
+         {% for each in TERMS_FOR_CUSTOM_INVOICE %}
+          {{each["SrNo"]}}. {{each["Term"]}}.<br>
+         {% endfor %}
+
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

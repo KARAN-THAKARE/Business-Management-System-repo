@@ -1,0 +1,670 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+ <script src="/static/js/setting controller/setting controller.js"></script>
+
+ <style media="screen">
+  :root {
+    --radius: 50px;
+    --padding: 15px;
+  }
+
+  .pulledLeft > * {
+  width: fit-content;
+  color: white;
+  padding: var(--padding) var(--padding) var(--padding) 0;
+  }
+  .pulledLeft > *:nth-child(1) {
+  border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .pulledLeft {
+  display: grid;
+  grid-template-columns: 1fr var(--containerWidth) 1fr;
+  }
+  .pulledLeft:before,.pulledLeft:after {
+  content:"";
+  }
+  .pulledLeft:before, .pulledLeft > * {
+  background:#343a40;
+  }
+</style>
+
+<style media="screen">
+
+.blink_me {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+h1 {
+  color: #fff;
+  position: absolute;
+  font-size: 2.5em;
+  height: 1em;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2;
+  margin: auto;
+  opacity: 0;
+  animation: appear 4s  forwards;
+  animation-iteration-count: infinite;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+    .boxcon {
+        position: absolute;
+        margin: auto;
+        height: 200px;
+        width: 200px;
+    }
+
+    .box1 {
+        position: absolute;
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        border: 4px solid #06bd31;
+        animation-name: spinx;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        text-align: center;
+    }
+
+    .box2 {
+        position: absolute;
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        border: 4px solid #06bd31;
+        animation-name: spiny;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        text-align: center;
+    }
+
+    @keyframes spinx {
+        0% {
+            transform: rotateX(0deg);
+        }
+
+        100% {
+            transform: rotateX(360deg);
+        }
+    }
+
+    @keyframes spiny {
+        0% {
+            transform: rotateY(0deg);
+        }
+
+        100% {
+            transform: rotateY(360deg);
+        }
+    }
+
+.authenticationBox{
+  width:15%;
+  border: 3px solid #ccc;
+  border-width: 1px 1px 4px
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 31px;
+  height: 17px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  right:15px;
+  height: 13px;
+  width: 13px;
+
+
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(15px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="page" ng-controller="SETTING~CONTROLLER">
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="../static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                     
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+
+
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                <a href="/Setting/User Profile" class="text-decoration-none"><span style="color: #333;font-size: 1.1rem;font-weight:700 ;" class="my-1 text-capitalize" id="OWNER_NAME"></a> </span>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+
+ <div class="content-inner bg-white">
+
+              <div class="pulledLeft mt-3 ">
+              <h4  >&nbsp;&nbsp;&nbsp;<i class="fa fa-cog fa-spin  fa-fw"></i>  SETTING <span style="font-weight:500">> {{Option_ID}}</span></h4>
+              </div>
+
+
+<div class="container-fluid mt-2 shadow bg-dark py-1" style="width:1050px;border-radius:25px" >
+
+<!-- ============================================================================================================================   -->
+<!-- =========================================================== USER PROFILE ===================================================   -->
+
+{% if Option_ID=='User Profile' %}
+<div ng-repeat="UserProfile in UserData">
+<table class="table table-borderless text-center align-middle table-dark text-light " >
+  <tbody>
+    <tr>
+      <td scope="row" style="width:25%" ><img src="/static/img/avatar-1.jpg" class="rounded-circle" style="height:200px;width:200px"></td>
+      <td class="text-right align-middle border-right-0">
+        Software Code &nbsp;: <br>
+        Authentication Code &nbsp;: <br>
+        Registration Date &nbsp;:<br>
+        Subscription Plan &nbsp;:<br>
+        Start Date &nbsp;:<br>
+        End Date &nbsp;:<br>
+      </td>
+      <td class="text-left align-middle border-left-0 border-right-0"  ng-repeat="each in SoftwareInfo">
+        ..each.SOFTWARE_CODE.. <br>
+        **********..each.AUTH_CODE.. <i class="fa fa-circle" style="color:#8bc34a;"  ></i><br>
+        ..each.REGISTRATION_DATE|date : "d MMMM y".. <br>
+        ..each.SOFTWARE_PLAN..  <br>
+        ..each.START_DATE | date :  "d MMMM y"  ..  <br>
+        ..each.END_DATE ..  <br>
+      </td>
+      <td class="border-left-0">   <div class="boxcon">
+    <div class="box1">
+    </div>
+      <h1>Active</h1>
+    <div class="box2">
+    </div>
+    </div></td>
+    </tr>
+    <tr >
+      <td scope="row"  ><i class="fa fa-user pr-2" aria-hidden="true"></i> Full Name</td>
+      <td><input class="form-control form-control-sm rounded"   type="text" placeholder="First Name" ng-model="UserProfile.FN"  ng-disabled=SaveButton> </td>
+      <td><input class="form-control form-control-sm rounded"  type="text" placeholder="Middle Name" ng-model="UserProfile.MN"  ng-disabled=SaveButton></td>
+      <td><input class="form-control form-control-sm rounded" type="text" placeholder="Last Name" ng-model="UserProfile.LN"  ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+      <td class="align-middle" scope="row" rowspan="2" scope="row"  ><i class="fa fa-map-marker pr-2" aria-hidden="true"></i> Address</td>
+      <td colspan="3"><input class="form-control form-control-sm rounded" type="text" placeholder="Full Address" ng-model="UserProfile.Address"  ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+    <td><input class="form-control form-control-sm rounded" type="text" placeholder="City" ng-model="UserProfile.City"  ng-disabled=SaveButton></td>
+    <td><input class="form-control form-control-sm rounded" type="text" placeholder="State" ng-model="UserProfile.State"  ng-disabled=SaveButton></td>
+    <td><input class="form-control form-control-sm rounded" type="text"  maxlength="7" placeholder="Zip Code" ng-model="UserProfile.ZipCode" id="zipcode"  ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-phone pr-2" aria-hidden="true"></i>Phone No.</td>
+      <td ><input class="form-control form-control-sm rounded" type="text" id="contact" placeholder="Contact No." ng-model="UserProfile.PhoneNo"  maxlength="10"  ng-disabled=SaveButton></td>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-envelope pr-2" aria-hidden="true"></i>Email</td>
+      <td ><input class="form-control form-control-sm rounded" type="email" placeholder="Email" ng-model="UserProfile.Email"  ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-venus-mars pr-2" aria-hidden="true"></i>Gender</td>
+      <td><select class="form-control form-control-sm rounded" ng-model="UserProfile.Gender" ng-options="item for item in GENDERS"   ng-disabled=SaveButton>
+        <option value="">Select Gender</option>
+</select>
+      </td>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-birthday-cake pr-2" aria-hidden="true"></i>DOB</td>
+      <td ><input class="form-control form-control-sm rounded" type="date" placeholder="DOB"  ng-model="UserProfile.DOB" ng-value="UserProfile.DOB"  ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+     <td class="border-0"> </td>
+      <td class="border-0"> <button type="button" class="btn btn-success rounded-pill float-right text-white" style="font-weight:500 !important" ng-click="Enable_To_Edit()" ng-disabled=!SaveButton>Enable To Edit</button></td>
+       <td class="border-0"> <button type="button" class="btn btn-light rounded-pill px-5 float-left"  style=" font-weight:500 !important"  ng-click="UpdateUserData(UserProfile)" ng-disabled=SaveButton>Save</button></td>
+        <td class="border-0"> </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+{% endif %}
+
+<!-- ===================================================== ~ END USER PROFILE END ~ ===================================================   -->
+<!-- ============================================================================================================================   -->
+
+<!-- ============================================================================================================================   -->
+<!-- =========================================================== SHOP PROFILE ===================================================   -->
+
+{% if Option_ID=='Shop Profile' %}
+<div ng-repeat="ShopProfile in StoreData">
+<table class="table table-borderless text-center align-middle text-light"  >
+  <tbody>
+    <tr>
+      <td scope="row" style="width:25%" ><img src="/static/img/logo.png"  style="height:120px;width:270px"></td>
+      <td class="text-right align-middle border-right-0">
+
+      </td>
+      <td colspan="2" class="text-left align-middle border-left-0 border-right-0">
+
+      </td>
+    </tr>
+    <tr>
+      <td scope="row"  ><i class="fa fa-building-o pr-2" aria-hidden="true"></i>Shop Name</td>
+      <td colspan="3"><input class="form-control form-control-sm rounded" type="text" placeholder="Full Shop Name" ng-model="ShopProfile.Name" ng-disabled=SaveButton ></td>
+    </tr>
+    <tr>
+      <td class="align-middle" scope="row" rowspan="2" scope="row"  ><i class="fa fa-map-marker pr-2" aria-hidden="true"></i> Address &nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td colspan="3"><input class="form-control form-control-sm rounded" type="text" placeholder="Full Address" ng-model="ShopProfile.Address" ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+    <td class="w-25"><input class="form-control form-control-sm rounded" type="text" placeholder="City" ng-model="ShopProfile.City" ng-disabled=SaveButton></td>
+    <td><input class="form-control form-control-sm rounded" type="text" placeholder="State" ng-model="ShopProfile.State" ng-disabled=SaveButton></td>
+    <td><input class="form-control form-control-sm rounded" type="text" placeholder="Zip Code" ng-model="ShopProfile.ZipCode"  ng-disabled=SaveButton></td>
+    </tr>
+    <tr>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-phone pr-2" aria-hidden="true"></i>Phone No. &nbsp;&nbsp;</td>
+      <td  class="w-25"><input class="form-control form-control-sm rounded" type="text" maxlength="10" placeholder="Contact No." ng-model="ShopProfile.Contact_No_1" ng-disabled=SaveButton></td>
+      <td ><input class="form-control form-control-sm rounded" type="text" maxlength="10" placeholder="Contact No." ng-model="ShopProfile.Contact_No_2" ng-disabled=SaveButton></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-envelope pr-2" aria-hidden="true"></i>Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td ><input class="form-control form-control-sm rounded" type="email" placeholder="Email" ng-model="ShopProfile.Email" ng-disabled=SaveButton></td>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <td class="align-middle"  scope="row"  ><i class="fa fa-address-card-o pr-2" aria-hidden="true"></i>GSTIN No. &nbsp;&nbsp;</td>
+      <td ><input class="form-control form-control-sm rounded" type="text" placeholder="GSTIN Number" ng-model="ShopProfile.GSTIN" ng-disabled=SaveButton></td>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+     <td class="border-0" colspan="2"> </td>
+     <td class="border-0"> <button type="button" class="btn btn-success rounded-pill float-right"   ng-click="Enable_To_Edit()" ng-disabled=!SaveButton>Enable To Edit</button></td>
+      <td class="border-0"> <button type="button" class="btn btn-light rounded-pill px-5 float-left"   ng-click="UpdateStoreData(ShopProfile)" ng-disabled=SaveButton>Save</button></td>
+
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endif %}
+
+<!-- ===================================================== ~ END SHOP PROFILE END ~ ===================================================   -->
+<!-- ============================================================================================================================   -->
+
+<!-- ============================================================================================================================   -->
+<!-- =========================================================== SUBSCRIPTION ===================================================   -->
+
+
+{% if Option_ID=='Subscription' %}
+<div  class="bg-dark text-light  " style="left:15%; border-radius:25px;margin:100px">
+<p class="text-center">
+<img src="/static/img/privacy.png" class="my-4" style="width:120px;height:120px"><br>
+<span class="h3" ng-repeat="each in SoftwareInfo" >..each.START_DATE | date :  "d MMMM y".. &nbsp;&nbsp; To &nbsp;&nbsp; ..each.END_DATE .. </span><br>
+Your are on Subscription screen. Please contact service provider to extend your <br> subscription plan by entering Authentication Key . <a href="#" style="text-decoration: none;color:#1eef1e" ng-click="EnableAuthKey()"> Click here  </a> to submit Authentication Key .
+<br><br>
+<input type="password" name="" value="" class="authenticationBox mx-3 rounded px-4" maxlength="6"  ng-model="AuthKey.key1"><input type="password" name="" value=""  class="authenticationBox mx-3 rounded px-4" maxlength="6" ng-model="AuthKey.key2"><input type="password" name="" value="" class="authenticationBox mx-3 rounded px-4" maxlength="6" ng-model="AuthKey.key3"><input type="password" name="" value="" class="authenticationBox mx-3 rounded px-4" maxlength="6" ng-model="AuthKey.key4">
+<br><br>
+<button type="button" class="btn btn-success px-4 mr-2 "  ng-show=Subscription ng-click="ExtenedSubscription()">Submit </button><button type="button" class="btn btn-light px-4"  ng-show=Subscription ng-click="EnableAuthKey()">Close</button>
+</p>
+</div>
+{% endif %}
+
+<!-- ===================================================== ~ END SUBSCRIPTION END ~ ===================================================   -->
+<!-- ============================================================================================================================   -->
+
+<!-- ============================================================================================================================   -->
+<!-- =========================================================== TERMS & CONDITIONS ===================================================   -->
+{% if Option_ID=='Terms & Condition' %}
+<div class="pr-3 mt-2" style=" overflow-y: scroll;height:550px">
+
+<table class="table table-striped table-borderless text-center text-light" >
+  <thead>
+    <tr>
+      <th scope="col" colspan="7"  class="text-right "><button type="button" class="btn btn-success py-1" data-toggle="modal" data-target="#Add_Terms_And_Condition"  ><i class="fa fa-plus-circle" aria-hidden="true"></i> ADD</button></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row" style="width:8%" >Sr. No.</th>
+      <th  colspan="3">Terms & Condition</th>
+      <th style="width:11%">Action</th>
+      <th>Invoice</th>
+      <th>Purchase</th>
+
+    </tr>
+    <tr ng-repeat="each in TermsData">
+      <th scope="row">..$index + 1 ..</th>
+      <td colspan="3" class=" text-justify"  >..each.terms..</td>
+      <td class="align-middle"><a href="" ng-click="UpdateTermsModel(each.ID,each.terms)"  title='Click here to Edit'  ><img src="/static/img/edit.png" alt="" style='width:20px;height:20px' class="mx-2"></a> <a href="#" ng-click="DeleteTerms(each.ID)" data-toggle="tooltip" data-placement="left" title="Click here to Delete"  data-trigger="hover"><img src="/static/img/delete.png" alt="" style='width:20px;height:20px' class="mx-2"></a></td>
+       <td class="align-middle"><label class="switch mt-2"><input type="checkbox" ng-checked="each.isActiveForInvoice=='true'" ng-click="ChangeAccess(each.ID,'Invoice',each.isActiveForInvoice)"><span class="slider round"></span></label></td>
+       <td class="align-middle"><label class="switch mt-2"><input type="checkbox" ng-checked="each.isActiveForPurchase=='true'" ng-click="ChangeAccess(each.ID,'Purchase',each.isActiveForPurchase)"><span class="slider round"></span></label></td>
+    </tr>
+  </tbody>
+</table>
+{% endif %}
+
+</div>
+<!-- Modal for Add Terms and condition -->
+<div class="modal fade " id="Add_Terms_And_Condition" tabindex="-1" role="dialog" aria-labelledby="Add_Terms_And_Condition" aria-hidden="true" style="border-radius:25px">
+  <div class="modal-dialog modal-dialog-centered " role="document" >
+    <div class="modal-content " style="border-radius:25px">
+      <div class="modal-header py-2">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add Terms & Condition</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="TC_Form">
+          <textarea class="form-control form-control-sm" name="name" rows="3" cols="56"   ng-model="Terms_Condition"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer py-1">
+        <button type="button" class="btn btn-success py-0" style="background:#1c9015" ng-click="AddTerms(Terms_Condition)">Save</button>
+          <button type="button" class="btn btn-dark py-0" data-dismiss="modal" style="background:#000">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Edit -->
+<div class="modal fade" id="Edit_Terms_And_Condition" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="border-radius:25px">
+      <div class="modal-header py-2">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Terms & Condition</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea class="form-control form-control-sm" name="name" rows="3" cols="56"   ng-model="Update_Terms_Condition"></textarea>
+      </div>
+      <div class="modal-footer py-1">
+        <button type="button" class="btn btn-success py-0" ng-click="UpdateTerms()" style="background:#1c9015">Update <i class="fa fa-chevron-circle-up ml-1" style="background:#1c9015"></i></button>
+          <button type="button" class="btn btn-dark py-0" data-dismiss="modal" style="background:#000">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if Option_ID!='Terms & Condition' %}
+<br>
+<footer class="main-footer mt-5">
+  <div class="container-fluid  ">
+    <div class="row">
+      <div class="col-sm-12 " >
+      <p>This computer software is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this Software , or any portion of it  may result in severe civil and criminal penalties , and will be prosecuted to maximum extend possible under the law . <span style="color:#39FF14">Karan Thakare &copy; 2021-2020</span></p>
+      </div>
+      <div class="col-sm-6 text-right">
+
+
+      </div>
+    </div>
+  </div>
+</footer>
+{% endif %}
+
+<!-- ===================================================== ~ END TERMS & CONDITIONS END ~ ===================================================   -->
+<!-- ============================================================================================================================   -->
+
+</div>
+{% if Option_ID=='Terms & Condition' %}
+<footer class="main-footer ">
+  <div class="container-fluid  ">
+    <div class="row">
+      <div class="col-sm-12">
+      <!--  <p>Your company &copy; 2017-2020</p> -->
+      <p>This computer software is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this Software , or any portion of it  may result in severe civil and criminal penalties , and will be prosecuted to maximum extend possible under the law . <span style="color:#39FF14">Karan Thakare &copy; 2021-2020</span></p>
+      </div>
+      <div class="col-sm-6 text-right">
+
+
+      </div>
+    </div>
+  </div>
+</footer>
+{% endif %}
+
+</div>
+  </div>
+  </div>
+
+
+
+
+
+
+
+
+{% endblock %}
+<script type="text/javascript">
+$('#contact').keyup(function () {
+  this.value = this.value.replace(/[^0-9\.]/g,'');
+});
+</script>

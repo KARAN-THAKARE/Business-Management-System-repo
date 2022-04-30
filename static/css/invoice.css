@@ -1,0 +1,218 @@
+@font-face {
+  font-family: SourceSansPro;
+  src: url('http://127.0.0.1:5000/static/fonts/invoice font/SourceSansPro-Regular.ttf');
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+ 
+a {
+  color: #57b223;
+  text-decoration: none;
+}
+
+body {
+  position: relative;
+  width: 22cm;
+  height: 29.7cm;
+  margin: 0 auto;
+  color: #000;
+  background: #FFFFFF;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-family: SourceSansPro;
+  font-weight:600
+}
+
+header {
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #AAAAAA;
+}
+
+#logo {
+  float: left;
+  margin-top: 8px;
+}
+
+#logo img {
+  height: 70px;
+}
+
+#company {
+  float: right;
+  text-align: right;
+}
+
+
+#details {
+  margin-bottom: 50px;
+}
+
+#client {
+  padding-left: 6px;
+  border-left: 6px solid #57b223;
+  float: left;
+}
+
+#client .to {
+  color: #777777;
+}
+
+h2.name {
+  font-size: 1.7em;
+  font-weight: 700;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+#invoice {
+  float: right;
+  text-align: right;
+}
+
+#invoice h3 {
+  color: #36800b;
+  font-size: 1.6em;
+  font-weight: 600;
+  margin: 0  0 10px 0;
+}
+
+#invoice .date {
+  font-size: 1em;
+  color: #575757;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+
+table th,
+table td {
+  padding: 6px;
+  background: #FFF;
+  text-align: center;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+table th {
+  white-space: nowrap;
+  font-weight: 700;
+    background: #EEE;
+}
+
+table td {
+
+}
+
+table td h3{
+  color: #57B223;
+  font-size: 1.2em;
+  font-weight: 700;
+  margin: 0 0 0.2em 0;
+}
+
+table .no {
+  color: #FFFFFF;
+  font-size: 1.6em;
+  background: #57B223;
+}
+
+table .desc {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8em;
+}
+
+table .desc h3{
+  text-align: left;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+
+table .unit {
+  background: #FFF;
+}
+
+table .qty {
+}
+
+table .total {
+  background: #FFF;
+  color: #000;
+}
+
+table td.unit,
+table td.qty,
+table td.total {
+  font-size: 0.9em;
+}
+
+table tbody tr:last-child td {
+  border: none;
+}
+
+table tfoot td {
+  padding: 10px 20px;
+  background: #FFFFFF;
+  border-bottom: none;
+  font-size: 0.9em;
+  white-space: nowrap;
+  border-top: 1px solid #000;
+}
+
+table tfoot tr:first-child td {
+  border-top: none;
+  font-size: 0.9em;
+}
+
+table tfoot tr:last-child td {
+  color: #000;
+  background: #EEE;
+  font-size: 1.1em;
+  border-top: 1px solid #000;
+
+}
+
+table tfoot tr td:first-child {
+  border: none;
+}
+
+#thanks{
+  font-size: 2em;
+  margin-bottom: 50px;
+}
+
+#notices{
+  padding-left: 6px;
+  border-left: 6px solid #57b223;
+}
+
+#notices .notice {
+  font-size: 0.9em;
+}
+
+footer {
+  color: #777777;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid #AAAAAA;
+  padding: 8px 0;
+  text-align: center;
+}
+.PaymentTable{
+  font-size:12px;
+}
+
+.random_border{
+border: 1px solid #000
+}

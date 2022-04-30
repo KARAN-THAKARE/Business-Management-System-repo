@@ -1,0 +1,326 @@
+/* your styles go here */
+.list_color{
+  font-size:18px;
+}
+
+.Drop_list_color{
+  color: black;
+}
+
+.lable_define{
+  margin-bottom: -.5rem;
+  position:relative;
+  right:7px;
+}
+
+/* .lable_define_2{
+  margin-bottom: -.5rem;
+  font-size:14px;
+} */
+
+
+.cols_pad{
+margin-bottom: .4rem
+}
+
+.vl {
+  border-left: 0.01em solid #dbdbdb;
+  height: 76px;
+}
+.required
+{
+    color: #ff5959;
+}
+
+.input_box_height
+{
+height:31px
+}
+
+
+.GO_RIGHT{
+  position: relative;
+  left:18px
+}
+.nav > .nav-item > .active  {
+color: #000;
+border-bottom: 4px solid #959595;
+background: #e0e0e0;
+font-weight:600;
+}
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #868282;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+  .pagination>.active>a,
+  .pagination>.active>a:focus,
+  .pagination>.active>a:hover,
+  .pagination>.active>span,
+  .pagination>.active>span:focus,
+  .pagination>.active>span:hover {
+      z-index: 3;
+      color: #fff;
+      cursor: default;
+      background-color: #e0e0e0;
+      border-color: #d6d6d6;
+      color:#000;
+      font-weight:500;
+    }
+    .dropexport {
+      min-width: 2rem !important;
+      background: #ebebeb;
+      border-color:#dadada;
+    }
+    .autocomplete {
+      position: relative;
+    display: inline-block;
+
+    }
+
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 1;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 93%;
+      left: 3%;
+      right: 0;
+      font-size: 15px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      text-align:left;
+      width:77.5%
+    }
+
+    .autocomplete-items div {
+      padding: 5px;
+      cursor: pointer;
+      background-color: #fff;
+      color:#000;
+      border-bottom: 1px solid #eee;
+    }
+
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #eee !important;
+      border-bottom: 1px solid eee !important;
+      color: #000 !important;
+    }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: eee !important;
+      border-bottom: 1px solid eee !important;
+      color: #000;
+
+    }
+
+
+    .calculator
+    {
+      width: 400px;
+      max-width: 90%;
+    }
+    .calcul-input
+    {
+      width: 100%;
+      height: 60px;
+      margin-bottom: 10px;
+      border: 1px solid #dedede;
+      border-radius: 10px;
+      color: #1c1c1c;
+      padding: 0 10px;
+      font-size: 1.2em;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .calcul
+    {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+    }
+    .Calculatorbutton
+    {
+      height: 60px;
+      border: 1px solid #dedede;
+      border-radius: 10px;
+      background-color: white;
+      font-size: 1.2em;
+      color: #1c1c1c;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+    .Calculatorbutton:active
+    {
+      box-shadow: none;
+      border: 2px solid #dedede;
+    }
+    #equal
+    {
+      color: white;
+      background-color: #0561ff;
+      border: none;
+      font-size: 1.8em;
+    }
+    #equal:active
+    {
+      background-color: #044dcc;
+    }
+    #open, #close, #mod, #c, #slash, #x, #min, #plus
+    {
+      background-color: #ebebeb;
+      border: none;
+      box-shadow: none;
+    }
+    #open:active, #close:active, #mod:active, #c:active, #slash:active, #x:active, #min:active, #plus:active
+    {
+      border: 2px solid #dedede;
+    }
+
+    option:not(:checked) {
+    background-color: #fff;
+
+  }
+ option:checked {
+      background: #eee;
+  }
+
+.forClient{
+  left:660px ! important;
+  top:372px ! important
+}
+
+.CustomPlaceholder::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #000 !important;
+  opacity: 1 !important; /* Firefox */
+  font-weight:600 !important
+}
+
+.bs-popover-top .arrow::after,
+.bs-popover-auto[x-placement^="top"] .arrow::after {
+    border-top-color: #343a40;
+}
+
+.bs-popover-bottom .arrow::after,
+.bs-popover-auto[x-placement^="bottom"] .arrow::after {
+    border-bottom-color: #343a40;
+}
+.autocomplete {
+  position: relative;
+display: inline-block;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #fff;
+  border-bottom: none;
+  border-top: none;
+  z-index: 1;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+  font-size: 13px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+}
+
+.autocomplete-items div {
+  padding: 4px;
+  cursor: pointer;
+  background-color: #2f333e;
+  color:#fff;
+  border-bottom: 1px solid #7a7a7a;
+  padding-left: 40px;
+  width: 125%;
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #fff !important;
+  border-bottom: 1px solid #fff !important;
+  color: #000;
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: #000 !important;
+  border-bottom: 1px solid #000 !important;
+  color: #ffffff;
+}
+
+
+/* <datalist> and <option> styling */
+datalist {
+  position: absolute;
+  max-height: 20em;
+  border: 0 none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+datalist select option {
+  font-size: 0.8em;
+  padding: 0.3em 1em;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+datalist option:hover, datalist option:focus {
+  color: #fff;
+  background-color: #036;
+  outline: 0 none;
+}
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ebebeb;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #6d6d6d;
+}
+:root {
+  --radius: 50px;
+  --bgcolor: linear-gradient(to right,#000428,#004e92);
+  --padding: 15px;
+}
+
+.pulledLeft > * {
+width: fit-content;
+color: white;
+padding: var(--padding) var(--padding) var(--padding) 0;
+}
+.pulledLeft > *:nth-child(1) {
+border-radius: 0 var(--radius) var(--radius) 0;
+}
+.pulledLeft {
+display: grid;
+grid-template-columns: 1fr var(--containerWidth) 1fr;
+}
+.pulledLeft:before,.pulledLeft:after {
+content:"";
+}
+.pulledLeft:before, .pulledLeft > * {
+background: #2f333e;
+}

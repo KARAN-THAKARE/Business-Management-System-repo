@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<!--index page controller -->
+<script src="/static/js/Warn controller/Warn controller.js"></script>
+<style media="screen">
+  body, html {
+  height: 100%;
+  margin: 0;
+  overflow-x:hidden;  overflow-y:hidden;
+}
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+  .bg {
+  background-image: url("/static/img/home.png");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-filter: blur(4px); /* Safari 6.0 - 9.0 */
+ filter: blur(4px);
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+
+    <div  class="bg"></div>
+
+    <div ng-controller="WARN~CONTROLLER" class="modal fade" id="WarningModel" tabindex="-1" role="dialog" aria-labelledby="WarningModel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  style=" border:2px solid #f9cc03;">
+      <div class="modal-dialog modal-dialog-centered" role="document" >
+        <div class="modal-content rounded" style=" border:2px solid #f9cc03; background:#f9cc03">
+          <div class="modal-header py-2 " style=" background-image: url('/static/img/warn.jpg');background-position: center;background-size: cover; border: 1px solid #f1c500;">
+
+          </div>
+          <div class="modal-body"  >
+           <h1> Warning !!!</h1>
+           <p class="text-justify" style="font-size:12px">We couldn't log you in beacause your subscription expired on <b>..ExDate..</b> . All of your data will be safe for the next 15 Days as your product is in buffer zone for now. Once buffer zone of <b> 15 day </b>finish, your data will be lost .
+           Please contact service provider and confirm your payment . Once payment confirmation done , you have to enter <b>authentication key </b>provided by service provider  below for renewal .</p>
+        <div class="row">   <input type="password"  class=" mx-1 rounded ml-4 px-4" style="width:100px;border-color: #f9cc03;background: #ffe573;" ng-model="AuthKey.key1"  maxlength="6"><input type="password" ng-model="AuthKey.key2" class="mx-1 rounded  px-4"  maxlength="6" style="width:100px;border-color: #f9cc03;background: #ffe573;"><input type="password"  maxlength="6" ng-model="AuthKey.key3" class="mx-1 rounded  px-4" style="width:100px;border-color: #f9cc03;background: #ffe573;"><input type="password" ng-model="AuthKey.key4" class="mx-1 rounded  px-4" style="width:100px;border-color: #f9cc03;background: #ffe573;"  maxlength="6"></div>
+
+        <button type="button" class="btn btn-dark btn-sm mt-3 px-4" style="margin-left:135px" ng-click="Renew()">Renew</button>        <button type="button" class="btn btn-light btn-sm mt-3 px-4" ng-click="shutdownServer()">close</button>
+          </div>
+          <div class="modal-footer pb-2 mt-0" style=" background-image: url('/static/img/warn.jpg');background-position: center;background-size: cover;border: 1px solid #f1c500;">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    {% endblock %}

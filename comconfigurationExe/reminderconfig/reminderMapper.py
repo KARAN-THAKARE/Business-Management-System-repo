@@ -1,0 +1,6 @@
+# ADD_REMINDER="INSERT into Reminder (reminder_mesg,reminder_date) values (?,?)"
+ADD_EVENT="INSERT into Reminder (reminder_mesg,Start_Date,End_Date,IsAllDay,Reminder_Start_Date,Reminder_End_Date,Created_Date) values (?,?,?,?,?,?,?)"
+EDIT_EVENT="UPDATE Reminder SET reminder_mesg=? WHERE reminder_id = ? "
+DELETE_EVENT="DELETE FROM Reminder WHERE reminder_id = ? "
+FETCH_EVENT_LIST="Select * from Reminder"
+FETCH_LATEST_EVENT_ID="Select reminder_id FROM Reminder ORDER BY reminder_id DESC LIMIT 1"

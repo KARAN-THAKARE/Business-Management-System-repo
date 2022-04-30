@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html ng-app="REPORT" ng-controller="REPORT~CONTROLLER">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+
+
+    <!-- Angular controller JS-->
+    <script src="/static/js/angular/angular.min.js"></script>
+    <script src="/static/js/report controller/report controller.js"></script>
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="/static/vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="/static/css/fontastic.css">
+
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="/static/css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+
+    <!-- FONT-AWESOME-->
+    <link rel="shortcut icon" href="/static/css/font awesome/all.min.css">
+    <link rel="shortcut icon" href="/static/css/font awesome/fontawesome.min.css">
+    <!-- FONT-AWESOME END-->
+    <!-- notiflix -->
+    <link rel="shortcut icon" href="/static/css/notiflix/notiflix.css">
+    <!-- notiflix END-->
+    <!-- Clock-->
+    <link rel="stylesheet" href="/static/css/clock.css">
+
+        <!-- Calculator -->
+        <link rel="shortcut icon" href="/static/css/calculator/calculator.css">
+        <!-- Calculator END-->
+        <!-- battery -->
+        <link rel="stylesheet" href="/static/css/battery.css">
+        <!-- battery END-->
+        <!-- daterangepicker-->
+        <link rel="stylesheet" href="/static/css/daterangepicker/daterangepicker.css">
+        <!-- Table for Records-->
+        <link rel="stylesheet" href="/static/css/table for records/1.css">
+        <link rel="stylesheet" href="/static/css/table for records/2.css">
+
+        <style media="screen">
+        body {
+          overflow-y: hidden;
+          overflow-x: hidden;
+        }
+        </style>
+
+      </head>
+
+<body>
+
+    <div class="page">
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  >
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                     
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                <a href="/Setting/User Profile" class="text-decoration-none"><span style="color: #333;font-size: 1.1rem;font-weight:700 ;" class="my-1 text-capitalize" id="OWNER_NAME"></a> </span>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li ><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li ><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li ><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li class="active"><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+  <div class="content-inner bg-white">
+
+  <div class="pulledLeft mt-3">
+    <h4>&nbsp;&nbsp;&nbsp;Generate Supplier Report</h4>
+  </div>
+
+<div class="container-fluid" style="background:#fff;">
+
+<br>
+    <div class="row navbar">
+      <div class="pr-5 mr-5" style="padding-right: 25rem!important;"><a class="navbar-brand"></a></div>
+
+
+      <div class="col-auto">
+        <div class="input-group">
+          <div class="input-group-prepend" >
+            <div class="input-group-text rounded-left" style="border:1px solid #c0c0c0"><i class="fa fa-filter" aria-hidden="true"></i></div>
+          </div>
+          <select class="form-control  rounded-right" id="SupplierFilter" style="background: #fff; cursor: pointer; padding: 5px 40px; border: 1px solid #ccc; ">
+            <option value="All">All</option>
+            <option value="true">Active</option>
+            <option value="false">Deactive</option>
+          </select>
+        </div>
+      </div>
+
+
+
+      <div class="form-inline">
+        <div id="reportrange" class="px-3 mx-0  rounded" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; ">
+            <i class="fa fa-calendar"></i>&nbsp;
+            <span></span> <i class="fa fa-caret-down"></i>
+        </div>
+      </div>
+      <button type="button" class="btn btn-dark"   style="background:#2f333e;color:#fff;border: 3px solid #ccc;border-width: 1px 1px 4px" ng-click="GenrateSupplierReport()">Generate</button>
+    </div>
+<br><br>
+
+    <table ng-table ="usersTable" id="example" class="display nowrap" style="width:100%">
+            <thead >
+                <tr style="background: #dddddd80;">
+                    <th style="border:1px solid #eee">Client ID</th>
+                    <th style="border:1px solid #eee">Client Name</th>
+                    <th style="border:1px solid #eee">Phone No.</th>
+                    <th style="border:1px solid #eee">Address</th>
+                    <th style="border:1px solid #eee">Pan No.</th>
+                </tr>
+            </thead>
+            <tbody>
+          {% for each in GENERATED_SUPPLIER_DATA %}
+                <tr >
+                    <td>{{each["supplier_id"]}}</td>
+                    <td>{{each["Name"]}}</td>
+                    <td>{{each["contact_no"]}}</td>
+                    <td>{{each["Address"]}}</td>
+
+                    {% if each["PAN_NO"] is none or each["PAN_NO"]==''%}
+                    <td class="text-center">-</td>
+                    {% endif %}
+                    {% if each["PAN_NO"] is not none and each["PAN_NO"]!=''%}
+                    <td>{{each["PAN_NO"]}}</td>
+                    {% endif %}
+                </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+
+<input type="hidden" id="STARTER" >
+<input type="hidden" id="ENDER" >
+<input type="hidden" id="isSuccess" value={{isSuccess}}>
+
+<!-- Previously selected Start Date End Date -->
+<input type="hidden" id="Previous_Selected_Date" value={{StartDate}} >
+<input type="hidden" id="Previous_End_Date" value={{EndDate}} >
+
+
+  </div>
+  <!-- Page Footer-->
+  <footer class="main-footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+        <!--  <p>Your company &copy; 2017-2020</p> -->
+        <p>This computer software is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this Software , or any portion of it  may result in severe civil and criminal penalties , and will be prosecuted to maximum extend possible under the law . <span style="color:#39FF14">Karan Thakare &copy; 2021-2020</span></p>
+        </div>
+        <div class="col-sm-6 text-right">
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+</div>
+
+
+
+
+
+
+
+<!-- ___________________________________________________________________________________________________ -->
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " DAILY SUMMARY " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+ <div class="modal fade  " id="Daily_Summary_model" tabindex="-1" role="dialog"  style="float:left;left:80px" >
+   <div class="modal-dialog   modal-dialog-centered modal-lg"  style="float:left">
+
+     <!-- Modal content-->
+     <div class="modal-content py-0 my-0" style="border-radius:25px;width:1400px !important;border:none">
+       <!-- Modal header-->
+       <div class="modal-header py-2 pt-3 pl-4" style="border-radius:25px 25px 0px 0px;background-image: linear-gradient(to right,#2f333ef5,#2f333ef5 ); ">
+         <h6 class="text-white" style="margin-left:585px"> <img class="pr-3" src="/static/img/Header icon/data anaylsis.png" >   DAILY SUMMARY</h6>
+         <button type="button" class="close  text-light" data-dismiss="modal" >&times;</button>
+       </div>
+
+     <div class="modal-body" style="width:1400px !important" >
+
+       <select class="form-control form-control-sm text-white" id="DailySummaryOption" ng-model="Daily_Summary_Option"  ng-options="item for item in Daily_Summary_Option_list" ng-change='Fetch_Daily_Summary()' style="background:#181a1f;width:240px;border-radius:25px" ></select>
+
+      <!-- ============================================================================================================================================
+       ***********************************************************  Today's sale Invoices *********************************************************
+       ============================================================================================================================================= -->
+       <input type="text" class="form-control my-2 float-right " ng-show="Daily_Summary_Option=='Customer Invoices'"  id="Search1" style="width:240px;border-radius:25px" placeholder="Search ...">
+       <table class="table text-center table-striped" ng-show="Daily_Summary_Option=='Customer Invoices'">
+         <thead class="thead-dark">
+           <tr>
+             <th scope="col">INVOICE ID</th>
+                <th scope="col">INVOICE TYPE</th>
+                  <th scope="col">CUSTOMER NAME</th>
+                    <th scope="col">TOTAL AMOUNT</th>
+                       <th scope="col">AMOUNT PAID</th>
+                          <th scope="col">BALANCE AMOUNT</th>
+                            <th scope="col">STATUS</th>
+                               <th scope="col">EXPORT</th>
+               </tr>
+             </thead>
+             <tbody id="SearchTable1">
+               <tr ng-repeat='each in DailySummaryData'>
+                 <td>..each.Invoice_NO..</td>
+                 <td class="text-left  pl-5">..each.Invoice_Type..</td>
+                 <td class="text-left">..each.Customer_Name..</td>
+                 <td class="text-left pl-5">₹..each.Total_Amount..</td>
+                 <td class="text-left pl-5">₹..each.Amount_Paid..</td>
+                 <td class="text-left pl-5">₹..each.Balance_Amount..</td>
+                 <td ng-if="each.Status=='Complete'"><span class="text-white px-4 py-1"  style="font-size:14px;background:#1ea330bf;border-radius:25px">Complete</span></td>
+                 <td ng-if="each.Status!='Complete'"><span class="text-white px-4 py-1"  style="font-size:14px;background:#ff0000bf;border-radius:25px">Pending</td>
+                 <td><a href="/Display_Bill_For_Invoice.do/..each.Invoice_NO../Download_PDF_For_Invoice/..each.Invoice_NO../Short" data-toggle="tooltip" data-placement="left" title="" data-trigger="hover" data-original-title="Click here to download Invoice for ..each.Customer_Name.. "><img src="/static/img/pdf.svg"  style="width:30px;height;30px"></a></td>
+               </tr>
+                 <tr ng-show='DailySummaryDataLength==0'>
+                     <td colspan="8" >No Data Available</td>
+                 </tr>
+         </tbody>
+       </table>
+       <!-- ============================================================================================================================================
+        *********************************************************** ~ END Today's sale Invoices END ~ *********************************************************
+        ============================================================================================================================================= -->
+
+
+
+        <!-- ============================================================================================================================================
+         ***********************************************************  Today's purchase Invoices *********************************************************
+         ============================================================================================================================================= -->
+         <input type="text" class="form-control my-2 float-right "ng-show="Daily_Summary_Option=='Supplier Invoices'"  id="Search2"  style="width:240px;border-radius:25px" placeholder="Search ...">
+         <table class="table text-center table-striped" ng-show="Daily_Summary_Option=='Supplier Invoices'">
+           <thead class="thead-dark">
+             <tr>
+               <th scope="col">PURCHASE ID</th>
+                  <th scope="col">PURCHASE TYPE</th>
+                    <th scope="col">SUPPLIER NAME</th>
+                      <th scope="col">TOTAL AMOUNT</th>
+                         <th scope="col">AMOUNT PAID</th>
+                            <th scope="col">BALANCE AMOUNT</th>
+                              <th scope="col">STATUS</th>
+                                 <th scope="col">EXPORT</th>
+                 </tr>
+               </thead>
+               <tbody  id="SearchTable2">
+                 <tr ng-repeat='each in DailySummaryData'>
+                   <td>..each.Purchase_NO..</td>
+                   <td class="text-left  pl-5">..each.Purchase_Type..</td>
+                   <td class="text-left ">..each.Supplier_Name..</td>
+                   <td class="text-left  pl-5">₹..each.Total_Amount..</td>
+                   <td class="text-left  pl-5">₹..each.Amount_Paid..</td>
+                   <td class="text-left  pl-5">₹..each.Balance_Amount..</td>
+                   <td ng-if="each.Status=='Complete'"><span class="text-white px-4 py-1"  style="font-size:14px;background:#1ea330bf;border-radius:25px">Complete</span></td>
+                   <td ng-if="each.Status!='Complete'"><span class="text-white px-4 py-1"  style="font-size:14px;background:#ff0000bf;border-radius:25px">Pending</td>
+                   <td><a href="/Display_Bill_For_Purchase.do/..each.Purchase_NO../Download_PDF_For_PURCHASE/..each.Purchase_NO../Short" data-toggle="tooltip" data-placement="left" title="" data-trigger="hover" data-original-title="Click here to download Invoice for ..each.Supplier_Name.. "><img src="/static/img/pdf.svg" alt="" style="width:30px;height;30px"></a></td>
+                 </tr>
+                   <tr ng-show='DailySummaryDataLength==0'>
+                       <td colspan="8" >No Data Available</td>
+                   </tr>
+           </tbody>
+         </table>
+         <!-- ============================================================================================================================================
+          *********************************************************** ~ END Today's purchase Invoices END ~ *********************************************************
+          ============================================================================================================================================= -->
+
+          <!-- ============================================================================================================================================
+           ***********************************************************  Today's Payment Transaction *********************************************************
+           ============================================================================================================================================= -->
+           <input type="text" class="form-control my-2 float-right "ng-show="Daily_Summary_Option=='Payment Transaction'"   id="Search3"  style="width:240px;border-radius:25px" placeholder="Search ...">
+           <table class="table text-center table-striped" ng-show="Daily_Summary_Option=='Payment Transaction'">
+             <thead class="thead-dark">
+               <tr>
+                 <th scope="col">PAYMENT ID</th>
+                    <th scope="col">INVOICE NO.</th>
+                      <th scope="col">NAME</th>
+                        <th scope="col">AMOUNT PAID</th>
+                           <th scope="col">PAYMENT MODE</th>
+                              <th scope="col">TXN NO.</th>
+                                <th scope="col">REMARKS</th>
+                                   <th scope="col">EXPORT</th>
+                   </tr>
+                 </thead>
+                 <tbody  id="SearchTable3">
+                   <tr ng-repeat='each in DailySummaryData' ng-if="each.PaymentFor=='Invoice'">
+                     <td>I-..each.Payment_ID..</td>
+                     <td>..each.InvoiceNo..</td>
+                     <td class="text-left">..each.Name..</td>
+                     <td class="text-left pl-5">₹..each.Amount_Paid..</td>
+                     <td class="text-left pl-5">..each.Payment_Mode..</td>
+                     <td class="text-left">..each.Txn_NO..</td>
+                     <td class="text-left">..each.Remarks..</td>
+                     <td><a href="/DOWNLOAD_PAYSLIP_INVOICE/..each.InvoiceNo../..each.Payment_ID.."  ><img class="liftUP" src="/static/img/pdf.svg" style="width:30px;height:30px;"></a></td>
+                   </tr>
+                   <tr ng-repeat='each in DailySummaryData' ng-if="each.PaymentFor=='Purchase'">
+                     <td>P-..each.Payment_ID..</td>
+                     <td>PO..each.InvoiceNo..</td>
+                     <td class="text-left">..each.Name..</td>
+                     <td class="text-left pl-5">₹..each.Amount_Paid..</td>
+                     <td class="text-left pl-5">..each.Payment_Mode..</td>
+                     <td class="text-left">..each.Txn_NO..</td>
+                     <td class="text-left">..each.Remarks..</td>
+                     <td><a href="/DOWNLOAD_PAYSLIP_PURCHASE/..each.InvoiceNo../..each.Payment_ID.." ><img class="liftUP" src="/static/img/pdf.svg" style="width:25px;height:25px;"></a></td>
+                   </tr>
+                     <tr ng-show='DailySummaryDataLength==0' >
+                         <td colspan="8" >No Data Available</td>
+                     </tr>
+             </tbody>
+           </table>
+           <!-- ============================================================================================================================================
+            *********************************************************** ~ END Today's Payment Transaction END ~ *********************************************************
+            ============================================================================================================================================= -->
+
+            <!-- ============================================================================================================================================
+             ***********************************************************  Today's Stock Transaction *********************************************************
+             ============================================================================================================================================= -->
+             <input type="text" class="form-control my-2 float-right "ng-show="Daily_Summary_Option=='Stock Transaction'"   id="Search4"  style="width:240px;border-radius:25px" placeholder="Search ...">
+             <table class="table text-center table-striped" ng-show="Daily_Summary_Option=='Stock Transaction'">
+               <thead class="thead-dark">
+                 <tr>
+                   <th scope="col">STOCK ID</th>
+                      <th scope="col">STOCK NAME</th>
+                        <th scope="col">QUANTITY</th>
+                          <th scope="col">NAME</th>
+                             <th scope="col">INVOICE NO.</th>
+                              <th scope="col">TRANSACTION FOR</th>
+
+                     </tr>
+                   </thead>
+                   <tbody id="SearchTable4">
+                     <tr ng-repeat='each in DailySummaryData' ng-if="each.Transaction_For=='Customer'">
+                       <td>..each.Stock_ID..</td>
+                       <td class="text-left">..each.Stock_Name..</td>
+                       <td>..each.Quantity..</td>
+                       <td> ..each.Name..</td>
+                       <td> ..each.Invoice..</td>
+                       <td><span class="text-white px-4 py-1"  style="font-size:14px;background:#1ea330bf;border-radius:25px"> ..each.Transaction_For..</span></td>
+                     </tr>
+                     <tr ng-repeat='each in DailySummaryData' ng-if="each.Transaction_For=='Supplier'">
+                       <td>..each.Stock_ID..</td>
+                       <td class="text-left">..each.Stock_Name..</td>
+                       <td>..each.Quantity..</td>
+                       <td> ..each.Name..</td>
+                      <td>PO..each.Invoice..</td>
+                       <td><span class="text-white px-4 py-1"  style="font-size:14px;background:#1e35a3bf;border-radius:25px">&nbsp; ..each.Transaction_For..&nbsp;</span></td>
+                     </tr>
+                       <tr ng-show='DailySummaryDataLength==0' >
+                           <td colspan="8" >No Data Available</td>
+                       </tr>
+               </tbody>
+             </table>
+             <!-- ============================================================================================================================================
+              *********************************************************** ~ END Today's Stock Transaction END ~ *********************************************************
+
+              ============================================================================================================================================= -->
+              <!-- ============================================================================================================================================
+               ***********************************************************  Today's Client joine *********************************************************
+               ============================================================================================================================================= -->
+               <input type="text" class="form-control my-2 float-right "ng-show="Daily_Summary_Option=='Client Joine'"  id="Search5"  style="width:240px;border-radius:25px" placeholder="Search ...">
+               <table class="table text-center table-striped" ng-show="Daily_Summary_Option=='Client Joine'">
+                 <thead class="thead-dark">
+                   <tr>
+                     <th scope="col">CLIENT ID</th>
+                        <th scope="col">CLIENT NAME</th>
+                          <th scope="col">PHONE NO.</th>
+                            <th scope="col">ADDRESS</th>
+                               <th scope="col">PAN NUMBER</th>
+                       </tr>
+                     </thead>
+                     <tbody id="SearchTable5">
+                       <tr ng-repeat='each in DailySummaryData'>
+                         <td>..each.Client_ID..</td>
+                         <td class="text-left">..each.Client_Name..</td>
+                         <td>..each.PhoneNo..</td>
+                         <td class="text-left"> ..each.Address..</td>
+                         <td> ..each.PanNumber..</td>
+                       </tr>
+                         <tr ng-show='DailySummaryDataLength==0' >
+                             <td colspan="8" >No Data Available</td>
+                         </tr>
+                 </tbody>
+               </table>
+               <!-- ============================================================================================================================================
+                *********************************************************** ~ END Today's Client joine END ~ *********************************************************
+                ============================================================================================================================================= -->
+
+
+                <!-- ============================================================================================================================================= -->
+                <!-- ============================================================================================================================================
+                 ***********************************************************  Today's Client joine *********************************************************
+                 ============================================================================================================================================= -->
+                 <input type="text" class="form-control my-2 float-right "ng-show="Daily_Summary_Option=='Supplier Joine'"  id="Search6"  style="width:240px;border-radius:25px" placeholder="Search ...">
+                 <table class="table text-center table-striped" ng-show="Daily_Summary_Option=='Supplier Joine'">
+                   <thead class="thead-dark">
+                     <tr>
+                       <th scope="col">SUPPLIER ID</th>
+                          <th scope="col">SUPPLIER NAME</th>
+                            <th scope="col">PHONE NO.</th>
+                              <th scope="col">ADDRESS</th>
+                                <th scope="col">PAN NUMBER</th>
+                                  <th scope="col">GSTIN</th>
+                         </tr>
+                       </thead>
+                       <tbody id="SearchTable6">
+                         <tr ng-repeat='each in DailySummaryData'>
+                           <td>..each.Supplier_ID..</td>
+                           <td class="text-left">..each.Supplier_Name..</td>
+                           <td>..each.PhoneNo..</td>
+                           <td class="text-left"> ..each.Address..</td>
+                           <td> ..each.PanNumber..</td>
+                           <td> ..each.GSTIN..</td>
+                         </tr>
+                           <tr ng-show='DailySummaryDataLength==0' >
+                               <td colspan="8" >No Data Available</td>
+                           </tr>
+                   </tbody>
+                 </table>
+                 <!-- ============================================================================================================================================
+                  *********************************************************** ~ END Today's Client joine END ~ *********************************************************
+                  ============================================================================================================================================= -->
+     </div>
+   </div>
+ </div>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " DAILY SUMMARY " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- ______________________________________________________________________________________________________-->
+
+
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " STOCK SUMMARY "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- ______________________________________________________________________________________________________-->
+
+ <div class="modal fade  " id="Stock_Summary_model" tabindex="-1" role="dialog"  style="float:left;left:80px"  >
+   <div class="modal-dialog   modal-dialog-centered modal-lg"  style="float:left" >
+     <!-- Modal content-->
+
+     <div class="modal-content py-0 my-0" style="border-radius:25px;width:1400px !important;border:none">
+       <div class="modal-header py-2 pt-3 pl-4" style="border-radius:25px 25px 0px 0px;background-image: linear-gradient(to right,#2f333ef5,#2f333ef5 ); ">
+         <h6 class="text-white " style="margin-left:585px"><img class="pr-3" src="/static/img/Header icon/stock.png" > STOCK SUMMARY</h6>
+         <button type="button" class="close  text-light" data-dismiss="modal" >&times;</button>
+
+       </div>
+     <div class="modal-body" style="width:1400px !important" >
+
+       <input type="text" class="form-control my-2 float-right " id="StockSearch" style="width:240px;border-radius:25px" placeholder="Search ...">
+
+
+       <table class="table text-center table-striped"  >
+         <thead class="thead-dark">
+           <tr>
+             <th scope="col">STOCK ID</th>
+             <th scope="col">STOCK NAME</th>
+             <th scope="col">QUANTITY</th>
+             <th scope="col">PREV. CREDIT QUANTITY</th>
+              <th scope="col">PREV. CREDIT DATE</th>
+              <th scope="col">PREV. DEBIT QUANTITY</th>
+                <th scope="col">PREV. DEBIT DATE</th>
+                 <th scope="col">STATUS</th>
+
+           </tr>
+         </thead>
+         <tbody id="StockTable">
+           <tr ng-repeat='stock in StockSummary'>
+             <td  >..stock.STOCK_ID..</td>
+             <td  class="text-left">..stock.STOCK_NAME..</td>
+             <td>..stock.STOCK_QUANTITY..</td>
+             <td>..stock.PREV_CREDIT_QUANTITY..</td>
+             <td>..stock.PREV_CREDIT_DATE..</td>
+             <td>..stock.PREV_DEBIT_QUANTITY..</td>
+             <td>..stock.PREV_DEBIT_DATE..</td>
+             <td ng-if="stock.STOCK_QUANTITY<=0"><span class="text-white px-3 py-1"  style="font-size:14px;background:#ff0000bf;border-radius:25px">Out OF Stock</span></td>
+                <td ng-if="stock.STOCK_QUANTITY<=stock.WARNING_STOCK_COUNT && stock.STOCK_QUANTITY>0"><span class=" px-3 py-1"  style="font-size:14px;background:#ffe400a6;border-radius:25px;color:#6b6b63">About To Out</span></td>
+                   <td ng-if="stock.STOCK_QUANTITY>stock.WARNING_STOCK_COUNT"><span class="text-white px-4 py-1"  style="font-size:14px;background:#1ea330bf;border-radius:25px">&nbsp; Available &nbsp;</span></td>
+           </tr>
+
+         </tbody>
+       </table>
+     </div>
+   </div>
+ </div>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " STOCK SUMMARY " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- ______________________________________________________________________________________________________-->
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " BUSINESS BOOK "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- ______________________________________________________________________________________________________-->
+
+ <div class="modal fade  " id="Business_Book_model" tabindex="-1" role="dialog"  style="float:left;left:80px" >
+   <div class="modal-dialog   modal-dialog-centered modal-lg"  style="float:left">
+     <!-- Modal content-->
+
+     <div class="modal-content py-0 my-0" style="border-radius:25px;width:1400px !important;border:none">
+       <div class="modal-header py-2 pt-3 pl-4" style="border-radius:25px 25px 0px 0px;background-image: linear-gradient(to right,#2f333ef5,#2f333ef5 ); ">
+         <h6 class="text-white " style="margin-left:585px"><img class="pr-3" src="/static/img/Header icon/business analysis.png" >BUSINESS BOOK</h6>
+         <button type="button" class="close  text-light" data-dismiss="modal" >&times;</button>
+
+       </div>
+     <div class="modal-body" style="width:1400px !important" >
+
+       <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="py-0 my-0" for="StartDate" style="font-size:13px">Start Date</label>
+              <input type="date" class="form-control form-control-sm rounded" id="StartDate" ng-model="StartDate" >
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+             <label  class="py-0 my-0"  for="EndDate" style="font-size:13px">End Date</label>
+             <input type="date" class="form-control form-control-sm rounded" id="EndDate"  ng-model="EndDate">
+           </div>
+          </div>
+          <div class="col">
+
+             <button type="button" class="btn btn-success mt-3" style="font-size:15px" ng-click='SearchBusinessBook("Custome")'><i class="fa fa-search pr-1" ></i> Search</button>
+
+          </div>
+          <div class="col-6" >
+           <table class="bg-dark text-light rounded " style="float:right;">
+                 <tr>
+                  <td class="px-3 pt-2">Total Inflow &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :  &nbsp;</td>
+                  <td class="pr-3 pt-2"><i class="fa fa-inr" aria-hidden="true"></i> ..Total_Inflow..</td>
+                </tr>
+                <tr>
+                  <td class="px-3 ">Total Outflow &nbsp;&nbsp; : &nbsp;</td>
+                  <td class="pr-3 "><i class="fa fa-inr" aria-hidden="true"></i> ..Total_Outflow..</td>
+                </tr>
+                <tr>
+                  <td class="px-3 pb-2">Net Flow &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  : &nbsp;</td>
+                  <td class="pr-3 pb-2"><i class="fa fa-inr" aria-hidden="true"></i> ..Net_Flow..</td>
+                </tr>
+            </table>
+          </div>
+      </div>
+
+      <div class="row ">
+         <div class="col">
+         <button type="button" class="btn btn-dark btn-sm px-4" style="font-size:12px" ng-click='SearchBusinessBook("Today")'>Today</button>
+         <button type="button" class="btn btn-dark btn-sm" style="font-size:12px" ng-click='SearchBusinessBook("Yesterday")'>Yesterday</button>
+         <button type="button" class="btn btn-dark btn-sm px-4" style="font-size:12px" ng-click='SearchBusinessBook("SevenDayBack")'>7 Days</button>
+          <button type="button" class="btn btn-dark btn-sm px-4" style="font-size:12px" ng-click='SearchBusinessBook("ThirtyDayBack")'>30 Days</button>
+         </div>
+     </div>
+
+
+       <input type="text" class="form-control my-2 float-right " id="BusinessBookSearch" style="width:240px;border-radius:25px" placeholder="Search ..." autocomplete="off">
+
+
+       <table class="table  table-borderless  ">
+         <thead class="thead-dark ">
+           <tr class="bg-dark text-light">
+             <td scope="col" style="border-radius:10px 0px 0px 0px">DATE</td>
+             <td scope="col">PARTICULARS</td>
+             <td scope="col">PAYMENT MODE</td>
+              <td scope="col">CREDIT</td>
+              <td scope="col" style="border-radius:0px 10px 0px 0px">DEBIT</td>
+
+           </tr>
+         </thead>
+         <tbody id="BusinessBookTable">
+           <tr ng-repeat='data in BussinessBookData' ng-style="data.Type=='credit' && {'background-color':'#13b3132e'} || data.Type=='debit' && { 'background' : '#a31c1c30' } ">
+             <td>..data.Date | date : "MMMM d, y".. </td>
+             <td  class="text-left">..data.Particulars..</td>
+             <td>..data.PaymentMode..</td>
+             <td><span ng-if="data.Type=='credit'"><i class="fa fa-inr" aria-hidden="true"></i> ..data.AmountPaid..</span> </td>
+             <td><span ng-if="data.Type=='debit'"><i class="fa fa-inr" aria-hidden="true"></i> ..data.AmountPaid..</span> </td>
+           </tr>
+           <tr ng-show='BusinessBookDataLength==0' class="text-center" style="background:#ededed">
+               <td colspan="5" >No Data Available</td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+   </div>
+ </div>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " BUSINESS BOOK  " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- ______________________________________________________________________________________________________-->
+
+<!-- ______________________________________________________________________________________________________-->
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " CALCULATOR  "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+ <div class="modal fade" id="Calculator_model" tabindex="-1" role="dialog" >
+   <div class="modal-dialog   modal-dialog-centered"  >
+     <!-- Modal content-->
+
+     <div class="modal-content py-0 my-0" style="border-radius:25px">
+
+     <div class="modal-body">
+
+         <input class="calcul-input" type="text" placeholder="Your calcul ..." onkeypress="if (event.keyCode == 13){enter()}">
+
+         <div class="calcul">
+           <button class="Calculatorbutton" id="open">(</button><button class="Calculatorbutton"  id="close">)</button><button class="Calculatorbutton"  id="mod">%</button><button class="Calculatorbutton" id="c">C</button>
+           <button class="Calculatorbutton" id="seven">7</button><button class="Calculatorbutton" id="eight">8</button><button class="Calculatorbutton" id="nine">9</button><button class="Calculatorbutton"  id="slash">÷</button>
+           <button class="Calculatorbutton" id="four">4</button><button class="Calculatorbutton" id="five">5</button><button class="Calculatorbutton" id="six">6</button><button class="Calculatorbutton"  id="x">x</button>
+           <button class="Calculatorbutton" id="one">1</button><button class="Calculatorbutton" id="two">2</button><button class="Calculatorbutton" id="three">3</button><button  class="Calculatorbutton" id="min">-</button>
+           <button class="Calculatorbutton" id="zero">0</button><button class="Calculatorbutton" id="point">,</button><button class="Calculatorbutton"  id="equal">=</button><button class="Calculatorbutton" id="plus">+</button>
+         </div>
+
+
+     </div>
+   </div>
+ </div>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " CALCULATOR  " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- ______________________________________________________________________________________________________-->
+
+
+
+
+<!-- __________________________________________________________________________________________________________-->
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " GST CALCULATOR  " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+ <div class="modal fade" id="GST_model" role="dialog" >
+   <div class="modal-dialog modal-lg" style="top:200px;" >
+     <!-- Modal content-->
+
+     <div class="modal-content py-0 my-0" style="border-radius:25px">
+     <div class="modal-header border-0  pt-3 pb-0">
+       <h4 class="text-white py-3 px-3" style="border-radius:0px 50px 50px 0px;background:linear-gradient(to right,#000428,#004e92);" >GST CALCULATOR</h4>
+       <button type="button" class="close" data-dismiss="modal" >&times;</button>
+     </div>
+     <div class="modal-body">
+  <form class="" id="Reminder_form" autocomplete="off">
+
+ <div class="container-fluid" >
+
+   <div class="row" > <!-- First row-->
+     <div class="col">
+       <div class="form-group cols_pad ">
+       <label for="GST_amount" class="form-control-sm lable_define  " >Amount</label>
+       <div class="input-group-prepend input_box_height  " >
+       <div class="input-group-text rounded-left">₹</div>
+       <input type="number" class="form-control form-control-sm rounded-right" id="GST_amount" ng-model="GST.amount" ng-change="GST_Calculator(GST)"    >
+     </div></div>
+     </div>
+
+
+
+
+  <div class="form-group col-md-4">
+    <label for="GST_option"  class="form-control-sm lable_define" >GST Option</label>
+    <select id="GST_option" class="form-control form-control-sm rounded" ng-model="GST.option" ng-change="GST_Calculator(GST)" placeholder=""    >
+      <option selected value=0 >Add GST</option>
+      <option value=1>Remove GST</option>
+    </select>
+  </div>
+
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="GST_rate" class="form-control-sm lable_define" >Custom GST Rate</label>
+  <div class="input-group-prepend input_box_height" >
+  <div class="input-group-text rounded-left">%</div>
+  <input type="number" class="form-control form-control-sm rounded-right" id="GST_rate" ng-model="GST.rate" ng-change="GST_Calculator(GST)"   >
+</div></div>
+</div>
+    </div>
+
+       </div>
+
+<div class="card-deck mx-3">
+<div class="card">
+<div class="card-body py-2 align-middle">
+<h5 class="card-title text-center">.. GST.rate .. %</h5>
+</div>
+<div class="card-footer py-2 align-middle ">
+<h6  class="text-muted text-center ">GST %</h6 >
+</div>
+</div>
+<div class="card">
+<div class="card-body py-2 align-middle">
+<h5 class="card-title text-center">₹ ..GST.GSTAmount..</h5>
+</div>
+<div class="card-footer py-2 align-middle">
+<h6  class="text-muted text-center">GST Amount</h6 >
+</div>
+</div>
+<div class="card">
+<div class="card-body py-2 align-middle">
+<h5 class="card-title text-center text-center">₹ ..GST.Net_Amount..</h5>
+</div>
+<div class="card-footer py-2 align-middle">
+<h6 class="text-muted text-center">Net Amount</h6>
+</div>
+</div>
+</div>
+
+     </form>
+     </div>
+   </div>
+ </div></div>
+
+
+ <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " GST CALCULATOR  " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+ <!-- __________________________________________________________________________________________________________-->
+
+ <!-- ______________________________________________________________________________________________________________________-->
+ <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " SCREEN SIZE WARN-NING MODEL " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+ <div  class="modal fade" id="ScreenWarningModel" tabindex="-1" role="dialog" aria-labelledby="WarningModel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  style=" border:2px solid #f9cc03;">
+   <div class="modal-dialog modal-dialog-centered" role="document" >
+     <div class="modal-content rounded" style=" border:2px solid #f9cc03; background:#f9cc03">
+       <div class="modal-header py-2 " style=" background-image: url('/static/img/warn.jpg');background-position: center;background-size: cover; border: 1px solid #f1c500;">
+
+       </div>
+       <div class="modal-body"  >
+        <h1>Screen Resolution Warning !!!</h1>
+        <p class="text-justify" style="font-size:12px">Hey User , Application is not in full screen resolution . For better experience we request you to please press  <b style="font-size:13px">F-11</b> button.</p>
+
+       <div class="modal-footer pb-2 mt-0" style=" background-image: url('/static/img/warn.jpg');background-position: center;background-size: cover;border: 1px solid #f1c500;">
+
+       </div>
+     </div>
+   </div>
+ </div>
+ <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " SCREEN SIZE WARN-NING MODEL  " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+ <!-- _______________________________________________________________________________________________________________________-->
+
+</div>
+
+    <!-- JavaScript files-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/vendor/jquery.cookie/jquery.cookie.js"> </script>
+    <script src="/static/vendor/chart.js/Chart.min.js"></script>
+    <script src="/static/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="/static/front/js/charts-home.js"></script>
+
+    <!-- notiflix-->
+    <script src="/static/js/notiflix/notiflix-aio-2.7.0.min.js"></script>
+    <!-- clock-->
+    <script src="/static/js/clock.js"></script>
+
+    <!-- table for records -->
+    <script src="/static/js/table for records/1.js" ></script>
+    <script src="/static/js/table for records/2.js" ></script>
+    <script src="/static/js/table for records/3.js" ></script>
+    <script src="/static/js/table for records/4.js" ></script>
+    <script src="/static/js/table for records/5.js" ></script>
+    <script src="/static/js/table for records/6.js" ></script>
+    <script src="/static/js/table for records/7.js" ></script>
+    <script src="/static/js/table for records/8.js" ></script>
+    <script src="/static/js/table for records/9.js" ></script>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+      $('#example').DataTable( {
+          dom: 'Bfrtip',
+          buttons: [
+              'copy', 'csv', 'excel', 'pdf', 'print'
+          ]
+      } );
+    } );
+    </script>
+    <!--end table for records -->
+
+    <!-- DATE PICKER -->
+    <script src="/static/js/clock.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker/daterangepicker.js"></script>
+
+    <script type="text/javascript">
+    $(function() {
+
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            document.getElementById("STARTER").value = start.format('YYYY-MM-DD');
+            document.getElementById("ENDER").value = end.format('YYYY-MM-DD');
+        }
+
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+               'Today': [moment(), moment()],
+               'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+               'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+               'This Month': [moment().startOf('month'), moment().endOf('month')],
+               'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+
+        cb(start, end);
+
+    });
+    </script>
+
+    <style type="text/css">
+    .demo { position: relative; }
+    .demo i {
+    position: absolute; bottom: 10px; right: 24px; top: auto; cursor: pointer;
+    }
+    </style>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+    $('#config-text').keyup(function() {
+      eval($(this).val());
+    });
+
+    $('.configurator input, .configurator select').change(function() {
+      updateConfig();
+    });
+
+    $('.demo i').click(function() {
+      $(this).parent().find('input').click();
+    });
+
+
+    updateConfig();
+
+    function updateConfig() {
+      var options = {};
+
+      if ($('#timePicker').is(':checked'))
+        options.timePicker = true;
+
+
+      if ($('#ranges').is(':checked')) {
+        options.ranges = {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        };
+      }
+
+      if ($('#locale').is(':checked')) {
+        $('#rtl-wrap').show();
+        options.locale = {
+          direction: $('#rtl').is(':checked') ? 'rtl' : 'ltr',
+          format: 'MM/DD/YYYY HH:mm',
+          separator: ' - ',
+          applyLabel: 'Apply',
+          cancelLabel: 'Cancel',
+          fromLabel: 'From',
+          toLabel: 'To',
+          customRangeLabel: 'Custom',
+          daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+          monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          firstDay: 1
+        };
+      } else {
+        $('#rtl-wrap').hide();
+      }
+
+      $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+
+      $('#config-demo').daterangepicker(options, function(start, end, label) { console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');}).click();;
+
+    }
+
+    });
+    </script>
+    <script>
+
+    $(document).ready(function(){
+    //**********************************************************************************************************
+    //========================================== FOR Stock Summary START =======================================
+    $("#StockSearch").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#StockTable tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+    //========================================== FOR Stock Summary END =========================================
+    //**********************************************************************************************************
+
+    //**********************************************************************************************************
+    //========================================== FOR Business Book START =======================================
+    $("#BusinessBookSearch").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#BusinessBookTable tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+    //========================================== FOR Business Book  END ========================================
+    //**********************************************************************************************************
+
+    //**********************************************************************************************************
+    //========================================== FOR Daily Summary START =======================================
+
+    $("#Search1").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#SearchTable1 tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+
+    $("#Search2").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#SearchTable2 tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+
+    $("#Search3").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#SearchTable3 tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+
+    $("#Search4").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#SearchTable4 tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+
+    $("#Search5").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#SearchTable5 tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+
+    $("#Search6").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#SearchTable6 tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+    //========================================== FOR Daily Summary  END ========================================
+    //**********************************************************************************************************
+
+    //********************************************************************************************************
+    //========================================== FOR Information START ======================================
+    $("#Information").popover({
+    html:true,
+    sanitize:false,
+    content:function(){
+    return $('#InformationTemplate').html();
+    }
+    });
+    //========================================== FOR Information END ========================================
+    //********************************************************************************************************
+
+
+
+
+    //
+    // //********************************************************************************************************
+    // //========================================== Disable right click ========================================
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    // //=========================================== Disable right click END ==================================
+    // //********************************************************************************************************
+    //
+
+    //
+    // //********************************************************************************************************
+    // //========================================== Check Window screen size  ===================================
+    $(document).ready(function() {
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      //alert("weight :"+ w +"Height :"+h)
+      //weight :1536 Height :864
+       if (w<1500 || h<850) {
+          $('#ScreenWarningModel').modal('show');
+       }else{
+         $('#ScreenWarningModel').modal('hide');
+       }
+        $(window).on('resize', function() {
+          var w = window.innerWidth;
+          var h = window.innerHeight;
+          if (w<1500 || h<850) {
+             $('#ScreenWarningModel').modal('show');
+          }
+          else{
+            $('#ScreenWarningModel').modal('hide');
+          }
+        });
+     });
+     // //=========================================== Check Window screen size END ==============================
+     // //********************************************************************************************************
+     //
+
+    });
+</script>
+  </body>
+</html>

@@ -1,0 +1,455 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+
+    <script src="/static/js/Manage Invoice/Manage Invoice Controller.js"></script>
+
+
+  <link rel="stylesheet" href="/static/css/css2/data-table/bootstrap-table.css">
+  <link rel="stylesheet" href="/static/css/css2/data-table/bootstrap-editable.css">
+
+
+
+{% endblock %}
+
+{% block body %}
+    <div class="page" style="background:white;" ng-controller="MANAGE~INVOICE~CONTROLLER">
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                     
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+
+
+      <div class="page-content d-flex align-items-stretch" >
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                  <a href="/Setting/User Profile" class="text-decoration-none"><h1 class="h4 text-capitalize" id="OWNER_NAME"></h1></a>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li class="active"><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+     <div class="content-inner"  style="overflow-y:scroll;height:1px">
+           <div class="pulledLeft mt-3">
+                <h4>&nbsp;&nbsp;&nbsp;MANAGE INVOICES</h4>
+           </div>
+          <br>
+
+  <div class="px-3">
+
+                  <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-fill justify-content-center">
+                      <!-- <li class="nav-item">
+                        <a class="nav-link  " data-toggle="tab" href="#tab1">DRAFTED</a>
+                      </li> -->
+                      <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tab2">OPEN</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab3">EMI</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab4">RETURN</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab5">COMPLETED</a>
+                      </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                      <!-- <div id="tab1" class=" tab-pane active">
+
+                        <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-key-events="true"  data-resizable="true" data-cookie="true"
+                            data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="font-size:15px;color:#000">
+                            <thead>
+                                <tr>
+                                   <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="Client ID"   >Invoice ID </th>
+                                    <th data-field="Client Name"  >Invoice Date</th>
+                                    <th data-field="Phone No"  >Client Name</th>
+                                    <th data-field="Pan Number" >Status</th>
+                                    <th data-field="Action" >Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in DATA_FOR_DRAFT %}
+                                <tr>
+                                   <td></td>
+                                    <td >{{i.Invoice_NO}}</td>
+                                    <td> {{i.InvoiceDate}}</td>
+                                    <td>Mr./Ms. {{i.ClientName}}</td>
+                                    <td class=" font-weight-bold">Save As Draft</td>
+                                    <td><a href="#" data-toggle="tooltip" data-placement="left" title='Click here to Edit'  data-trigger="hover" ><img src="/static/img/edit.png" alt="" style='width:20px;height:20px' class="mx-2"></a><a href="/DeleteSaveAsDraftForInvoice.do/{{i.Invoice_NO}}"  data-toggle="tooltip" data-placement="left" title='Click here to Delete'  data-trigger="hover" > <img src="/static/img/delete.png" alt="" style='width:20px;height:20px'  class="mx-2"></a></td>
+                                </tr>
+                                 {% endfor %}
+                            </tbody>
+                        </table>
+                          <br><br>
+                      </div> -->
+
+                      <div id="tab2" class="tab-pane active">
+
+                        <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-key-events="true"  data-resizable="true" data-cookie="true"
+                            data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="font-size:15px;color:#000">
+
+                            <thead>
+                                <tr>
+                                   <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="Purchase ID">Invoice ID</th>
+                                    <th data-field="Purchase Type" >Invoice Type</th>
+                                    <th data-field="Invoice Date" >Invoice Date</th>
+                                    <th data-field="Bill Fo"  >Client Name</th>
+                                    <th data-field="Total Amount" >Total Amount</th>
+                                    <th data-field="Amount Paid" >Amount Paid</th>
+                                    <th data-field="Balance Amount" >Balance Amount</th>
+                                    <th data-field="Status" >Status</th>
+                                    <th data-field="Action" >Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in DATA_FOR_OPEN %}
+                                <tr>
+                                   <td></td>
+                                    <td class="font-weight-bold"> <a href="/Display_Bill_For_Invoice.do/{{i.Invoice_NO}}/old" style="color:#000">{{i.Invoice_NO}}</a></td>
+                                    <td class="text-left pl-4">&nbsp; {{i.Invoice_Type}}</td>
+                                    <td>{{i.InvoiceDate}}</td>
+                                    <td class="text-left px-3">&nbsp;{{i.ClientName}}</td>
+                                    <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Total_Amount}} </td>
+                                    <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Amount_Paid}}</td>
+                                    <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Balance_Amount}}</td>
+                                    <td class="datatable-ct "><span class="pie " >{{i.GraphStatus}}/100</span>
+                                      {% if i.InvoiceStatus=='Pending' %}
+                                       <td><a href="/PAY_Bill_For_Invoice.do/{{i.Invoice_NO}}" type="button" class="btn btn-dark   btn-sm py-0"  >Pay <i class="fa fa-google-wallet  px-1" aria-hidden="true"></i></a></td>
+                                      {% endif %}
+                                      {% if i.InvoiceStatus!='Pending' %}
+                                       <td><a href="/PAY_Bill_For_Invoice_EMI.do/{{i.Invoice_NO}}" type="button" class="btn btn-dark   btn-sm py-0"  >Pay <i class="fa fa-google-wallet px-1" aria-hidden="true"></i></a></td>
+                                      {% endif %}
+                                </tr>
+                                 {% endfor %}
+                            </tbody>
+                        </table>
+                          <br><br>
+                       </div>
+
+                 <div id="tab3" class="tab-pane">
+                   <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-key-events="true"  data-resizable="true" data-cookie="true"
+                       data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="font-size:15px;color:#000">
+
+                       <thead>
+                           <tr>
+                              <th data-field="state" data-checkbox="true"></th>
+                               <th data-field="Purchase ID">Invoice ID</th>
+                               <th data-field="Purchase Type " >Invoice Type</th>
+                               <th data-field="Invoice Date" >Invoice Date</th>
+                               <th data-field="Bill Fo"  >Client Name</th>
+                               <th data-field="Total Amount" >Total Amount</th>
+                               <th data-field="Amount Paid" >Amount Paid</th>
+                               <th data-field="EMI" >EMI %</th>
+                               <th data-field="Status" >Status</th>
+                               <th data-field="Action" >Action</th>
+                           </tr>
+                       </thead>
+
+                       <tbody>
+                           {% for i in DATA_FOR_EMI %}
+                           <tr>
+                              <td></td>
+                               <td class="font-weight-bold"> <a href="/Display_Bill_For_Invoice.do/{{i.Invoice_NO}}/old" style="color:#000">{{i.Invoice_NO}}</a></td>
+                               <td class="text-left pl-4">&nbsp;{{i.Invoice_Type}}</td>
+                               <td>{{i.InvoiceDate}}</td>
+                               <td class="text-left">&nbsp;{{i.ClientName}}</td>
+                               <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Total_Amount}} </td>
+                               <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Amount_Paid}}</td>
+                               <td> {{i.EMI_Percent}} %</td>
+                               <td class="datatable-ct "><span class="pie " >{{i.Status}}/100</span>
+                               <td><a href="/PAY_Bill_For_Invoice_EMI.do/{{i.Invoice_NO}}" type="button" class="btn btn-dark  btn-sm py-0"  >Pay <i class="fa fa-google-wallet px-1" aria-hidden="true"></i></a></td>
+                           </tr>
+                            {% endfor %}
+                       </tbody>
+                   </table>
+                     <br><br>
+                  </div>
+
+                  <div id="tab4" class="tab-pane">
+                    <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-key-events="true"  data-resizable="true" data-cookie="true"
+                        data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="font-size:15px;color:#000">
+
+                        <thead>
+                            <tr>
+                               <th data-field="state" data-checkbox="true"></th>
+                                <th data-field="Purchase ID"   >Invoice ID</th>
+                                <th data-field="Invoice Date" >Invoice Date</th>
+                                <th data-field="Purchase Type"   >Invoice Type</th>
+                                <th data-field="Bill Fo"  >Invoice For</th>
+                                <th data-field="Place Of Supply"  >Place Of Supply</th>
+                                <th data-field="Total Amount" >Total Amount</th>
+                                <th data-field="Amount Paid" >Amount Paid</th>
+                                <th data-field="Remarks" >Remarks</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for i in DATA_FOR_RETURN %}
+                            <tr>
+                                <td></td>
+                                <td class="font-weight-bold"> <a href="/Display_Bill_For_Invoice.do/{{i.Invoice_NO}}/old" style="color:#000">{{i.Invoice_NO}}</a></td>
+                                <td  >{{i.InvoiceDate}}</td>
+                                <td>{{i.Invoice_Type}}</td>
+                                <td class="text-left">&nbsp;{{i.ClientName}}</td>
+                                <td>{{i.Place_of_supply}}</td>
+                                <td class="text-left">&nbsp;Rs. {{i.Total_Amount}}</td>
+                                <td class="text-left">&nbsp;Rs. {{i.Amount_Paid}}</td>
+                                <td class="text-left"> {{i.Remarks}}</td>
+
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                      <br><br>
+                   </div>
+
+
+
+
+                    <div id="tab5" class="tab-pane">
+
+                      <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-key-events="true"  data-resizable="true" data-cookie="true"
+                          data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="font-size:15px;color:#000; ">
+
+                          <thead>
+                              <tr>
+                                 <th data-field="state" data-checkbox="true"></th>
+                                  <th data-field="Purchase ID"   >Invoice ID</th>
+                                  <th data-field="Invoice Date" >Invoice Date</th>
+                                  <th data-field="Purchase Type"   >Invoice Type</th>
+                                  <th data-field="Bill Fo"  >Invoice For</th>
+                                  <th data-field="Place Of Supply"  >Place Of Supply</th>
+                                  <th data-field="Total Amount" >Total Amount</th>
+                                  <th data-field="Amount Paid" >Amount Paid</th>
+                                  <th data-field="Status" >Status</th>
+                                  <th data-field="Export" >Export</th>
+                                  <th data-field="Send" >Send</th>
+                              </tr>
+                          </thead>
+
+                          <tbody>
+                              {% for i in DATA_FOR_COMPLETED %}
+                              <tr>
+                                 <td></td>
+                                  <td class="font-weight-bold"> <a href="/Display_Bill_For_Invoice.do/{{i.Invoice_NO}}/old" style="color:#000">{{i.Invoice_NO}}</a></td>
+                                  <td>{{i.InvoiceDate}}</td>
+                                  <td  class="text-left">&nbsp;{{i.Invoice_Type}}</td>
+                                  <td class="text-left"  >&nbsp;{{i.ClientName}}</td>
+                                  <td>{{i.Place_of_supply}}</td>
+                                  <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Total_Amount}}</td>
+                                  <td class="text-left">&nbsp;<i class="fa fa-inr" aria-hidden="true"></i> {{i.Amount_Paid}}</td>
+                                  <td><span class="text-white px-2 rounded " style="font-size:12px;background:#0cc712;">Paid <i class="fa fa-check"></i></span></td>
+                                  <td><a href="/Display_Bill_For_Invoice.do/{{i.Invoice_NO}}/Download_PDF_For_Invoice/{{i.Invoice_NO}}/Short" data-toggle="tooltip" data-placement="left" title='Click here to download Invoice for {{i.ClientName}}.'  data-trigger="hover" ><img src="/static/img/pdf.svg" alt="" style="width:30px;height;30px"></a></td>
+                                  <td>
+                                    {% if i.email is not none %}
+                                    <a href="#" data-toggle="tooltip" onclick="SEND_INVOICE_ON_MAIL('{{i.Invoice_NO}}','{{i.ClientName}}')" data-placement="left" title='Click here to send invoice to {{i.ClientName}}.'  data-trigger="hover" ><img src="/static/img/email.png" alt="" style="width:30px;height;30px"></a>
+                                    {% endif %}
+                                  </td>
+                              </tr>
+                               {% endfor %}
+                          </tbody>
+                      </table>
+                      <br><br>
+                     </div>
+
+            </div>
+      </div>
+</div>
+
+
+
+
+
+    <!-- jquery
+    ============================================ -->
+    <script src="/static/js/js2/vendor/jquery-1.12.4.min.js"></script>
+
+    <script src="/static/js/js2/data-table/bootstrap-table.js"></script>
+    <script src="/static/js/js2/data-table/tableExport.js"></script>
+    <script src="/static/js/js2/data-table/data-table-active.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-table-editable.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-editable.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-table-resizable.js"></script>
+    <script src="/static/js/js2/data-table/colResizable-1.5.source.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-table-export.js"></script>
+
+    <!-- Chart JS
+    ============================================ -->
+    <script src="/static/js/js2/chart/jquery.peity.min.js"></script>
+    <script src="/static/js/js2/peity/peity-active.js"></script>
+
+
+
+{% endblock %}

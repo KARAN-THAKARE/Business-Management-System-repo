@@ -1,0 +1,848 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script src="/static/js/Manage Inventory Controller/Manage Inventory Controller.js"></script>
+
+  <link rel="stylesheet" href="/static/css/css2/data-table/bootstrap-table.css">
+  <link rel="stylesheet" href="/static/css/css2/data-table/bootstrap-editable.css">
+
+
+
+  <style media="screen">
+
+    .autocomplete-items div {
+        padding: 4px;
+        cursor: pointer;
+        background-color: #2f333e;
+        color: #fff;
+        border-bottom: 1px solid #7a7a7a;
+        padding-left: 30px;
+        width: 100%;
+
+    }
+
+  .pagination>.active>a,
+  .pagination>.active>a:focus,
+  .pagination>.active>a:hover,
+  .pagination>.active>span,
+  .pagination>.active>span:focus,
+  .pagination>.active>span:hover {
+      z-index: 3;
+      color: #fff;
+      cursor: default;
+      background-color: #e0e0e0;
+      border-color: #d6d6d6;
+      color:#000;
+      font-weight:500;
+    }
+
+    .pagination>li>a, .pagination>li>span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #868282;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+      }
+
+  </style>
+
+    {% endblock %}
+
+    {% block body %}
+
+    <div class="page" style="background:white;" ng-controller="MANAGE_INVENTORY_DASHBOARD_CONTROLLER">
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                     
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+      <div class="page-content d-flex align-items-stretch"  >
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                  <a href="/Setting/User Profile" class="text-decoration-none"><h1 class="h4 text-capitalize" id="OWNER_NAME"></h1></a>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li ><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="  list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li ><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li  class="active"><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+
+        <div class="content-inner" style="overflow-y:scroll;height:1px">
+
+
+          <div class="pulledLeft mt-2">
+            <h4>&nbsp;&nbsp;&nbsp;INVENTORY DASHBOARD</h4>
+          </div>
+          <br>
+          <div class="data-table-area mg-b-15">
+              <div class="container-fluid">
+                  <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="sparkline13-list">
+                              <div class="sparkline13-graph">
+                                  <div class="datatable-dashv1-list custom-datatable-overright">
+                                      <div id="toolbar">
+                                          <select class="form-control dt-tb">
+                        <option value="">Export Basic</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                      </select>
+                                      </div>
+
+
+
+                                              <div class="admintab-wrap edu-tab1 mg-t-30">
+
+
+                                                      <!-- Nav tabs -->
+                                                        <ul class="nav nav-tabs nav-fill justify-content-center">
+                                                          <li class="nav-item">
+                                                            <a class="nav-link active" data-toggle="tab" href="#Current_Inventory_Data" onClick="window.location.reload()">CURRENT INVENTORY DATA</a>
+                                                          </li>
+                                                          <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" href="#Add_Inventory"> + ADD INVENTORY</a>
+                                                          </li>
+                                                          <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" href="#Update_Delete_Inventory" id="thirdtab">UPDATE / DELETE INVENTORY INFORMATION</a>
+                                                          </li>
+                                                        </ul>
+
+                                                  <div class="tab-content">
+                                                      <div id="Current_Inventory_Data" class="tab-pane in active  flipInX custon-tab-style1">
+                                                        <br>
+
+                                                        <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-key-events="true"  data-resizable="true" data-cookie="true"
+                                                            data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="font-size:15px;color:#000;">
+                                                            <thead>
+                                                                <tr>
+                                                                   <th data-field="state" data-checkbox="true"></th>
+                                                                    <th data-field="ID"   >ID</th>
+                                                                     <th data-field="Product type" >Product Type</th>
+                                                                    <th data-field="Product Name"  >Product Name</th>
+                                                                    <th data-field="Purchase Price"  >Purchase Price</th>
+                                                                    <th data-field="Sale Price">Sale Price</th>
+                                                                    <th data-field="CGST" >CGST</th>
+                                                                    <th data-field="SGST" >SGST</th>
+                                                                    <th data-field="IGST" >IGST</th>
+                                                                    <th data-field="Cess" >Cess</th>
+                                                                    <th data-field="Action" >Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for i in INVENTORY_INFO %}
+                                                                <tr>
+                                                                   <td></td>
+                                                                    <td class="font-weight-bold">{{i.StockID}}</td>
+                                                                    <td class="text-left font-weight-bold">&nbsp; {{i.Product_type}} </td>
+                                                                    <td  class="text-left font-weight-bold"> {{i.Product_name}} </td>
+                                                                    <td  class="text-left"> <i class="fa fa-inr " aria-hidden="true"></i>  {{i.Purchase_price}} </td>
+                                                                    <td  class="text-left"> <i class="fa fa-inr " aria-hidden="true"></i>  {{i.Sale_price}} </td>
+                                                                    <td class="text-left"> {{i.CGST}}%  </td>
+                                                                    <td class="text-left"> {{i.SGST}}%  </td>
+                                                                    <td class="text-left"> {{i.IGST}}%  </td>
+                                                                    <td class="text-left">  {{i.Cess}}% </td>
+
+
+                                                                    <td><a onClick="EditButton({{i.StockID}})" data-toggle="tooltip" data-placement="left" title='Click here to Edit'  data-trigger="hover" ><img src="/static/img/edit.png" alt="" style='width:20px;height:20px' class="mx-2"></a> <a onClick="DeleteButton({{i.StockID}})" data-toggle="tooltip" data-placement="left" title='Click here to Delete'  data-trigger="hover" ><img src="/static/img/delete.png" alt="" style='width:20px;height:20px' class="mx-2"></a></td>
+                                                                </tr>
+                                                                 {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                        <br><br>
+                                                      </div>
+
+
+                                                      <!-- ************ ADD INVENTORY TAB ****************   -->
+                                                       <div id="Add_Inventory" class="tab-pane  flipInX custon-tab-style1">
+                                                        <form id="AddStockForm" autocomplete="off">
+                                                          <br>
+                                                          <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  ">Product Information   </span>
+
+                                                          <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" ><!-- First row-->
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_pn" class="form-control-sm lable_define" >Product Name<span class="required">*</span></label>
+                                                           <input type="text" class="form-control form-control-sm rounded" id="stock_pn" ng-model="stock.PN"  required>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col ">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_group" class="form-control-sm lable_define" >Group</label>
+                                                           <select class="form-control form-control-sm rounded" ng-model="stock.groupp"  id="stock_group"  >
+                                                           <option selected disabled>select</option>
+                                                           <option value="1">Non GST</option>
+                                                           <option value="2">GST</option>
+                                                           <option value="3">Bill of supply</option>
+                                                           </select>
+                                                           </div>
+                                                           </div>
+
+                                                         <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_brand" class="form-control-sm lable_define" >Brand<span class="required">*</span></label>
+                                                           <input type="text" class="form-control form-control-sm rounded" id="stock_brand" ng-model="stock.brand"  required>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_IC" class="form-control-sm lable_define" >Item Code</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-dashcube" aria-hidden="true"  style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_IC" ng-model="stock.IC" style="background:#ffffe1" >
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_sn" class="form-control-sm lable_define" >Serial Number</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-dashcube" aria-hidden="true"  style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_sn" ng-model="stock.SN"  style="background:#ffffe1">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           </div>
+
+                                                           <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  mt-4">&nbsp; &nbsp; Price Information  &nbsp; </span>
+
+                                                           <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" > <!-- 2nd row-->
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_pp" class="form-control-sm lable_define" >Purchase Price<span class="required">*</span></label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                      <div class="input-group-text rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_pp" ng-model="stock.PP" style="background:#ffffe1" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_sp" class="form-control-sm lable_define" >Sale Price<span class="required">*</span></label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_sp" ng-model="stock.SP"  style="background:#ffffe1" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+
+
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_msp" class="form-control-sm lable_define" >Minimum Sale Price</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_msp" ng-model="stock.MSP" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                            <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_mrp" class="form-control-sm lable_define" >M.R.P</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_mrp" ng-model="stock.MRP"  onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col ">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_unit" class="form-control-sm lable_define" >Unit Type</label>
+                                                           <select class="form-control form-control-sm rounded" id="stock_unit" ng-model="stock.unit" >
+                                                             <option value="UNT">UNT</option>
+                                                             <option value="OTH">OTH</option>
+                                                             <option value="PCS">PCS</option>
+                                                             <option value="PAC">PAC</option>
+                                                             <option value="SET">SET</option>
+                                                             <option value="BOX">BOX</option>
+                                                             <option value="TON">TON</option>
+                                                             <option value="GMS">GMS</option>
+                                                             <option value="BKL">BKL</option>
+                                                             <option value="BDL">BDL</option>
+                                                             <option value="NOS">NOS</option>
+                                                             <option value="MTR">MTR</option>
+                                                           </select>
+                                                           </div>
+                                                           </div>
+                                                           </div>
+
+                                                           <span style="font-size:15px;background:#e0e0e0;font-weight:600" class="  px-4 py-1  mt-4">&nbsp; &nbsp; Tax Information   &nbsp;&nbsp;</span>
+                                                           <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" ><!-- 3rd row-->
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_hsn" class="form-control-sm lable_define" >HSN / SAC Code</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-dashcube" aria-hidden="true"  style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_hsn" ng-model="stock.HSN"  style="background:#ffffe1">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_cgst" class="form-control-sm lable_define" >CGST</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_cgst" ng-model="stock.CGST" style="background:#ffffe1" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_sgst" class="form-control-sm lable_define" >SGST </label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_sgst" ng-model="stock.SGST" style="background:#ffffe1" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                                 <div class="form-group cols_pad">
+                                                                 <label for="stock_cess" class="form-control-sm lable_define" >Cess </label>
+                                                                 <div class="input-group">
+                                                                   <div class="input-group-prepend">
+                                                                     <div class="input-group-text rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                                   </div>
+                                                                 <input type="text" class="form-control form-control-sm rounded-right" id="stock_cess" ng-model="stock.cess"  style="background:#ffffe1" onfocus="this.value=null">
+                                                               </div>
+                                                                 </div>
+                                                               </div>
+                                                               <div class="col">
+                                                                 <div class="form-group cols_pad">
+                                                                 <label for="stock_IGST" class="form-control-sm lable_define" >IGST</label>
+                                                                 <div class="input-group">
+                                                                   <div class="input-group-prepend">
+                                                                     <div class="input-group-text rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                                   </div>
+                                                                 <input type="text" class="form-control form-control-sm rounded-right" id="stock_IGST" ng-model="stock.IGST" style="background:#ffffe1" onfocus="this.value=null">
+                                                               </div>
+                                                                   </div>
+                                                               </div>
+                                                               </div>
+
+                                                              <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  mt-4">&nbsp;  Other Information  &nbsp; </span>
+                                                              <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" > <!-- 4th row-->
+                                                                          <div class="col ">
+                                                                            <div class="form-group cols_pad">
+                                                                            <label for="stock_PT" class="form-control-sm lable_define" >Product type<span class="required">*</span></label>
+                                                                            <select class="form-control form-control-sm rounded" ng-model="stock.product_type" id="stock_PT"   required>
+                                                                               <option selected disabled>select</option>
+                                                                               <option value="General">General</option>
+                                                                               <option value="Electronic">Electronic</option>
+                                                                          </select>
+                                                                          </div>
+                                                                        </div>
+                                                                          <div class="col">
+                                                                            <div class="form-group cols_pad">
+                                                                              <label for="stock_PDiscription" class="form-control-sm lable_define" >Product Discription</label>
+                                                                               <textarea class="form-control form-control-sm rounded" id="stock_PDiscription" ng-model="stock.PDiscription" rows="1"></textarea>
+                                                                          </div>
+                                                                          </div>
+                                                                          <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                         <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                         <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                          </div>
+                                                                          <br>
+
+
+                                                                          <div class="row" > <!-- 4th row-->
+                                                                            <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                            <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                              <div class="col">
+                                                                              <div class="form-group cols_pad">
+                                                                             <button type="button" class="btn btn-dark" ng-click="SubmitStock(stock)"  style="width:150px;height:37px;font-size:13px; "><i class="fa fa-plus-square" aria-hidden="true" ></i>&nbsp;&nbsp;Add Stock</button>
+                                                                             </div>
+                                                                             </div>
+                                                                             <div class="col"><div class="form-group cols_pad">
+                                                                                <button type="reset" class="btn btn-warning" style="width:150px;height:37px;font-size:13px; " ><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Reset</button>
+                                                                             </div> </div>
+                                                                             <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                             <div class="col"><div class="form-group cols_pad"></div> </div><div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                             </div>
+
+                                                              </form>
+                                                          </div>
+
+                                              <!-- *********************** END ADD INVENTORY TAB **********************   -->
+
+                                              <!-- *********************** UPDATE AND DELETE INVENTORY TAB **********************   -->
+
+                                                      <div id="Update_Delete_Inventory" class="tab-pane  flipInX custon-tab-style1">
+                                                        <br>
+                                                        <form id="UPDATE_DELETE_INVENTORY_INFO_SEARCH" autocomplete="off" role="search" class="sr-input-func">
+
+
+                                                   <div class="breadcome-heading" style="float:right">
+                                                        <div class="input-group">
+                                                          <div class="autocomplete" style="width:300px;display:flex">
+                                                            <input type="text" id="searchTab"  placeholder="Search..." class="search-int form-control rounded-left" style="width:225px" autocomplete="off">
+                                                            <a href="" style="text-decoration:none;border:1px solid #dadada;border-radius:0px 20px 20px 0px" ng-click="SearchInventoryInfo()" data-toggle="tooltip" data-placement="bottom" title='Click here to search Inventory'  data-trigger="hover" >&nbsp;&nbsp;<img src="/static/img/search person.png"style="width:28px;height:28px;margin-top:4px;margin-right:10px" /></a>
+                                                        </div>
+                                                      </div>
+
+
+
+
+                                                        </form>
+                                                        </div>
+
+                                                        <br>
+                                                        <form id="UPDATE_DELETE_FORM" >
+
+                                                      <div ng-if="DATA_PRESENT_FOR_UPDATE">
+                                                      <!-- If block -->
+                                                      <p style="text-align:center"><img src="/static/img/no data.png" style="width:70%;height:70%;"   alt=""><p>
+                                                      </div>
+
+                                                      <!-- else block -->
+                                                      <div ng-repeat="i in INVENTORY_DATA">
+
+                                                        <form id="AddStockForm" autocomplete="off">
+                                                          <br>
+                                                           <input type="hidden" ng-model="i.StockID">
+                                                          <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  mt-2"> Product Information  </span>
+                                                             <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" ><!-- First row-->
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_pn" class="form-control-sm lable_define" >Product Name<span class="required">*</span></label>
+                                                           <input type="text" class="form-control form-control-sm rounded" id="stock_pn" ng-model="i.Product_name"  required>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col ">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_group" class="form-control-sm lable_define" >Group</label>
+                                                           <select class="form-control form-control-sm rounded" ng-model="i.Product_Group"  id="stock_group"  >
+                                                           <option selected disabled>select</option>
+                                                           <option value="Non GST">Non GST</option>
+                                                           <option value="GST">GST</option>
+                                                           <option value="Bill of supply">Bill of supply</option>
+                                                           </select>
+                                                           </div>
+                                                           </div>
+
+                                                         <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_brand" class="form-control-sm lable_define" >Brand<span class="required">*</span></label>
+                                                           <input type="text" class="form-control form-control-sm rounded" id="stock_brand" ng-model="i.Brand"  required>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_IC" class="form-control-sm lable_define" >Item Code</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text rounded-left"><i class="fa fa-dashcube" aria-hidden="true"  style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_IC" ng-model="i.Item_Code" style="background:#ffffe1" >
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_sn" class="form-control-sm lable_define" >Serial Number</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-dashcube" aria-hidden="true"  style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_sn" ng-model="i.Serial_number"  style="background:#ffffe1">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           </div>
+
+                                                          <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  mt-4">&nbsp; &nbsp; Price Information : &nbsp;&nbsp;</span>
+                                                             <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" ><!-- 2nd row-->
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_pp" class="form-control-sm lable_define" >Purchase Price<span class="required">*</span></label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="number" class="form-control form-control-sm rounded-right" id="stock_pp" ng-model="i.Purchase_price" style="background:#ffffe1" >
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_sp" class="form-control-sm lable_define" >Sale Price<span class="required">*</span></label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="number" class="form-control form-control-sm rounded-right" id="stock_sp" ng-model="i.Sale_price"  style="background:#ffffe1" >
+                                                           </div>
+                                                           </div>
+                                                           </div>
+
+
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_msp" class="form-control-sm lable_define" >Minimum Sale Price</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="number" class="form-control form-control-sm rounded-right" id="stock_msp" ng-model="i.MSP" >
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                            <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_mrp" class="form-control-sm lable_define" >M.R.P</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-inr" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="number" class="form-control form-control-sm rounded-right" id="stock_mrp" ng-model="i.MRP" >
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col ">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_unit" class="form-control-sm lable_define" >Unit Type</label>
+                                                           <select class="form-control form-control-sm rounded" id="stock_unit" ng-model="i.Unit" >
+                                                             <option value="UNT">UNT</option>
+                                                             <option value="OTH">OTH</option>
+                                                             <option value="PCS">PCS</option>
+                                                             <option value="PAC">PAC</option>
+                                                             <option value="SET">SET</option>
+                                                             <option value="BOX">BOX</option>
+                                                             <option value="TON">TON</option>
+                                                             <option value="GMS">GMS</option>
+                                                             <option value="BKL">BKL</option>
+                                                             <option value="BDL">BDL</option>
+                                                             <option value="NOS">NOS</option>
+                                                             <option value="MTR">MTR</option>
+                                                           </select>
+                                                           </div>
+                                                           </div>
+                                                           </div>
+
+                                                          <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  mt-4">&nbsp; &nbsp; Tax Information : &nbsp;&nbsp;</span>
+                                                            <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" > <!-- 3rd row-->
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_hsn" class="form-control-sm lable_define" >HSN / SAC Code</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-dashcube" aria-hidden="true"  style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="text" class="form-control form-control-sm rounded-right" id="stock_hsn" ng-model="i.HSN"  style="background:#ffffe1">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_cgst" class="form-control-sm lable_define" >CGST</label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="number" class="form-control form-control-sm rounded-right" id="stock_cgst" ng-model="i.CGST" style="background:#ffffe1" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                           <div class="form-group cols_pad">
+                                                           <label for="stock_sgst" class="form-control-sm lable_define" >SGST </label>
+                                                           <div class="input-group">
+                                                             <div class="input-group-prepend">
+                                                               <div class="input-group-text  rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                             </div>
+                                                           <input type="number" class="form-control form-control-sm rounded-right" id="stock_sgst" ng-model="i.SGST" style="background:#ffffe1" onfocus="this.value=null">
+                                                           </div>
+                                                           </div>
+                                                           </div>
+                                                           <div class="col">
+                                                                 <div class="form-group cols_pad">
+                                                                 <label for="stock_cess" class="form-control-sm lable_define" >Cess </label>
+                                                                 <div class="input-group">
+                                                                   <div class="input-group-prepend">
+                                                                     <div class="input-group-text  rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                                   </div>
+                                                                 <input type="number" class="form-control form-control-sm rounded-right" id="stock_cess" ng-model="i.Cess"  style="background:#ffffe1" onfocus="this.value=null">
+                                                               </div>
+                                                                 </div>
+                                                               </div>
+                                                               <div class="col">
+                                                                 <div class="form-group cols_pad">
+                                                                 <label for="stock_IGST" class="form-control-sm lable_define" >IGST</label>
+                                                                 <div class="input-group">
+                                                                   <div class="input-group-prepend">
+                                                                     <div class="input-group-text  rounded-left"><i class="fa fa-percent" aria-hidden="true" style="font-size: 13px;font-weight:400"></i></div>
+                                                                   </div>
+                                                                 <input type="number" class="form-control form-control-sm rounded-right" id="stock_IGST" ng-model="i.IGST" style="background:#ffffe1" onfocus="this.value=null">
+                                                               </div>
+                                                                   </div>
+                                                               </div>
+                                                               </div>
+
+                                                                    <span style="font-size:15px;background:#e0e0e0;font-weight:600"  class="  px-4 py-1  mt-4"> Other Information : &nbsp;&nbsp;</span>
+                                                                        <div class="row" style="background: #e0e0e05e;border-top: 2px solid #e0e0e0;border-bottom: 2px solid #e0e0e0;border-left: 2px solid #e0e0e0;border-right: 2px solid #e0e0e0;margin: 0px;" > <!-- 4th row-->
+                                                                          <div class="col ">
+                                                                            <div class="form-group cols_pad">
+                                                                            <label for="stock_PT" class="form-control-sm lable_define" >Product type<span class="required">*</span></label>
+                                                                            <select class="form-control form-control-sm rounded" ng-model="i.Product_type" id="stock_PT"   required>
+                                                                               <option selected disabled>select</option>
+                                                                               <option value="General">General</option>
+                                                                               <option value="Electronic">Electronic</option>
+
+                                                                          </select>
+                                                                          </div>
+                                                                        </div>
+                                                                          <div class="col">
+                                                                            <div class="form-group cols_pad">
+                                                                              <label for="stock_PDiscription" class="form-control-sm lable_define" >Product Discription</label>
+                                                                               <textarea class="form-control form-control-sm rounded" id="stock_PDiscription" ng-model="i.Product_Discription" rows="1"></textarea>
+                                                                          </div>
+                                                                          </div>
+                                                                          <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                         <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                         <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                          </div>
+                                                                          <br>
+
+
+                                                                          <div class="row" > <!-- 4th row-->
+                                                                            <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                            <div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                              <div class="col">
+                                                                              <div class="form-group cols_pad">
+                                                                             <button type="button" class="btn btn-dark" ng-click="UpdateInventoryData(i)"  style="width:150px;height:37px;font-size:13px; "><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Update</button>
+                                                                             </div>
+                                                                             </div>
+                                                                             <div class="col"><div class="form-group cols_pad">
+                                                                                <button type="reset" class="btn btn-warning" style="width:150px;height:37px;font-size:13px; " ><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp; Reset</button>
+                                                                             </div> </div>
+                                                                             <div class="col"><div class="form-group cols_pad">
+                                                                                <button type="button" class="btn btn-danger" ng-click="DeleteInventoryData(i)"  style="width:150px;height:37px;font-size:13px; " ><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Delete</button>
+                                                                             </div> </div>
+                                                                             <div class="col"><div class="form-group cols_pad">
+                                                                                <button type="button" class="btn btn-info" ng-click="Close()"  style="width:150px;height:37px;font-size:13px; " >&nbsp;&nbsp;Close</button>
+                                                                             </div> </div>
+
+
+                                                                             <div class="col"><div class="form-group cols_pad"></div> </div><div class="col"><div class="form-group cols_pad"></div> </div>
+                                                                             </div>
+
+                                                              </form>
+
+
+                                                  </div>
+                                                </div>
+                                              </div>
+                                          </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </div>
+     </div>
+    <!-- jquery
+    ============================================ -->
+    <script src="/static/js/js2/vendor/jquery-1.12.4.min.js"></script>
+
+    <!-- data table JS
+    ============================================ -->
+    <script src="/static/js/js2/data-table/bootstrap-table.js"></script>
+    <script src="/static/js/js2/data-table/tableExport.js"></script>
+    <script src="/static/js/js2/data-table/data-table-active.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-table-editable.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-editable.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-table-resizable.js"></script>
+    <script src="/static/js/js2/data-table/colResizable-1.5.source.js"></script>
+    <script src="/static/js/js2/data-table/bootstrap-table-export.js"></script>
+
+
+
+  {% endblock %}

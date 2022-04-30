@@ -1,0 +1,1001 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script src="/static/js/purchase controller/purchase controller.js"></script>
+<style media="screen">
+  .autocomplete-items div {
+      padding: 4px;
+      cursor: pointer;
+      background-color: #2f333e;
+      color: #fff;
+      border-bottom: 1px solid #7a7a7a;
+      padding-left: 30px;
+      width: 130%;
+
+  }
+</style>
+    {% endblock %}
+    {% block body %}
+
+    <div class="page"  ng-controller="PURCHASEBILL_CONTROLLER">
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                   
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                <a href="/Setting/User Profile" class="text-decoration-none"><h1 class="h4 text-capitalize" id="OWNER_NAME"></h1></a>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li ><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class=" active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li class="active"><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li> <a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+        <div class="content-inner" style="background:#f5f5f5; overflow: scroll;height:1px;overflow-x:hidden">
+          <!-- Page Header-->
+          <!-- First container -->
+          <form id="Purchase_Form" autocomplete="off">
+
+
+
+<span style="border-radius:2px 5px 5px 2px;font-size:12px" class="bg-dark text-light px-3 py-1 my-1 mt-2">Purchase Information : </span>
+<div class="container-fluid  " style="background:#f5f5f5;">
+
+<div class="row" > <!-- First row-->
+  <div class="col ">
+    <div class="form-group cols_pad">
+    <label for="staff_gender" class="form-control-sm lable_define" >Purchase Type <span class="required">*</span> </label>
+    <div class="input-group">
+      <div class="input-group-prepend input_box_height" >
+      <div class="input-group-text rounded-left"><i class="fa fa-file-o" aria-hidden="true"></i></div>
+    <select class="form-control form-control-sm rounded-right" ng-model="purchaseBill.pt" id="Purchase_Type" ng-options="item for item in PURCHASE_TYPE"  style="font-size:15px;width:240px">
+    <option value="">select</option>
+    </select>
+  </div></div></div>
+</div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="Bill_DATE" class="form-control-sm lable_define" >Bill Date<span class="required">*</span></label>
+  <input  class="form-control form-control-sm rounded" type="date" id="Bill_DATE" ng-model="purchaseBill.BD"  required >
+</div>
+</div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="SN" class="form-control-sm lable_define" >Supplier Name<span class="required">*</span> <span id="Tooltip1" data-toggle="tooltip" data-placement="top" title='Click here to add supplier.'  data-trigger="hover" ><a  href="#" class="text-secondary" data-toggle="modal" data-target="#add_new_item_suppliers" style="margin-left:50px" ><i class="fa fa-user-plus" aria-hidden="true"></i> Add Supplier</a></span></label>
+  <div class="autocomplete" style="width:280px;">
+  <input type="text" class="form-control form-control-sm rounded" id="SN" ng-model="purchaseBill.SN" placeholder="Enter supplier name"  required>
+</div></div>
+</div>
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="DD" class="form-control-sm lable_define" >Due Date<span class="required">*</span></label>
+  <input  class="form-control form-control-sm rounded" type="date" id="DD" ng-model="purchaseBill.DD"    >
+</div>
+</div>
+</div>
+
+<div class="row" > <!-- Second row-->
+  <div class="col">
+    <div class="form-group cols_pad">
+    <label for="BN" class="form-control-sm lable_define" >Purchase Bill No.<span class="required">*</span></label>
+    <div class="input-group" >
+    <div class="input-group-prepend input_box_height" >
+    <div class="input-group-text rounded-left">#</div>
+    <input type="text" class="form-control form-control-sm rounded-right" id="BN"  ng-model="purchaseBill.billno"  style="width:240px" disabled>
+  </div>  </div> </div>
+</div>
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="on" class="form-control-sm lable_define" >Purchase Order No.<span class="required">*</span></label>
+  <div class="input-group" >
+  <div class="input-group-prepend input_box_height" >
+  <div class="input-group-text rounded-left">#</div>
+  <input type="text" class="form-control form-control-sm rounded-right" id="on"  ng-model="purchaseBill.ON"  style="width:240px" disabled >
+</div></div></div>
+</div>
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="pod" class="form-control-sm lable_define " >Purchase Order Date<span class="required">*</span></label>
+  <input  class="form-control form-control-sm rounded-right" type="date" id="pod" ng-model="purchaseBill.pod"  style="width:277px" required>
+</div>
+</div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="eway_no" class="form-control-sm lable_define" >E-Way Bill No.</label>
+  <div class="input-group" >
+  <div class="input-group-prepend input_box_height" >
+  <div class="input-group-text rounded-left">#</div>
+  <input type="text" class="form-control form-control-sm rounded-right" id="eway_no" ng-model="purchaseBill.eway_no"  style="width:240px" placeholder="Enter E-Way Bill Number">
+</div></div>
+</div>
+</div>
+</div>
+</div>
+
+          <!-- Second container -->
+
+<span style="border-radius:2px 5px 5px 2px;font-size:12px" class="bg-dark text-light px-3 py-1 my-1 mt-2 pr-4">Add Purchase Item : &nbsp;</span>
+          <div class="container-fluid"  style="background:#f5f5f5;">
+
+          <div class="row" > <!-- First row-->
+
+          <div class="col" >
+          <div class="form-group cols_pad" style="width:295px">
+
+          <label for="SelectedItem" class="form-control-sm lable_define " >Item Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="Tooltip1" data-toggle="tooltip" data-placement="top" title='Click here to add new Stock Information.'  data-trigger="hover" ><a href="#" class="ml-5 text-secondary"  data-toggle="modal" data-target="#add_new_item_model"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add new Item </a> </span></label>
+
+          <input  class="form-control form-control-sm rounded-left"  list=text_editors ng-model="Item_Name.selectedItemName" id="SelectedItem" style="width:254px" placeholder="  Search item here"  autocomplete="off">
+          <datalist id="text_editors" >
+              <select >
+                <option ng-repeat="i in FETCH_ITEM_NAME_LIST" value="..i.Item_name.." autocomplete="off" >..i.Item_name..</option>
+              </select>
+            </datalist>
+
+          <button type="button" id="add_Item_details" class="btn btn-warning text-light   rounded-right" ng-click="SelectedItem(Item_Name,purchaseBill)"  style="width:36px;position:relative;top:-32px;font-size:14px;left:250px;background-image: linear-gradient(to bottom right, #e6da09 , #bf5a0d);border:none"><i class="fa fa-search" ></i></button>
+          </div>
+          </div>
+
+
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="purchaseBill_qty" class="form-control-sm lable_define" >Quantity</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_qty" ng-change="TotalItemAmount()"  ng-model="purchaseBill.qty" ng-disabled="makeItOff"   min=1 >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad" >
+          <label for="purchaseBill_pp" class="form-control-sm lable_define" >P. Price</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_pp"  ng-change="TotalItemAmount()"  ng-model="purchaseBill.pp"  ng-disabled="makeItOff"  style="width:100px"  min=0 >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="purchaseBill_dsic" class="form-control-sm lable_define" >Discount</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_dsic" ng-change="TotalItemAmount()"  step=".1" ng-model="purchaseBill.disc"  ng-disabled="makeItOff"   min=0  >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="cgst" class="form-control-sm lable_define" >CGST</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_cgst" ng-change="TotalItemAmount()"  step=".1"  ng-model="purchaseBill.cgst" ng-disabled="makeItOff"   min=0   >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="sgst" class="form-control-sm lable_define" >SGST</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_sgst" ng-change="TotalItemAmount()"  step=".1"  ng-model="purchaseBill.sgst" ng-disabled="makeItOff"     min=0 >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="sgst" class="form-control-sm lable_define" >IGST</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_igst" ng-change="TotalItemAmount()"  step=".1" ng-model="purchaseBill.igst" ng-disabled="makeItOff"  min=0  >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="purchaseBill_cess" class="form-control-sm lable_define" >Cess</label>
+          <input type="number" class="form-control form-control-sm rounded" id="purchaseBill_cess" ng-change="TotalItemAmount()"  step=".1" ng-model="purchaseBill.cess" ng-disabled="makeItOff"   min=0  >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="purchaseBill_amt" class="form-control-sm lable_define" >Amount</label>
+          <input type="text" class="form-control form-control-sm rounded" id="purchaseBill_amt" ng-model="purchaseBill.amt"  style="width:100px" ng-disabled=true >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+            <button type="button" class="btn btn-warning text-light" id="Add_Stock_TO_Bucket_Button" ng-click="Add_Stock_TO_Bucket(Item_Name,purchaseBill,FETCH_ITEM_NAME_LIST)" ng-disabled="Plus_Button" style="position:relative;top:19px;font-size:19px;background-image: linear-gradient(to bottom right, #e6da09 , #bf5a0d);border:none">+</button>
+          </div>
+          </div>
+          </div>
+
+          <div class="mt-0"> <!-- third row ##Table-->
+            <table class="table table-borderless table-sm" style="text-align:center;">
+              <thead>
+                <tr style="background:#2f333e;color:white">
+                  <th scope="col"  style="border-radius:7px 0px 0px 0px">S.No</th>
+                  <th scope="col">Item Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Purchase Price</th>
+                  <th scope="col">CGST</th>
+                  <th scope="col">SGST</th>
+                  <th scope="col">IGST</th>
+                  <th scope="col">Cess</th>
+                  <th scope="col">Discount</th>
+                  <th scope="col">Total Price</th>
+                  <th style="border-radius:0px 7px 0px 0px"></th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#FFFFE1;" ng-repeat="i in Bucket">
+                  <th scope="row">..i.SrNo..</th>
+                  <th class=" text-left">..i.Stock_Name..</th>
+                  <td>..i.Qty..</td>
+                  <td class="pl-5 text-left"><i class="fa fa-inr " aria-hidden="true" style="font-size:13px"></i> ..i.Purchase_Price..</td>
+                  <td>..i.CGST.. %</td>
+                  <td>..i.SGST.. %</td>
+                  <td>..i.IGST.. %</td>
+                  <td>..i.Cess.. %</td>
+                  <td class="text-danger">..i.Discount.. %</td>
+                  <td class=" text-left"><i class="fa fa-inr " aria-hidden="true" style="font-size:13px"></i> ..i.Amount..</td>
+                  <td ><i class="fa fa-trash" style="color:red;font-size:20px" ng-click="Delete_Item_From_Bucket(i.ID,purchaseBill)" ></i></td>
+                </tr>
+                <tr ng-show="BucketSize==0">
+                  <th colspan="11" style="background:#FFFFE1;" > Empty Bucket !!!</th>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+          </div>
+
+
+<div class="container-fluid mt-2"  style="background:#f5f5f5;">
+<hr>
+<table class="table table-borderless table-sm">
+  <tbody>
+    <!-- FIRST ROW-->
+    <tr>
+      <th scope="row" ><input type="checkbox"  id="Apply_Discount"  ng-model="purchaseBill.Apply_Discount"  ng-click="ZERO_BOTH_FIELD(purchaseBill)" style="position:relative;top:24px" ng-disabled="BucketSize<1"></th>
+      <td  style="width:180px; ">
+        <label  for="Apply_Discount" class="form-control-sm lable_define"  style="padding-top:22px">Apply Discount</label>
+      </td>
+      <td  style="width: 10%;">
+        <label for="Disc_in_percentage" class="form-control-sm lable_define"  >Dis. in Percent</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">%</div>
+        <input type="number" class="form-control form-control-sm rounded-right" id="Disc_in_percentage"  ng-change="FinalAmount(purchaseBill)"   ng-model="purchaseBill.Disc_in_percentage" ng-click="ZERO_AMOUNT_FIELD(purchaseBill)"  ng-disabled="!purchaseBill.Apply_Discount" >
+        </div>
+      </td>
+      <td style="vertical-align: middle;width:5%;text-align:center" >or</td>
+      <td  style="width: 11%;">
+        <label for="Disc_in_amt" class="form-control-sm lable_define"  >Dis. in Amount</label>
+        <input type="number" class="form-control form-control-sm rounded" id="Disc_in_amt"  ng-change="FinalAmount(purchaseBill)"  ng-model="purchaseBill.Disc_in_amt" ng-click="ZERO_PERCENT_FIELD(purchaseBill)"  ng-disabled="!purchaseBill.Apply_Discount"  >
+      </td>
+
+      <td colspan="2" style="width:22%;">
+        <div class="col ">
+          <div class="form-group cols_pad">
+          <label for="staff_gender" class="form-control-sm lable_define" >Payment Mode</label>
+          <div class="input-group">
+            <div class="input-group-prepend input_box_height" >
+            <div class="input-group-text rounded-left"><i class="fa fa-cc-visa" aria-hidden="true"></i></div>
+          <select class="form-control form-control-sm rounded-right" ng-model="purchaseBill.payment_mode" id="payment_mode" ng-options="item for item in PAYMENT_MODE"  style="font-size:15px;width:185px" ng-change="ChnageInPaymentMode(purchaseBill)">
+          <option value="">select</option>
+          </select>
+        </div></div></div>
+      </div>
+      </td>
+
+      <td style="background:#FFFFE1;padding:0px;">
+      <p style="position:relative;top:11px;left:35px"><span style="font-size:15px;font-weight: 600;">Total  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;Rs. ..purchaseBill.Fixed_Sub_Total..</span> <br>
+       <span style="font-size:15px;font-weight: 600;">Discount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; ..Discount_String.. </span> <br>
+        <span style="font-size:15px;font-weight: 600;">Shipping Amt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; Rs. ..Shipping_String.. </span>
+      </p>
+    </td>
+    </tr>
+
+    <!-- 2nd ROW-->
+    <tr>
+      <td scope="row"><input type="checkbox" id="Shipping" style="position:relative;top:21px" ng-change="FinalAmount(purchaseBill)" ng-model="purchaseBill.Apply_Shipping" ng-disabled="Shipping || BucketSize<1"></td>
+      <td style="vertical-align: middle;"><label  for="Shipping" class="form-control-sm lable_define">Add Shipping</label></td>
+      <td colspan="2">
+        <label for="ShippingAmt" class="form-control-sm lable_define" ng-show="purchaseBill.Apply_Shipping" >Shipping Amount</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" ng-show="purchaseBill.Apply_Shipping">
+        <div class="input-group-text rounded-left">₹</div>
+        <input type="number" class="form-control form-control-sm rounded-right" id="ShippingAmt" ng-change="FinalAmount(purchaseBill)" ng-model="purchaseBill.ShippingAmt" min=0  style="width:98px" onfocus="this.value=null">
+        </div></div>
+      </td>
+      <td></td>
+      <td colspan="2">
+        <label for="TxnNo" class="form-control-sm lable_define GO_RIGHT"  ng-if="purchaseBill.payment_mode==''">transaction ID </label>
+                <label for="TxnNo" class="form-control-sm lable_define GO_RIGHT"  ng-if="purchaseBill.payment_mode!=''">..purchaseBill.payment_mode.. Transaction ID </label>
+        <div class="input-group GO_RIGHT" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">#</div>
+        <input type="text" class="form-control form-control-sm rounded-right" id="TxnNo" ng-model="purchaseBill.TxnNo" ></div></div>
+      </td>
+      <td style="background:#FFFFE1;padding:0px;">
+      <p style="position:relative;top:11px;left:35px"><span style="font-size:17px;font-weight:600">Sub Total  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;Rs. ..purchaseBill.SubTotal..</span> <br>
+       <span style="font-size:21px;font-weight:600">Net Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; Rs. ..purchaseBill.TotalAmount...0</span>
+      </p>
+    </td>
+    </tr>
+
+
+    <!-- #3rd ROW-->
+    <tr>
+      <td scope="row"><input type="checkbox" id="EMI" style="position:relative;top:22px"  ng-model="purchaseBill.Apply_EMI" ng-click="Function_for_EMI(purchaseBill)" ng-disabled="true"></td>
+      <td style="vertical-align: middle;"><label  for="EMI" class="form-control-sm lable_define" >Convert To EMI</label></td>
+      <td  colspan="2" style="padding:0px" >
+        <label for="EMI_Months" class="form-control-sm lable_define" ng-show="purchaseBill.Apply_EMI" >EMI Month's  <i style="font-size:22px;position:relative;left:37px;color:#0e14b5" class="fa fa-info-circle" aria-hidden="true" ng-show="true" data-toggle="modal" data-target="#EMI_Breakup"></i></label>
+        <select class="browser-default custom-select custom-select-sm" style="font-size:14px;width:140px" ng-model="purchaseBill.EMI_Months" id="EMI_Months" ng-show="purchaseBill.Apply_EMI"  >
+           <option value=3>3 Months</option>
+           <option value=6>6 Months</option>
+           <option value=9>9 Months</option>
+           <option value=12>12 Months</option>
+      </select>
+      </td>
+
+      <td>
+        <label for="EMI_PERCENT" class="form-control-sm lable_define" ng-show="purchaseBill.Apply_EMI">EMI %</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" ng-show="purchaseBill.Apply_EMI">
+        <div class="input-group-text">%</div>
+        <input type="number" min=0 class="form-control form-control-sm" id="EMI_PERCENT" ng-model="purchaseBill.EMI_PERCENT"  ng-click="On_Click_EMI_value_Zero(purchaseBill)"></div></div>
+      </td>
+
+      <td colspan="2">
+        <label for="Amount_Paid" class="form-control-sm lable_define GO_RIGHT" >Amount Paid</label>
+        <div class="input-group GO_RIGHT" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">₹</div>
+        <input type="number"  class="form-control form-control-sm rounded-right" id="Amount_Paid" ng-model="purchaseBill.Amount_Paid"  ng-change="PaidAmount(purchaseBill)"   ng-disabled="BucketSize<1"   required onfocus="this.value=null"></div></div>
+      </td>
+
+    <td style="vertical-align:bottom">&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-dark" style="position:relative;top:10px;height:50px;width:347px;left:8px;font-size:19px;background:black" ng-click="Save(purchaseBill)">Submit</button></td>
+    </tr>
+
+
+
+
+    <!-- #4TH ROW-->
+    <tr>
+      <td scope="row"></td>
+        <td style="vertical-align: middle;"><span ng-show="purchaseBill.Apply_EMI" >Down Payment</span></td>
+      <td  style="width: 12%;">
+        <label for="Disc_in_percentage" class="form-control-sm lable_define" ng-show="purchaseBill.Apply_EMI"  >in Percent</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" ng-show="purchaseBill.Apply_EMI" >
+        <div class="input-group-text">%</div>
+        <input type="number" class="form-control form-control-sm"  id="Disc_in_percentage" ng-model="purchaseBill.DP_in_Percent" ng-click="ZERO_AMOUNT_FIELD_FOR_DP(purchaseBill)"  >
+        </div>
+      </td>
+      <td style="vertical-align: middle;text-align:center" ><span ng-show="purchaseBill.Apply_EMI">or</span></td>
+
+      <td>
+        <label for="Disc_in_amt" class="form-control-sm lable_define"  ng-show="purchaseBill.Apply_EMI" >in Amount</label>
+        <input type="number" min=0 class="form-control form-control-sm" id="Disc_in_amt" ng-model="purchaseBill.DP_in_Amount" ng-click="ZERO_PERCENT_FIELD_FOR_DP(purchaseBill)"  ng-show="purchaseBill.Apply_EMI"   >
+      </td>
+
+      <td colspan="2">
+        <label for="BalanceAmount" class="form-control-sm lable_define GO_RIGHT" >Balance Amount<span class="required">*</span></label>
+        <div class="input-group GO_RIGHT" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">₹</div>
+        <input type="text" class="form-control form-control-sm rounded-right" id="BalanceAmount" ng-model="purchaseBill.BalanceAmount" ng-disabled="true" required></div></div>
+<td style="vertical-align:bottom"><button type="button" class="btn btn-warning ml-4 mt-2 mb-0" ng-click="CreateNew(purchaseBill)" style="width:347px;height:50px;font-size:18px;background:#dede31;" >Create New</button></td>
+  </tbody>
+</table>
+
+</div>
+
+<div class="container-fluid" style=" width: 100%; background: #2f333e; color: #fff; padding: 20px 55px;font-size:13px">
+  <div class="row">
+    <div class="col-sm-12">
+    <p>This computer software is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this Software , or any portion of it  may result in severe civil and criminal penalties , and will be prosecuted to maximum extend possible under the law . <span style="color:#39FF14">Karan Thakare &copy; 2021-2020</span></p>
+    </div>
+    <div class="col-sm-6 text-right">
+    </div>
+  </div>
+</div>
+
+          </div>
+        </div>
+
+
+
+
+
+    <!-- *****************  Model for "ADD New Suppliers" ********************* -->
+     <div class="modal fade py-0" id="add_new_item_suppliers" role="dialog"  >
+       <div class="modal-dialog" style="top:100px;right:220px;">
+         <div class="modal-content" style="width:1100px !important;border-radius:25px 25px 0px 0px;">
+         <!-- Modal content-->
+
+         <div class="modal-header border-0">
+           <h5 class="text-white py-3 px-3" style="border-radius:0px 50px 50px 0px;background:linear-gradient(to right,#000428,#004e92);" >ADD NEW SUPPLIER</h5>
+           <button type="button" class="close" data-dismiss="modal" ><i class="fa fa-times-circle text-danger" aria-hidden="true"></i></button>
+         </div>
+
+
+           <div class="modal-body py-0 ">
+             <form id="AddStockForm">
+               <div class="jumbotron  py-0 mx-3 ">
+                <div id="Add_Supplier" class="tab-pane  flipInX custon-tab-style1">
+        <form id="SUPPLIER_DATA_SUBMITTED">
+        <small class="my-1 pt-2" style="  color:#949494">Personal Information :</small>
+        <div class="row" >
+
+          <div class="col">
+            <div class="form-group cols_pad">
+            <label for="on" class="form-control-sm lable_define" >First Name<span class="required">*</span></label>
+            <div class="input-group" >
+            <input type="text" class="form-control form-control-sm rounded" id="supplier_FN" ng-model="supplier.FN"   style="width:240px" >
+        </div></div>
+          </div>
+
+          <div class="col">
+            <div class="form-group cols_pad">
+            <label for="on" class="form-control-sm lable_define" >Last Name<span class="required">*</span></label>
+            <div class="input-group" >
+            <input type="text" class="form-control form-control-sm rounded" id="supplier_LN" ng-model="supplier.LN"    style="width:240px" >
+          </div></div>
+          </div>
+
+          <div class="col">
+            <div class="form-group cols_pad">
+            <label for="on" class="form-control-sm lable_define" >Full Billing Address<span class="required">*</span></label>
+            <div class="input-group" >
+            <textarea class="form-control form-control-sm rounded" id="supplier_address" rows="1" ng-model="supplier.address"  required></textarea>
+          </div></div>
+          </div>
+
+        </div>
+
+        <div class="row" >
+          <div class="col">
+            <div class="form-group cols_pad">
+            <label for="on" class="form-control-sm lable_define" >State<span class="required">*</span></label>
+            <div class="input-group" >
+              <select onchange="print_city('state', this.selectedIndex);" id="sts" name ="stt" class="form-control form-control-sm rounded"  ng-model="supplier.state"></select>
+          </div></div></div>
+
+          <div class="col">
+            <div class="form-group cols_pad">
+            <label for="on" class="form-control-sm lable_define" >City<span class="required">*</span></label>
+            <div class="input-group" >
+              <select id ="state" class="form-control form-control-sm rounded" required  ng-model="supplier.city"></select>
+             <script language="javascript">print_state("sts");</script>
+          </div></div></div>
+
+          <div class="col">
+            <div class="form-group cols_pad">
+            <label for="on" class="form-control-sm lable_define" >Pin Code </label>
+            <div class="input-group" >
+          <input type="text"  class="form-control form-control-sm rounded" id="supplier_PC" ng-model="supplier.pincode"  maxlength="7">
+        </div></div>
+          </div>
+
+      </div>
+
+      <div class="row" >
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >Contact No.<span class="required">*</span></label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-phone-square" aria-hidden="true"></i></div>
+          <input type="text" class="form-control form-control-sm rounded-right" maxlength="10" id="supplier_CN" ng-model="supplier.contactNumber" style="width:262px">
+        </div></div>
+        </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >Email ID</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-envelope" aria-hidden="true"></i></div>
+          <input type="email" class="form-control form-control-sm rounded-right" id="supplier_email" ng-model="supplier.email" style="width:262px">
+        </div></div>
+        </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >Gender</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-venus-mars" aria-hidden="true"></i></div>
+          <select class="form-control form-control-sm rounded-right"  id="supplier_gender" ng-model="supplier.gender" style="font-size:15px;width:262px" placeholder="Select Gender">
+               <option value="Male">Male</option>
+               <option value="Female">Female</option>
+               <option value="Other">Other</option>
+          </select>
+        </div></div>
+        </div>
+        </div>
+
+      </div>
+
+      <small class="my-1" style="color:#949494">Tax Information :</small>
+      <div class="row" >
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >PAN Number</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-id-badge" aria-hidden="true"></i></div>
+          <input type="text" class="form-control form-control-sm rounded-right" id="supplier_PAN" ng-model="supplier.pan"style="width:262px">
+        </div></div>
+        </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >GSTIN</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-file-o" aria-hidden="true"></i></div>
+          <input type="text" class="form-control form-control-sm rounded-right" id="supplier_GSTIN" ng-model="supplier.gstin" style="width:262px">
+        </div></div>
+        </div>
+        </div>
+
+      <div class="col ">
+      <div class="form-group cols_pad" style="padding:18px 1px">
+
+      </div>
+      </div>
+
+      </div>
+
+      <small class="mb-1" style="color:#949494">Identity Details :</small>
+      <div class="row" >
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >Document Type</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-id-card" aria-hidden="true"></i></div>
+          <select class="form-control form-control-sm rounded-right" ng-model="supplier.DT" id="supplier_DT" value="" style="width:262px;font-size:15px">
+            <option value="Aadhar Card">Aadhar Card</option>
+            <option value="Pan Card">Pan Card</option>
+            <option value="Voter Card">Voter Card</option>
+            <option value="Driving License">Driving License</option>
+          </select>
+        </div></div>
+        </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >..supplier.DT.. No.</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-id-badge" aria-hidden="true"></i></div>
+          <input type="text" class="form-control form-control-sm rounded-right" id="supplier_DN" ng-model="supplier.DN" style="width:262px">
+        </div></div>
+        </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group cols_pad">
+          <label for="eway_no" class="form-control-sm lable_define" >Date Of Birth</label>
+          <div class="input-group" >
+          <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left"><i class="fa fa-birthday-cake" aria-hidden="true"></i></div>
+          <input  type="date" class="form-control form-control-sm rounded-right" id="supplier_DOB" ng-model="supplier.DOB" style="width:262px">
+        </div></div>
+        </div>
+        </div>
+
+      </div>
+
+      <br>
+      <div class="row" >
+      <div class="col">
+      <div class="form-group cols_pad">
+      <button type="button" class="btn btn-light" ng-click="SubmitSupplierForm(supplier)"  style="width:165px;height:42px;font-size:17px;background:#1835a8;color:white;border-radius: 20px; float:right"  ng-disabled="addsupplierbutton"><i class="fa fa-plus-square" aria-hidden="true" ></i>&nbsp;&nbsp;Add Supplier</button>
+      </div></div>
+
+      <div class="col"><div class="form-group cols_pad">
+      <button type="reset" id="ResetSupplierForm" class="btn btn-light" style="width:165px;height:42px;font-size:17px;background:#dede31;radius:50px;border-radius: 20px;" ><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Reset</button>
+      </div> </div>
+      </div>
+      <br>
+      </form>
+                 </div>
+               </div>
+               </form>
+             </div>
+
+
+
+
+     <div class="modal-footer text-white justify-content-between py-1" style="background:#000;">
+       <small>* Detailed information about Supplier detailes will shown in Supplier Dashboard</small>
+     </div>
+
+     </div>
+    </div>
+   </div>
+    <!-- *****************  Model for "ADD New Suppliers" end here end here ********************* -->
+
+    <!-- *****************  Model for "ADD New Item" ********************* -->
+     <div class="modal fade" id="add_new_item_model" role="dialog"  >
+       <div class="modal-dialog" style="top:100px;right:220px">
+         <!-- Modal content-->
+         <div class="modal-content" style="width:1100px !important;;border-radius:25px 25px 0px 0px;">
+
+         <div class="modal-header border-0" >
+           <h4 class="text-white py-3 px-3" style="border-radius:0px 50px 50px 0px;background:linear-gradient(to right,#000428,#004e92);" >ADD NEW ITEM DETAILS</h4>
+           <button type="button" class="close" data-dismiss="modal" ><i class="fa fa-times-circle text-danger" aria-hidden="true"></i></button>
+         </div>
+
+   <form id="AddStockForm" autocomplete="off">
+    <div class="modal-body py-0">
+      <!-- Page Header-->
+      <!-- First container -->
+     <div class="jumbotron  py-0 mx-3 " >
+     <small  class="my-1 pt-2" style="  color:#949494">Product Information :</small>
+     <div class="row" > <!-- First row-->
+       <div class="col">
+         <div class="form-group cols_pad">
+         <label for="stock_pn" class="form-control-sm lable_define" >Product Name<span class="required">*</span></label>
+         <input type="text" class="form-control form-control-sm rounded" id="stock_pn" ng-model="stock.PN"  required>
+       </div>
+       </div>
+       <div class="col ">
+         <div class="form-group cols_pad">
+         <label for="stock_group" class="form-control-sm lable_define" >Group</label>
+         <select class="browser-default custom-select custom-select-sm rounded" ng-model="stock.groupp"  id="stock_group"  style="font-size:15px">
+            <option selected disabled>select</option>
+            <option value="Non GST">Non GST</option>
+            <option value="GST">GST</option>
+            <option value="Bill of supply">Bill of supply</option>
+       </select>
+       </div>
+     </div>
+
+     <div class="col">
+       <div class="form-group cols_pad">
+       <label for="stock_brand" class="form-control-sm lable_define" >Brand</label>
+       <input type="text" class="form-control form-control-sm rounded" id="stock_brand" ng-model="stock.brand"  required>
+     </div>
+     </div>
+      <div class="col">
+       <div class="form-group cols_pad">
+       <label for="stock_IC" class="form-control-sm lable_define" >Item Code</label>
+       <div class="input-group-prepend input_box_height" >
+      <div class="input-group-text rounded-left"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+       <input type="text" class="form-control form-control-sm rounded-right" id="stock_IC" ng-model="stock.IC"  >
+       </div> </div>
+       </div>
+
+       <div class="col">
+        <div class="form-group cols_pad">
+        <label for="stock_sn" class="form-control-sm lable_define" >Serial Number</label>
+        <div class="input-group-prepend input_box_height" >
+       <div class="input-group-text rounded-left"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+        <input type="text" class="form-control form-control-sm rounded-right" id="stock_sn" ng-model="stock.SN"  >
+        </div> </div>
+        </div>
+
+       </div>
+       <small  class="my-1" style="  color:#949494">Price Information :</small>
+       <div class="row" > <!-- 2nd row-->
+
+
+
+
+         <div class="col">
+           <div class="form-group cols_pad">
+           <label for="stock_pp" class="form-control-sm lable_define" >Purchase Price<span class="required">*</span></label>
+            <div class="input-group-prepend input_box_height" >
+           <div class="input-group-text rounded-left">₹</div>
+           <input type="number" class="form-control form-control-sm rounded-right"  id="stock_pp" ng-model="stock.PP" onfocus="this.value=null"  required>
+         </div> </div>
+         </div>
+
+
+         <div class="col">
+           <div class="form-group cols_pad">
+           <label for="stock_sp" class="form-control-sm lable_define" >Sale Price<span class="required">*</span></label>
+           <div class="input-group-prepend input_box_height" >
+          <div class="input-group-text rounded-left">₹</div>
+           <input type="number" class="form-control form-control-sm rounded-right" id="stock_sp" ng-model="stock.SP" onfocus="this.value=null"   required>
+         </div> </div>
+         </div>
+
+
+       <div class="col">
+         <div class="form-group cols_pad">
+         <label for="stock_msp" class="form-control-sm lable_define" >Minimum Sale Price</label>
+         <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">₹</div>
+         <input type="number" class="form-control form-control-sm rounded-right" id="stock_msp" ng-model="stock.MSP" onfocus="this.value=null" >
+       </div>     </div>
+       </div>
+
+        <div class="col">
+         <div class="form-group cols_pad">
+         <label for="stock_mrp" class="form-control-sm lable_define" >M.R.P</label>
+         <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">₹</div>
+         <input type="number" class="form-control form-control-sm rounded-right" id="stock_mrp" ng-model="stock.MRP" onfocus="this.value=null" >
+         </div>     </div>
+         </div>
+
+         <div class="col ">
+           <div class="form-group cols_pad">
+           <label for="stock_unit" class="form-control-sm lable_define" >Unit Type</label>
+           <select class="browser-default custom-select custom-select-sm rounded" id="stock_unit" ng-model="stock.unit" style="font-size:15px">
+              <option selected disabled>select</option>
+              <option value="UNT">UNT</option>
+              <option value="OTH">OTH</option>
+              <option value="PCS">PCS</option>
+              <option value="PAC">PAC</option>
+              <option value="SET">SET</option>
+              <option value="BOX">BOX</option>
+              <option value="TON">TON</option>
+              <option value="GMS">GMS</option>
+              <option value="BKL">BKL</option>
+              <option value="BDL">BDL</option>
+              <option value="NOS">NOS</option>
+              <option value="MTR">MTR</option>
+         </select>
+         </div>
+       </div>
+         </div>
+
+         <small class="my-1" style=" color:#949494">GST Details :</small>
+         <div class="row" > <!-- 3rd row-->
+           <div class="col">
+             <div class="form-group cols_pad">
+             <label for="stock_hsn" class="form-control-sm lable_define" >HSN / SAC Code</label>
+             <input type="text" class="form-control form-control-sm rounded" id="stock_hsn" ng-model="stock.HSN"  >
+           </div>
+           </div>
+
+           <div class="col">
+             <div class="form-group cols_pad">
+             <label for="stock_cgst" class="form-control-sm lable_define" >CGST</label>
+             <div class="input-group-prepend input_box_height" >
+            <div class="input-group-text rounded-left">%</div>
+             <input type="text" class="form-control form-control-sm rounded-right" id="stock_cgst" ng-model="stock.CGST" onfocus="this.value=null" >
+           </div> </div>
+           </div>
+
+           <div class="col">
+             <div class="form-group cols_pad">
+             <label for="stock_sgst" class="form-control-sm lable_define" >SGST</label>
+             <div class="input-group-prepend input_box_height" >
+            <div class="input-group-text rounded-left">%</div>
+             <input type="text" class="form-control form-control-sm rounded-right" id="stock_sgst" ng-model="stock.SGST"  onfocus="this.value=null" >
+           </div> </div>
+           </div>
+
+           <div class="col">
+             <div class="form-group cols_pad">
+             <label for="stock_cess" class="form-control-sm lable_define" >Cess</label>
+             <div class="input-group-prepend input_box_height" >
+            <div class="input-group-text rounded-left">%</div>
+             <input type="text" class="form-control form-control-sm rounded-right" id="stock_cess" ng-model="stock.cess" onfocus="this.value=null"  >
+           </div> </div>
+           </div>
+
+           <div class="col">
+             <div class="form-group cols_pad">
+             <label for="stock_IGST" class="form-control-sm lable_define" >IGST</label>
+             <div class="input-group-prepend input_box_height" >
+            <div class="input-group-text rounded-left">%</div>
+             <input type="text" class="form-control form-control-sm rounded-right" id="stock_IGST" ng-model="stock.IGST" onfocus="this.value=null"  >
+           </div>
+           </div> </div>
+           </div>
+
+                    <small  class="my-1" style="color:#949494 ">Other Details :</small>
+                    <div class="row" > <!-- 4th row-->
+                      <div class="col ">
+                        <div class="form-group cols_pad">
+                        <label for="stock_PT" class="form-control-sm lable_define" >Product type <span class="required">*</span></label>
+                        <select class="browser-default custom-select   rounded" ng-model="stock.product_type" id="stock_PT"  style="font-size:15px" required>
+                          <option selected disabled>select</option>
+                          <option value="General">General</option>
+                          <option value="Electronic">Electronic</option>
+                      </select>
+                      </div>
+                    </div>
+                      <div class="col-6">
+                        <div class="form-group cols_pad">
+                          <label for="stock_PDiscription" class="form-control-sm lable_define" >Product Discription</label>
+                           <textarea class="form-control custom-select-sm rounded" id="stock_PDiscription" ng-model="stock.PDiscription" rows="2"></textarea>
+                      </div>
+                      </div>
+
+
+
+                      <div class="col">
+                        <div class="form-group cols_pad ml-5">
+                           <button type="button" class="btn btn-light my-2" ng-click="SubmitStock(stock)"   ng-disabled="stockSubmitButton"  style="width:165px;height:42px;font-size:17px;background:#1835a8;color:white;border-radius: 20px;"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;Add</button>
+                            <button type="reset" class="btn btn-light" style="width:165px;height:42px;font-size:17px;background:#dede31;radius:50px;border-radius: 20px;" >Reset</button>
+                      </div>
+                      </div>
+                      </div>
+                      <br>
+           </div>
+    </div>
+  </form>
+
+        <div class="modal-footer text-white justify-content-between py-1" style="background:#000;">
+          <small>* Detailed information about stock detailes will shown in Inventory Dashboard</small>
+        </div>
+
+       </div>
+     </div>
+   </div>
+      <!-- *****************  Model for "ADD New Item" end here end here ********************* -->
+
+
+    </div>
+
+
+    {% endblock %}

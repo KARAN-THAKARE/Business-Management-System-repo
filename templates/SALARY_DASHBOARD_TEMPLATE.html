@@ -1,0 +1,935 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script src="/static/js/staff dashboard controller/Salary dashboard controller.js"></script>
+
+
+<style media="screen">
+
+ul {
+list-style: none;
+}
+
+/* Utilities */
+.card::after,
+.card .round_pic {
+border-radius: 50%;
+}
+
+.card,
+.stats {
+display: flex;
+}
+
+.card {
+padding: 2.5rem 2rem;
+border-radius: 10px;
+background-color: rgba(255, 255, 255, .5);
+max-width: 1300px;
+box-shadow: 0 0 30px rgba(0, 0, 0, .15);
+margin: 1rem;
+position: relative;
+transform-style: preserve-3d;
+overflow: hidden;
+}
+
+.card::before {
+width: 100%;
+height: 100%;
+border: 1px solid #FFF;
+border-radius: 10px;
+top: -.7rem;
+left: -.7rem;
+}
+.card::after {
+height: 15rem;
+width: 15rem;
+background-color: #4172f5aa;
+top: -8rem;
+right: -8rem;
+box-shadow: 2rem 6rem 0 -3rem #FFF
+}
+
+.card img {
+width: 8rem;
+min-width: 80px;
+box-shadow: 0 0 0 5px #FFF;
+}
+
+.infos {
+margin-left: 1rem;
+}
+
+.name {
+margin-bottom: 1rem;
+}
+.name h2 {
+font-size: 1.3rem;
+}
+.name h4 {
+font-size: .8rem;
+color: #333
+}
+
+.text {
+font-size: .9rem;
+margin-bottom: 1rem;
+}
+
+.stats {
+margin-bottom: 1rem;
+}
+.stats li {
+min-width: 5rem;
+}
+.stats li h3 {
+font-size: .99rem;
+}
+.stats li h4 {
+font-size: .75rem;
+}
+
+.links button {
+font-family: 'Poppins', sans-serif;
+min-width: 120px;
+padding: .5rem;
+border: 1px solid #222;
+border-radius: 5px;
+font-weight: bold;
+cursor: pointer;
+transition: all .25s linear;
+}
+.links .follow,
+.links .view:hover {
+background-color: #222;
+color: #FFF;
+}
+.links .view,
+.links .follow:hover{
+background-color: transparent;
+color: #222;
+}
+
+@media screen and (max-width: 450px) {
+.card {
+  display: block;
+}
+.infos {
+  margin-left: 0;
+  margin-top: 1.5rem;
+}
+.links button {
+  min-width: 100px;
+}
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ebebeb;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #6d6d6d;
+}
+</style>
+<style media="screen">
+
+
+
+input[type=checkbox], label {
+cursor: pointer;
+}
+input[type=checkbox] {
+margin-right: 0.25em;
+}
+
+.check {
+box-shadow:
+  0 0.125rem 0.375rem #0007;
+font-size: 0.5em;
+line-height: 1;
+margin-top: 1.5em;
+position: relative;
+transition: transform 0.3s ease-in-out;
+transform-style: preserve-3d;
+width: 24rem;
+height: 11rem;
+}
+input[type=checkbox]:checked ~ .check {
+transform: translateY(6.5rem) rotateZ(90deg) rotateX(-180deg);
+}
+.check small {
+font-size: 0.75em;
+}
+.check code {
+display: inline-block;
+font-family: "Courier Prime", monospace;
+font-size: 1.5em;
+letter-spacing: 0.1em;
+transform: translateY(0.1em);
+}
+.check__front, .check__back {
+display: flex;
+position: absolute;
+width: 100%;
+height: 100%;
+}
+
+.check__front, .check__input {
+color: #17181c;
+}
+.check__front {
+background:
+  repeating-radial-gradient(2rem 1rem at 75% 0%,#ebecef00 0 0.7rem,#ebecef 0.71rem 0.75rem),
+  repeating-radial-gradient(4rem 2rem at 0% 100%,#ebecef00 0 0.7rem,#ebecef 0.71rem 0.75rem),
+  #dddfe3;
+background-repeat: no-repeat;
+flex-wrap: wrap;
+align-content: flex-start;
+padding: 1rem 1rem 0 1rem;
+transform: translateZ(1px);
+}
+
+.check__address {
+font-style: normal;
+}
+.check__input {
+font-family: "Architects Daughter", sans-serif;
+height: 1.5em;
+-webkit-appearance: none;
+appearance: none;
+}
+.AmountField {
+background: #faffe1;
+padding: 0 0.25rem;
+width: 5.24rem;
+border: none
+}
+.check__input[type=text], .check__mp {
+  border:none;
+border-bottom: 1px solid;
+}
+.check__input[type=text] {
+background: transparent;
+}
+.check__label {
+display: block;
+}
+.check__person, .check__logo, .check__division {
+text-transform: uppercase;
+}
+.check__person {
+width: 11.75rem;
+}
+.check__date {
+margin: 1.25rem 0.5rem 0.75rem 0;
+width: 5.99rem;
+}
+.check__date .check__input {
+width: 100%;
+}
+.check__date .check__label, .check__order-of {
+text-align: center;
+}
+.check__no, .check__currency, .check__icon, .check__logo, .check__division {
+text-align: center;
+}
+.check__no {
+width: 3.75rem;
+}
+.check__no span, .check__currency, .check__icon {
+font-size: 1.5em;
+}
+.check__no span {
+display: inline-block;
+margin: 0 0 0.125rem 0;
+}
+.check__order-of {
+margin-right: 0.25rem;
+transform: translateY(-0.125rem);
+width: 4.80rem;
+}
+.check__order-of + .check__input {
+
+width: 11.12rem;
+}
+.check__currency {
+margin-left: 0.25rem;
+width: 0.75rem;
+transform: scaleX(1.25);
+}
+.check__currency + .check__input + .check__input {
+margin-right: 0.25rem;
+width: 16.5rem;
+}
+.check__currency-name {
+transform: translateY(0.25rem);
+}
+.check__icon {
+margin: 0 0.5em 0 0.625em;
+height: 0.75rem;
+width: 0.75rem;
+}
+.check__photo, .check__manufacturer, .check__payable {
+font-size: 0.5em;
+}
+.check__photo {
+width: 2rem;
+}
+.check__logo, .check__division {
+color: #fff;
+height: 1.5rem;
+}
+.check__logo {
+background: #0b46da;
+margin-right: 0.125rem;
+margin-bottom: 0.25rem;
+padding: 0.25rem 0;
+width: 1.5rem;
+}
+.check__division {
+background: #255ff4;
+margin-right: 0.5rem;
+padding: 0.5rem 0;
+width: 2.5rem;
+}
+.check__payable {
+margin-top: 0.875rem;
+width: 16.875rem;
+}
+.check__memo {
+margin-right: 0.125rem;
+transform: translateY(0.3rem);
+}
+.check__memo + .check__input {
+margin-right: 1.5rem;
+width: 9rem;
+}
+.check__memo + .check__input ~ .check__input, .check__endorsement {
+font-family: "Mr Dafoe", cursive;
+}
+.check__memo + .check__input ~ .check__input {
+font-size: 1.5em;
+  transform: translateY(-0.5em);
+width: 10rem;
+}
+.check__signature {
+clip: rect(1px,1px,1px,1px);
+overflow: hidden;
+position: absolute;
+width: 1px;
+height: 1px;
+}
+.check__mp {
+font-size: 0.75em;
+letter-spacing: -0.25em;
+padding-top: 0.75em;
+width: 0.5rem;
+height: 0.75rem;
+transform: translateY(0rem);
+}
+.check__routing-no, .check__account-no, .check__bottom-no {
+margin-top: 0.25rem;
+margin-bottom: 0.5rem;
+}
+.check__routing-no {
+margin-left: 0.25rem;
+width: 6.5rem;
+}
+.check__routing-no:before, .check__routing-no:after, .check__account-no:after {
+content: "";
+display: inline-block;
+vertical-align: middle;
+height: 0.5rem;
+}
+.check__routing-no:before, .check__routing-no:after {
+background:
+  linear-gradient(#17181c00 15%,#17181c 15% 85%,#17181c00 85%) 0 0 / 25% 100% no-repeat,
+  linear-gradient(#17181c 33%,#17181c00 33% 67%,#17181c 67%) 100% 0 / 50% 100% no-repeat;
+width: 0.4rem;
+}
+.check__routing-no:before {
+margin-right: 0.25rem;
+}
+.check__account-no {
+width: 6.75rem;
+}
+.check__account-no:after {
+background:
+  linear-gradient(90deg,#17181c 33%,#17181c00 33% 67%,#17181c 67%) 0 50% / 40% 75% no-repeat,
+  linear-gradient(#17181c 50%,#17181c00 50%) 100% 0 / 50% 100% no-repeat;
+width: 0.5rem;
+}
+.check__bottom-no {
+width: 8rem;
+}
+.check__manufacturer {
+transform: translateX(-0.375rem);
+}
+
+.check__input[type=checkbox] {
+box-shadow: 0 0 0 1px #c7cad1 inset;
+vertical-align: middle;
+width: 1em;
+height: 1em;
+}
+.check__input[type=checkbox]:before {
+content: "\2713";
+display: block;
+line-height: 1;
+text-align: center;
+visibility: hidden;
+}
+.check__input[type=checkbox]:checked:before {
+visibility: visible;
+}
+.check__input[type=checkbox] + small {
+display: inline-block;
+letter-spacing: 0.05em;
+transform: scaleY(1.25);
+word-spacing: 0.25em;
+}
+.check__back, .check__alter-area-body {
+background: #fff;
+}
+.check__back {
+background:
+  repeating-linear-gradient(5deg,#fff 0 0.05rem,#fff0 0.07rem 0.38rem,#fff 0.4rem),
+  repeating-linear-gradient(-50deg,#fff 0 0.05rem,#fff0 0.07rem 0.38rem,#fff 0.4rem),
+  #ebecef;
+color: #c7cad1;
+transform: translateZ(0) rotateY(180deg);
+}
+.check__back .check__input[type=text] {
+border-bottom: 1px solid #c7cad1;
+}
+.check__info, .check__deposit {
+background: #fff;
+}
+.check__info {
+margin-left: 0.25rem;
+padding: 0.5rem 0.5rem 0.1rem 0.25rem;
+width: calc(50% - 0.25rem);
+height: calc(100% - 0.25rem);
+}
+.check__back-no, .check__alter-area, .check__icons, .check__side-watermark {
+position: absolute;
+}
+.check__back-no {
+top: 0.25rem;
+right: calc(50% + 0.75rem);
+}
+.check__back-person, .check__alter-area, .check__watermarks {
+text-transform: uppercase;
+}
+.check__back-person, .check__alter-area-head {
+letter-spacing: -0.05em;
+}
+.check__back-person {
+margin-bottom: 2rem;
+}
+.check__alter-area {
+color: #e3e4e8;
+top: 2.75rem;
+left: 0.5rem;
+z-index: 1;
+}
+.check__alter-area-head {
+margin-bottom: 0.25em;
+padding-left: 0.5rem;
+}
+.check__alter-area-body {
+border-radius: 0.5rem;
+box-shadow: 0 0 0 1px inset;
+padding: 0.25rem 0.25rem;
+position: relative;
+text-align: center;
+width: 17.65rem;
+}
+.check__alter-area-border, .check__alter-area-border:before, .check__alter-area-border:after {
+position: absolute;
+}
+.check__alter-area-border {
+/*<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 60'><rect x='0' y='0' width='24' height='10' rx='5' ry='5' fill='#000' /><rect x='2' y='2' width='20' height='6' rx='3' ry='3' fill='#fff' /><rect x='0' y='50' width='24' height='10' rx='5' ry='5' fill='#000' /><rect x='2' y='52' width='20' height='6' rx='3' ry='3' fill='#fff' /></svg>*/
+background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 60'%3e%3crect x='0' y='0' width='24' height='10' rx='5' ry='5' fill='%23e3e4e8' /%3e%3crect x='2' y='2' width='20' height='6' rx='3' ry='3' fill='%23fff' /%3e%3crect x='0' y='50' width='24' height='10' rx='5' ry='5' fill='%23e3e4e8' /%3e%3crect x='2' y='52' width='20' height='6' rx='3' ry='3' fill='%23fff' /%3e%3c/svg%3e") 0 0 / 0.8rem 1.2rem;
+background-repeat: repeat-x;
+pointer-events: none;
+top: -0.1rem;
+left: 0.4rem;
+width: calc(100% - 0.8rem);
+height: calc(100% + 0.2rem);
+}
+.check__alter-area-border:before, .check__alter-area-border:after {
+content: "";
+display: block;
+top: 0;
+width: 0.5rem;
+height: 100%;
+}
+.check__alter-area-border:before {
+/*<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 60'><rect x='0' y='18' width='10' height='24' rx='5' ry='5' fill='#000' /><rect x='2' y='20' width='6' height='20' rx='3' ry='3' fill='#fff' /></svg>*/
+background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 60'%3e%3crect x='0' y='18' width='10' height='24' rx='5' ry='5' fill='%23e3e4e8' /%3e%3crect x='2' y='20' width='6' height='20' rx='3' ry='3' fill='%23fff' /%3e%3c/svg%3e") 0 0 / 0.4rem 1.2rem;
+background-repeat: no-repeat;
+left: -0.5rem;
+}
+.check__alter-area-border:after {
+/*<svg viewBox='0 0 20 60' xmlns='http://www.w3.org/2000/svg'><rect width='10' height='24' rx='5' ry='5' fill='#000' x='15' transform='matrix(0.707107, -0.707107, 0.707107, 0.707107, -12.60659, 17.677675)' /><rect x='17' y='2' width='6' height='20' rx='3' ry='3' fill='#fff' transform='matrix(0.707107, -0.707107, 0.707107, 0.707107, -12.60659, 17.677675)' /><rect width='10' height='24' rx='5' ry='5' fill='#000' x='15' y='36' transform='matrix(0.707107, 0.707107, -0.707107, 0.707107, 29.819815, -0.06244)' /><rect x='17' y='38' width='6' height='20' rx='3' ry='3' fill='#fff' transform='matrix(0.707107, 0.707107, -0.707107, 0.707107, 29.819815, -0.06244)' /></svg>*/
+background: url("data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 20 60' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='10' height='24' rx='5' ry='5' fill='%23e3e4e8' x='15' transform='matrix(0.707107, -0.707107, 0.707107, 0.707107, -12.60659, 17.677675)'%3e%3c/rect%3e%3crect x='17' y='2' width='6' height='20' rx='3' ry='3' fill='%23fff' transform='matrix(0.707107, -0.707107, 0.707107, 0.707107, -12.60659, 17.677675)'%3e%3c/rect%3e%3crect width='10' height='24' rx='5' ry='5' fill='%23e3e4e8' x='15' y='36' transform='matrix(0.707107, 0.707107, -0.707107, 0.707107, 29.819815, -0.06244)'%3e%3c/rect%3e%3crect x='17' y='38' width='6' height='20' rx='3' ry='3' fill='%23fff' transform='matrix(0.707107, 0.707107, -0.707107, 0.707107, 29.819815, -0.06244)'%3e%3c/rect%3e%3c/svg%3e") 0 0 / 0.4rem 1.2rem;
+background-repeat: no-repeat;
+right: -0.5rem;
+}
+.check__features {
+font-family: "Oswald", sans-serif;
+font-size: 0.8em;
+margin-left: 0;
+line-height: 1.2;
+transform: translateX(1.125rem);
+}
+.check__features-list {
+padding-left: 0.5rem;
+}
+.check__icons {
+display: flex;
+justify-content: space-between;
+top: 5.125rem;
+left: 0.5rem;
+width: 4.5rem;
+transform: rotate(90deg);
+transform-origin: 0 100%;
+}
+.check__icons .check__icon, .check__icons .check__photo {
+margin: 0;
+}
+.check__icons .check__icon circle, .check__icons .check__icon path {
+fill: #c7cad1;
+}
+.check__icons .check__photo {
+font-size: 0.5em;
+width: 1.25rem;
+}
+.check__watermarks {
+border-right: 0.1rem solid #c7cad1;
+overflow: hidden;
+padding-top: 0.25rem;
+white-space: nowrap;
+width: 26%;
+}
+.check__watermark {
+color: #dddfe3;
+font-size: 1.5em;
+font-weight: bold;
+line-height: 1;
+letter-spacing: 0.1em;
+margin-bottom: 0.5em;
+word-spacing: 0.25em;
+transform: scaleX(1.25);
+transform-origin: 0 50%;
+}
+.check__watermark:first-child {
+transform: translateX(0.75rem) scaleX(1.25);
+}
+.check__watermark:nth-child(2) {
+transform: translateX(-2.875rem) scaleX(1.25);
+}
+.check__watermark:nth-child(3) {
+margin-bottom: 2.5em;
+transform: translateX(0.25rem) scaleX(1.25);
+}
+.check__watermark:nth-child(4) {
+transform: translateX(-0.75rem) scaleX(1.25);
+}
+.check__watermark:nth-child(5) {
+transform: translateX(-4.5rem) scaleX(1.25);
+}
+.check__watermark:nth-child(6) {
+transform: translateX(-1.5rem) scaleX(1.25);
+}
+.check__watermark:nth-child(7) {
+transform: translateX(0.5rem) scaleX(1.25);
+}
+.check__watermark:nth-child(n + 4) {
+margin-bottom: 0.7em;
+}
+.check__side-watermark {
+color: #abafba;
+font-size: 0.5em;
+top: 0;
+left: calc(50% + 0.5em);
+transform: rotate(90deg) scaleX(1.25) translateZ(0);
+transform-origin: 0 100%;
+}
+.check__deposit {
+width: 24%;
+}
+.check__deposit-box {
+padding: 0.125rem 0.325rem 0.5rem 0.325rem;
+position: absolute;
+top: 50%;
+left: 88%;
+transform: translate(-50%,-50%) rotate(90deg);
+width: 11rem;
+height: 5.75rem;
+}
+.check__deposit-box .check__label, .check__deposit-tip {
+text-transform: uppercase;
+}
+.check__deposit-box .check__label {
+margin-bottom: 0.25rem;
+}
+.check__sign-here {
+border-bottom: 1px solid;
+display: inline-block;
+line-height: 1.5;
+width: 1.25em;
+}
+.check__sign-here + .check__endorsement {
+margin-bottom: 1.125rem;
+}
+.check__sign-here + .check__endorsement, .check__institution, .check__deposit-tip {
+width: calc(100% - 1.25em);
+}
+.check__institution, .check__deposit-tip {
+margin-left: 1.25em;
+}
+.check__institution {
+margin-bottom: 0.5rem;
+}
+.check__deposit-tip {
+letter-spacing: -0.05em;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="page" ng-controller="SALARY_DASHBOARD_CONTROLLER">
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"   ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                 
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+                <a href="/Setting/User Profile" class="text-decoration-none"><span style="color: #333;font-size: 1.1rem;font-weight:700 ;" class="my-1 text-capitalize" id="OWNER_NAME"></a> </span>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li ><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li ><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li ><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li class="active"><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+<div class="content-inner bg-white" style="overflow-y:scroll;height:500px;overflow-x:hidden">
+
+<div class="row">
+  <div class="pulledLeft mt-3"><h4 class="pl-3">&nbsp;&nbsp;&nbsp;SALARY DASHBOARD  <i class="fa fa-calendar ml-4" aria-hidden="true"></i> ..Selected_Month.. ..Selected_Year..</h4></div>
+
+    <div>
+        <select class="form-control form-control-sm px-4 rounded" style="position:relative;left: 637px;top:20px;border: 1px solid #ccc;" ng-options="item for item in Month_List" ng-model="Selected_Month" ng-change=Change_In_Month_Date()> </select>
+    </div>
+    <div>
+      <select class="form-control form-control-sm px-4 rounded" style="position:relative;left:642px;top:20px;border: 1px solid #ccc;" ng-options="item for item in Year_List" ng-model="Selected_Year" ng-change=Change_In_Month_Date()> </select>
+    </div>
+</div>
+
+
+
+<!-- CARD START -->
+
+<div class="card py-4  " ng-repeat="data in StaffData " ng-style=" data.pendingamt<=0 && {'background-color':'#dbf3db6e'}  " >
+
+  <div class="row ">
+
+    <!-- image sector -->
+    <div class="col-2 mx-0 px-0 ml-5 ">
+        <div class="img  float-left">
+            <img class="round_pic ml-3" style="  max-width: 100%;display: block;" src="static/img/profile-pic.jpg">
+              <h2 class="mt-2 text-center">..Selected_Month.. ..Selected_Year..</h2>
+        </div>
+
+    </div>
+  <!-- END END -->
+
+    <!-- Info sector -->
+    <div  style="width:300px">
+         <div class="infos">
+            <div class="name">
+               <h2 >..data.Name..</h2>
+               <h4 class="badge badge-success text-light "># ..data.Designation..</h4>
+            </div>
+            <ul class="stats px-0 mx-0">
+             <li class=" ">
+               <h3 class=" text-left"> Salary  :  Rs. ..data.Salary_Amount..  </h3>
+              <button type="button" class="btn btn-outline-secondary btn-sm h6" style="font-size:x-small" data-toggle="popover" id="allpayment..data.ID.."    data-html="true" data-placement="bottom"   onClick="ShowAllPayment(true,this.id)" data-template='<div class="popover bg-dark" role="tooltip" style="max-width: 100%;" ><div class="arrow " ></div><div class="popover-body"></div></div>'> Show All Payments  <a href="#" class="badge badge-warning " style="font-size: 10px;">..data.Totalpaidcount..</a></button>
+
+              <!-- Popover template Show all payment Start-->
+                 <div id="AllPaymentTemplate..data.ID.." class="d-none"  >
+                   <i class="text-light pb-2" style="font-weight:600;">All Salary Payment's</i><i class="fa fa-times-circle float-right text-light" id="allpayment..data.ID.."  onclick="ShowAllPayment(false,this.id)"></i><br>
+                   <span id="payment_history_table..data.ID.."></span>
+                  </div>
+                  <!-- Popover template for Show all payment End-->
+           </ul>
+          <div class="progress mt-3 mr-5">  <div class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: ..data.salarycompleteinpercent..%" aria-valuenow="..data.salarycompleteinpercent.." aria-valuemin="0" aria-valuemax="100" ng-if="data.salarycompleteinpercent>0">..data.salarycompleteinpercent..%</div></div>
+          </div>
+       </div>
+
+<!-- END END -->
+
+<!-- payment Check sector -->
+   <div class="mr-5" ng-style="data.Totalpaidcount ==0 && {'border':' 2px dashed #9d9d9d','background':'#ffdee280'}  "   >
+
+     <div class="align-bottom my-5 pt-3 mx-4 " ng-show=" data.Totalpaidcount ==0" style="margin-right: 66px !important;padding-left: 63px;font-weight: 600;">
+        <i class="fa fa-frown-o" aria-hidden="true"></i> No Payment Done Till Yet !
+     </div>
+
+     	<form class="check zoom" ng-show=" data.Totalpaidcount >0">
+     		<div class="check__front">
+
+     			      <div class="check__person">
+     			      	<address class="check__address">
+     			      		<strong>..ShopName..</strong><br>
+     			      		..ShopAddress..
+     			      	</address>
+     			      </div>
+     			      <div class="check__date">  </div>
+
+
+     			      <div class="check__no">
+     			      	<span style="width:80px">..data.prev_Paid_on | date :"dd-MM-yyyy"..</span>
+     			      	<small class="ml-2">19-305/67F8X9C </small>
+     			      </div>
+
+     			<label class="check__label check__order-of" for="order-of">Pay to the Order of</label>
+     			<input class="check__input" id="order-of" type="text" name="order_of"  value="..data.Name.." disabled>
+
+
+     			<label  for="amount"><i class="fa fa-inr pt-1"  style="font-size:10px"></i> </label>
+
+     			<input class="AmountField check__input ml-1" id="amount" type="text" name="amount"  value=..data.prev_payment_amt..  disabled style="background:#faffe1;border:1px solid #faffe1">
+
+     			<input class="check__input px-5 " id="amount-in-words" type="text" name="amount_in_words"   value="..data.prev_payment_amt_in_words.." style="width:800px" >
+
+
+
+     			<div class="check__photo"></div>
+
+     			<div class="check__payable">payable through<br>Spaceters payment getway</div>
+
+
+     			<label class="check__label check__memo" for="memo"> </label>
+     			<input class="check__input" id="memo" type="text" name="memo" placeholder="  SALARY SLIP" disabled>
+
+
+     	<div class="col-4"> </div>
+
+
+     			<div class="check__routing-no"><code style="background:#ebebeb">86CC4546</code></div>
+     			<div class="check__account-no"><code style="background:#ebebeb">5V45XC</code></div>
+     			<div class="check__bottom-no"><code style="background:#ebebeb">***5X658</code></div>
+          <div class="col-4 bg-dark text-light py-2 text-center" > Previously Paid Check</div>
+
+     		</div>
+
+     	</form>
+        </div>
+
+  <!-- END END -->
+  <!-- Pay Button section -->
+   <div class=" ml-2 border-dashed-left "  >
+     	<form id="salaryinputform">
+        <div class="infos">
+          <br>
+        <small class="font-weight-light  mt-5 text-left">Remaining amount </small>
+              <div class="input-group  float-right ml-3">
+                <div class="input-group-prepend">
+                  <div class="input-group-text form-control-sm bg-dark text-light rounded-left">Rs.</div>
+                </div>
+                <input type="number" class="form-control form-control-sm text-dark rounded-right  "  id=..data.ID.. value=..data.pendingamt..  style="width:10px">
+              </div>
+        </div>
+      <button   type="button" class="btn btn-success ml-3 px-5 mt-4 btn-sm " ng-click="Pay_Salary(data.ID)">PAY</button>
+      	</form>
+  </div>
+<!-- END END -->
+    </div>
+
+  </div>
+
+<!-- CARD END -->
+    <br>
+</div>
+</div></div>
+
+
+{% endblock %}

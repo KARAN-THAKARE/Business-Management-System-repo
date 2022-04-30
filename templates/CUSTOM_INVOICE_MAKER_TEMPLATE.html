@@ -1,0 +1,604 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script src="/static/js/Custom Invoice/Custom Invoice Controller.js"></script>
+
+
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="page" style="background:white;"  ng-controller="CUSTOM~INVOICE~CONTROLLER">
+      <!-- Main Navbar-->
+
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                   
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+
+
+      <div class="page-content d-flex align-items-stretch"  >
+        <!-- Side Navbar -->
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+              <div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-right-circle" style="border-radius:50%!important;"></div>
+              <div class="title">
+                  <a href="/Setting/User Profile" class="text-decoration-none"><h1 class="h4 text-capitalize" id="OWNER_NAME"></h1></a>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li class="active"><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class=" list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="list_color active"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+                 <li  class="active"><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+
+     <div class="content-inner"  style="height:500px;overflow-x:hidden;overflow-y:scroll">
+           <div class="pulledLeft mt-2">
+                <h4>&nbsp;&nbsp;&nbsp;CUSTOM INVOICE DASHBOARD</h4>
+           </div>
+          <br>
+
+  <div class="px-3">
+
+                  <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-fill justify-content-center">
+                      <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tab1"><i class="fa fa-plus-square mr-1" ></i> ADD CUSTOM INVOICE </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link  " data-toggle="tab" href="#tab2"><i class="fa fa-list-ul mr-1" ></i> MANAGE CUSTOM INVOICE  </a>
+                      </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" >
+                      <div id="tab1" class=" tab-pane active ">
+
+        <form  id="CustomInvoiceForm" autocomplete="off">
+
+         <table class="table table-borderless table-sm mt-3 text-center">
+        <br>
+        <small> <b> Note : </b>Present Dashboard allows user to create custom invoice for their own usage. System does not keep track of inventory for such invoices.</small>
+           <tr>
+             <th colspan="4" class="bg-dark text-light"style="font-size:17px">INVOICE </th>
+           </tr>
+            <tr><th  class="text-left" colspan="4"></th> </tr>
+              <tr><th  class="text-left" colspan="4"></th> </tr>
+             <tr>
+               <th class=" text-left " colspan="2">INVOICE TO :</th>
+               <th colspan="2"> <input type="text" class="form-control form-control-sm rounded-right float-right CustomPlaceholder" id="InvoiceNO" ng-model="Custom.InvoiceNO" placeholder="Enter Invoice No.  " style="width:35%"> <span class="float-right mr-2 pt-1">INVOICE :</span></th>
+             </tr>
+
+
+             <tr>
+               <th class=" text-left" colspan="2">
+                 <div class="input-group  " style="width:50%">
+                 <div class="input-group-prepend ">
+                 <div class="input-group-text form-control-sm"><i class="fa fa-user" aria-hidden="true"></i></div>
+                 </div>
+                 <input type="text" class="form-control form-control-sm rounded-right float-left CustomPlaceholder" CustomPlaceholder id="ClientName"  ng-model="Custom.ClientName" placeholder="Enter Client Name " >
+               </div>
+               </th>
+
+               <th colspan="2"> <input type="date" class="form-control form-control-sm rounded-right float-right CustomPlaceholder" id="InvoiceDate"  ng-model="Custom.InvoiceDate"   style="width:35%"> <span class="float-right mr-2 pt-1">Invoice Date :</span></th>
+             </tr>
+
+             <tr>
+               <th  colspan="2">
+                 <div class="input-group  " style="width:117%">
+                 <div class="input-group-prepend ">
+                 <div class="input-group-text form-control-sm"><i class="fa fa-location-arrow" aria-hidden="true"></i></div>
+                 </div>
+                 <input type="text" class="form-control form-control-sm rounded-right float-left CustomPlaceholder"  id="FullAddress"  ng-model="Custom.FullAddress" placeholder="Enter full address  "   >
+                 </div></th>
+               <th colspan="2">
+                <select class="form-control form-control-sm rounded-right float-right CustomPlaceholder"  ng-options="state for state in StateList"  id="POS"  ng-model="Custom.POS"   style="width:35%">
+                <option value="" selected disabled>Select State</option>
+                </select>
+
+                 <span class="float-right mr-2 pt-1">Place of supply :</span></th>
+             </tr>
+
+
+             <tr>
+               <th  class="text-left" colspan="4">
+                 <div class="row">
+
+               <select onchange="print_city('state', this.selectedIndex,'NA','NA');" id="sts" name ="stt" class="form-control form-control-sm rounded-right ml-3 mr-2 CustomPlaceholder" ng-model="Custom.State" style="width:15%"></select>
+               <select id ="state" class="form-control form-control-sm rounded-right mr-2  CustomPlaceholder" ng-model="Custom.City"  style="width:15%"></select>
+              <script language="javascript">print_state("sts");</script>
+
+                         <input type="text" class="form-control form-control-sm rounded-right  CustomPlaceholder" id="ZipCode" maxlength="10" ng-model="Custom.ZipCode"  placeholder="Enter Zip code  " style="width:15%">
+                 </div>
+               </th> </tr>
+
+               <tr>
+                 <th  class="text-left" colspan="4">
+                   <div class="row">
+
+
+                     <div class="input-group-prepend ml-3 mr-2">
+                     <div class="input-group-text form-control-sm"><i class="fa fa-phone" aria-hidden="true"></i></div>
+                     <input type="tel" class="form-control form-control-sm rounded-right CustomPlaceholder" id="ContactNo" ng-model="Custom.ContactNo"  maxlength="10"  placeholder="Enter Contact Number"   >
+                    </div>
+
+
+
+                  <div class="input-group-prepend">
+                  <div class="input-group-text form-control-sm"><i class="fa fa-envelope" aria-hidden="true"></i></div>
+                   <input type="text" class="form-control form-control-sm rounded-right  CustomPlaceholder" id="Email" ng-model="Custom.Email"   placeholder="Enter Email Address" >
+                   </div>
+
+                      </div>
+                 </th>
+             </tr>
+
+             <tr>
+               <th  class="text-left" colspan="4">
+                 <div class="row">
+                   <div class="input-group-prepend ml-3 mr-2">
+                   <div class="input-group-text form-control-sm"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+                   <input type="text" class="form-control form-control-sm rounded-right CustomPlaceholder" id="PAN" ng-model="Custom.PAN" placeholder="Enter PAN Number"  >
+                      </div>
+
+                      <div class="input-group-prepend">
+                      <div class="input-group-text form-control-sm"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+                         <input type="text" class="form-control form-control-sm rounded-right CustomPlaceholder" id="GSTIN" ng-model="Custom.GSTIN"  placeholder="Enter GSTIN Number"  >
+                        </div>
+
+                 </div>
+               </th>
+           </tr>
+
+
+
+         </table>
+
+
+                  <table class="table table-borderless table-sm text-center">
+
+
+
+                    <tr style="border-left:1px solid #cacaca;border-right:1px solid #cacaca;border-top:1px solid #cacaca">
+                      <th style="width:30%;background: #e2e2e2b0">ITEM</th>
+                       <th style="width:12%;background: #e2e2e2b0">PRICE</th>
+                       <th style="width:10%;background: #e2e2e2b0">QTY</th>
+                         <th style="width:14%;background: #e2e2e2b0"> TAX TYPE</th>
+                           <th style="width:12%;background: #e2e2e2b0">TAX  </th>
+                           <th style="width:10%;background: #e2e2e2b0">DISCOUNT</th>
+                           <th style="width:20%;background: #e2e2e2b0" colspan="2">TOTAL</th>
+                     </tr>
+
+                     <tr ng-repeat="each in Item_Bucket" style="border-left:1px solid #cacaca;border-right:1px solid #cacaca">
+                       <th> <textarea class="form-control form-control-sm rounded-right CustomPlaceholder"  rows="1" placeholder="..each.ItemName.." disabled ></textarea></th>
+                        <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder"  placeholder="..each.ItemPrice.."    disabled></th>
+                          <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder"   placeholder="..each.ItemQty.."    disabled></th>
+                            <th><input type="text" class="form-control form-control-sm rounded-right CustomPlaceholder"   placeholder="..each.ItemTaxType.."  disabled></th>
+                            <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder"   placeholder="..each.ItemTax.."     disabled></th>
+                            <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder"  placeholder="..each.ItemDisc.."    disabled></th>
+                          <th><input type="text" class="form-control form-control-sm rounded-right CustomPlaceholder"   placeholder=" ..each.ItemTotalAmount.. "  disabled></th>
+                               <th> <i class="fa fa-minus-square fa-2x  text-danger" ng-click="DeleteItem(each.ItemName)"></i> </th>
+                      </tr>
+
+                     <tr style="border-left:1px solid #cacaca;border-right:1px solid #cacaca">
+                       <th> <textarea class="form-control form-control-sm rounded-right CustomPlaceholder" id="ItemName"  ng-model="Custom.ItemName" rows="2" placeholder="Enter Item and Description"  ></textarea></th>
+                        <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder" id="ItemPrice" min=0 ng-model="Custom.ItemPrice"  placeholder="Enter price"  ng-change="Calculate_Amount()"></th>
+                          <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder" id="ItemQty" step="1" min=0 ng-model="Custom.ItemQty" placeholder="Enter Qty"   ng-change="Calculate_Amount()"></th>
+                            <th><input type="text" class="form-control form-control-sm rounded-right CustomPlaceholder" id="Item_Tax_Details"  ng-model="Custom.Item_Tax_Details" placeholder="Enter tax details" ></th>
+                            <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder" id="Item_Total_Tax" step="0.1" min=0 ng-model="Custom.Item_Total_Tax" placeholder="Enter Total Tax" maxlength="100"  ng-change="Calculate_Amount()"></th>
+                            <th><input type="number" class="form-control form-control-sm rounded-right CustomPlaceholder" id="Item_Disc" step="0.1" min=0 ng-model="Custom.Item_Disc" placeholder="Enter Discount"  maxlength="100" ng-change="Calculate_Amount()"></th>
+                          <th><input type="text" class="form-control form-control-sm rounded-right CustomPlaceholder" id="Item_Total_Amount"  ng-model="Custom.Item_Total_Amount" placeholder="Total Amount" disabled></th>
+
+                               <th> <i class="fa fa-plus-square fa-2x  text-success" ng-click="AddItem()"></i> </th>
+                      </tr>
+
+
+
+                      <tr style="border-left:1px solid #cacaca;border-right:1px solid #cacaca"><th  colspan="8" > </th> </tr>
+
+
+                      <tr style="border-left:1px solid #cacaca;border-right:1px solid #cacaca">
+                        <th  colspan="8" class="text-left ">
+                            <div class="row">
+                              <div class="input-group ml-3  " style="width:15%">
+                              <div class="input-group-prepend ">
+                              <div class="input-group-text form-control-sm text-danger">%</div>
+                              </div>
+                             <input type="number" class="form-control form-control-sm rounded-right  CustomPlaceholder  " id="OverallDiscount" ng-model="Custom.OverallDiscount"  placeholder="Enter discount" ng-change="CalculateNetAmt()" style="width:15%">
+                            </div></div>
+                          </th>
+                        </tr>
+
+                        <tr style="border-left:1px solid #cacaca;border-right:1px solid #cacaca">
+                          <th  colspan="8" class="text-left">
+                              <div class="row">
+                              <div class="input-group ml-3" style="width:15%">
+                              <div class="input-group-prepend ">
+                              <div class="input-group-text form-control-sm">₹</div>
+                              </div>
+                             <input type="number" class="form-control form-control-sm rounded-right   CustomPlaceholder  " id="ShippingAmount" ng-model="Custom.ShippingAmount"  placeholder="Enter Shipping" ng-change="CalculateNetAmt()">
+                              </div>
+                              </div>
+                            </th>
+                          </tr>
+
+
+                    <tr style="border:1px solid #cacaca ">
+                      <th  colspan="6" class="text-right" style="border-top:1px solid #cacaca;border-right:1px solid #cacaca;background:#eee"> Sub Total :</th>
+                      <th  colspan="2" class="text-left pl-5" style="border-top:1px solid #cacaca"  > Rs. ..Custom.subtotal.. </th>
+                    </tr>
+                    <tr style="border:1px solid #cacaca">
+                      <th  colspan="6" class="text-right" style="border-right:1px solid #cacaca;background:#eee">Discount :</th>
+                      <th  colspan="2" class="text-left pl-5" > ..Custom.OverallDiscount.. % </th>
+                    </tr>
+                    <tr style="border:1px solid #cacaca">
+                      <th  colspan="6" class="text-right" style="border-right:1px solid #cacaca;background:#eee">Shipping Cost :</th>
+                      <th  colspan="2" class="text-left pl-5" > Rs. ..Custom.ShippingAmount.. </th>
+                    </tr>
+                    <tr style="border:1px solid #cacaca">
+                      <th  colspan="6" class="text-right" style="border-right:1px solid #cacaca;background:#eee">Net Amount :</th>
+                      <th  colspan="2" class="text-left pl-5" > Rs. ..Custom.NetAmount.. </th>
+                    </tr>
+
+
+
+                       <tr><th  colspan="8" > </th> </tr>
+
+                      <tr>
+                        <th  colspan="8" class="text-left">Terms And Condition :</th>
+                       </tr>
+
+                       <tr ng-repeat="each in Terms">
+                         <th  colspan="8" class="text-left">
+                              <div class="row"><textarea class="form-control form-control-sm rounded-right  CustomPlaceholder ml-3" id="Terms"   rows="1" placeholder="..each.." style="width:95%" disabled></textarea><i class="fa fa-minus-square  fa-2x  ml-2 text-danger" ng-click="DeleteTerms(each)"></i></div></th>
+                        </tr>
+
+                       <tr>
+                         <th  colspan="8" class="text-left">
+                           <div class="row">
+                           <textarea class="form-control form-control-sm rounded-right CustomPlaceholder  ml-3" id="Terms" ng-model="Custom.Terms" rows="1" placeholder="Enter other Terms & Conditions" style="width:95%" ></textarea><i class="fa fa-plus-square fa-2x  ml-2 text-success" ng-click="AddTerms()"></i>
+                            </div>
+                            </th>
+                        </tr>
+
+                                <tr><th  colspan="8" > </th> </tr>  <tr><th  colspan="8" > </th> </tr>
+
+                        <tr>
+                          <th  colspan="3" class="text-left"><button type="button" class="btn btn-light float-right px-5 text-light" style="background-image: linear-gradient(to right, #1e3c72 , #2a5298);" ng-click="SaveCustomInvoice()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button></th>
+                             <th   colspan="5" class="text-left"><button type="button" class="btn btn-warning px-5" style="background-image: linear-gradient(to right, #ffb347 , #ffcc33);"  ng-click="ResetCustomInvoice()"><i class="fa fa-repeat" aria-hidden="true"></i> Reset</button></th>
+                         </tr>
+
+                  </table>
+          </form>
+                     <br><br>
+                      </div>
+
+                      <div id="tab2" class="tab-pane ">
+
+
+                                                    <input type="text" class="form-control my-3 float-right "  id="Search6"  style="width:240px;border-radius:25px" placeholder="Search ...">
+                                         <table class="table text-center table-striped table-sm"  >
+                                           <thead class="thead-dark">
+                                             <tr>
+                                               <th scope="col">INVOICE ID</th>
+                                                  <th scope="col">INVOICE FOR</th>
+                                                    <th scope="col">INVOICE DATE</th>
+                                                    <th scope="col">PHONE NO.</th>
+                                                      <th scope="col">INVOICE AMOUNT</th>
+                                                        <th scope="col">VIEW</th>
+                                                        <th scope="col">DELETE</th>
+                                                          <th scope="col">SEND</th>
+                                                          <th scope="col">EXPORT</th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody id="SearchTable6">
+                                                 <tr ng-repeat="each in TableData">
+                                                   <td>..each.Invoice_NO..</td>
+                                                   <td class="text-left">..each.ClientName..</td>
+                                                   <td>..each.InvoiceDate | date :  "MMM d, y"  ..</td>
+                                                   <td>..each.ClientContact..</td>
+                                                   <td class="text-left pl-5"><i class="fa fa-inr" aria-hidden="true"></i> ..each.NetAmount..</td>
+                                                   <td> <i class="fa fa-eye fa-2x" aria-hidden="true" style="color:#3b2ea1" ng-click="Preview(each.Invoice_NO)"></i></td>
+                                                    <td> <i class="fa fa-trash text-danger fa-2x"  aria-hidden="true" ng-click="Delete_Custom_Invoice(each.Invoice_NO)"></i></td>
+                                                     <th scope="col"><img src="/static/img/email.png" alt="" style="width:35px;height;35px" ng-show="each.ClientEmail!=''" ng-click="SEND_CUSTOM_INVOICE_ON_MAIL(each.Invoice_NO,each.ClientName)"></th>
+                                                     <td><img src="/static/img/pdf.svg" alt="" style="width:30px;height;30px" ng-click="DownloadCustomInvoicePDF(each.Invoice_NO)"></td>
+                                                 </tr>
+
+                                           </tbody>
+                                         </table>
+
+                       </div>
+
+
+
+
+
+            </div>
+      </div>
+</div>
+
+
+
+
+
+<!-- __________________________________________________________________________________________________________-->
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " PREVIEW CUSTOM INVOICE  "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+<div class="modal fade" id="InvoiceModel" role="dialog">
+ <div class="modal-dialog modal-lg modal-dialog-centered"  >
+   <div class="modal-content border-0 rounded"  >
+
+
+   <form id="Submit_Supplier_Form"  autocomplete="off">
+   <div class="modal-body">
+
+
+     <table class="table table-bordered my-0 py-0">
+       <tr  >
+         <th colspan="2" style="border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #fff" ><i class="fa fa-window-close-o float-right text-danger" aria-hidden="true" data-dismiss="modal"></i></th>
+       </tr>
+         <tr class="text-right " style="font-size:10px; " ng-repeat="each in StoreData" >
+           <th scope="col"  style="border-right:none"><img src="/static/img/logo.png"style="width:150px;height:60px;float:left" ></th>
+           <th scope="col" style="border-left:none">
+            <h3>..each.Name..</h3>
+              ..each.Address.. <br>
+              ..each.City.., ..each.State.. ..each.ZipCode..<br>
+              ..each.Contact_No_1.. | ..each.Contact_No_2..  <br>
+              ..each.Email.. <br>
+              GSTN No. : ..each.GSTIN..
+           </th>
+         </tr>
+     </table>
+     <table class="table table-bordered  table-sm my-0 py-0">
+         <tr style="font-size:10px">
+           <th scope="col" style="font-size:15px">INVOICE TO :</th>
+          <th scope="col" style="font-size:15px;text-align:right" ng-repeat="each in CustomInvoiceData">INVOICE  ..each.Invoice_NO..</th>
+         </tr>
+         <tr style="font-size:10px;">
+           <th scope="col" ng-repeat="each in CustomInvoiceData">..each.ClientName..</th>
+          <th scope="col" class="text-right" ng-repeat="each in CustomInvoiceData">Date of Invoice : ..each.InvoiceDate | date:'dd-MM-yyyy'..</th>
+         </tr>
+         <tr style="font-size:10px;">
+           <th scope="col" ng-repeat="each in CustomInvoiceData">..each.ClientAddress..</th>
+          <th scope="col" class="text-right" ng-repeat="each in CustomInvoiceData">Place of supply : ..each.POS..</th>
+         </tr>
+         <tr style="font-size:10px;">
+           <th scope="col"  colspan="2"> <span ng-repeat="each in CustomInvoiceData">  ..each.ClientContactNo.. </span> <span ng-repeat="each in CustomInvoiceData" ng-show="each.ClientEmail!=''" >| ..each.ClientEmail.. </span> </th>
+         </tr>
+         <tr style="font-size:10px;">
+           <th scope="col"  colspan="2" ng-repeat="each in CustomInvoiceData"> PAN No. : ..each.ClientPAN.. </th>
+         </tr>
+         <tr style="font-size:10px;">
+            <th scope="col"  colspan="2" ng-repeat="each in CustomInvoiceData"> GSTIN &nbsp;&nbsp; : ..each.ClientGSTIN.. </th>
+         </tr>
+     </table>
+     <table class="table table-bordered my-0 py-0" style="font-size:10px;">
+         <tr class="text-center "  style="font-size:13px;background:#e5e5e5;">
+         <th scope="col" style="padding: 0px;">ITEM</th>
+          <th scope="col" style="padding: 0px;">PRICE</th>
+           <th scope="col" style="padding: 0px;">QUANTITY</th>
+            <th scope="col" style="padding: 0px;">TAX TYPE</th>
+             <th scope="col" style="padding: 0px;">TAX</th>
+             <th scope="col" style="padding: 0px;">DISC</th>
+             <th scope="col" style="padding: 0px;">TOTAL</th>
+         </tr>
+         <tr class="text-center "  style="font-size:11px; " ng-repeat="each in CustomInvoiceBucketItem">
+         <th scope="col" style="padding: 2px 10px;text-align:left">..each.ItemName..</th>
+          <th scope="col" style="padding: 2px;">₹ ..each.ItemPrice..</th>
+           <th scope="col" style="padding: 2px;">..each.ItemQty..</th>
+            <th scope="col" style="padding: 2px;">..each.Tax_Type..</th>
+             <th scope="col" style="padding: 2px;">..each.Tax.. %</th>
+             <th scope="col" style="padding: 2px;">..each.Discount.. %</th>
+             <th scope="col" style="padding: 2px;">₹ ..each.TotalAmount..</th>
+         </tr>
+         <tr    style="font-size:11px; ">
+         <th scope="col" style="padding: 2px;text-align:right;background:#e5e5e5;" colspan="6" > Sub Total : </th>
+          <th scope="col" style="padding: 2px;" class="pl-2"  ng-repeat="each in CustomInvoiceData">₹ ..each.SubTotal..</th>
+         </tr>
+         <tr   style="font-size:11px; ">
+         <th scope="col" style="padding: 2px;text-align:right;background:#e5e5e5;" colspan="6">Discount : </th>
+          <th scope="col" style="padding: 2px;"  class="pl-2" ng-repeat="each in CustomInvoiceData">..each.Discount..%</th>
+         </tr>
+         <tr   style="font-size:11px; ">
+         <th scope="col" style="padding: 2px;text-align:right;background:#e5e5e5;" colspan="6">Shipping Amt : </th>
+          <th scope="col" style="padding: 2px;" class="pl-2"  ng-repeat="each in CustomInvoiceData">₹ ..each.Shipping..</th>
+         </tr>
+         <tr  style="font-size:13px; ">
+         <th scope="col" style="padding: 2px;text-align:right;background:#e5e5e5;" colspan="6">Net Amount : </th>
+          <th scope="col" style="padding: 2px;" class="pl-2"  ng-repeat="each in CustomInvoiceData">₹ ..each.NetAmount..</th>
+         </tr>
+     </table>
+
+     <table class="table table-borderless  mt-4" style="font-size:15px">
+         <tr class="text-left " >
+           <th scope="col"  style="padding: 2px;"> Thank You !!! </th>
+         </tr>
+         <tr class="text-right " >
+           <th scope="col" style="padding: 2px;">Authorised Signature</th>
+         </tr>
+         <tr class="text-left " >
+           <th scope="col"  style="padding: 2px;">Terms and Condition </th>
+         </tr>
+         <tr class="text-left " style="font-size:11px" ng-repeat="each in CustomInvoiceTerms">
+           <th scope="col"  style="padding: 2px;"> ..$index+1.. . ..each.Terms..</th>
+         </tr>
+     </table>
+       </div>
+     </form>
+
+     <div class="modal-footer border-0 mt-3">
+
+            <button type="button" class="btn btn-danger px-5" style="border-radius: 25px;"  ng-repeat="each in CustomInvoiceData" ng-click="PrintClientCustomInvoice(each.Invoice_NO)">Print <i class="fa fa-print text-light" aria-hidden="true"></i></button>
+
+      </div>
+
+
+   </div>
+ </div>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Model for " PREVIEW CUSTOM INVOICE  " END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<!-- __________________________________________________________________________________________________________-->
+
+
+</div></div>
+{% endblock %}

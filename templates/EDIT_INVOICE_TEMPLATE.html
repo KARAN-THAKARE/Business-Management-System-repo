@@ -1,0 +1,689 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script src="/static/js/edit controller/edit invoice controller.js"></script>
+
+    {% endblock %}
+
+    {% block body %}
+
+    <div class="page" ng-controller="EDIT_INVOICE_CONTROLLER">
+
+      <!-- Main Navbar-->
+      <!-- ================================================================================================================================================= -->
+      <!-- ================================================================= Header Start =================================================================== -->
+      <header class="header"  ng-controller="HEADER~CONTROLLER">
+        <nav class="navbar">
+
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+
+              <div class="navbar-header">
+                <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+              </div>
+
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <!-- Header Bar-->
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Daily_Summary_model" ><img  src="/static/img/Header icon/data anaylsis.png" > Daily summary &nbsp; &nbsp; &nbsp; </li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"    href="#"  data-toggle="modal" data-target="#Stock_Summary_model" ><img src="/static/img/Header icon/stock.png" > Stock summary &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#Business_Book_model"><img src="/static/img/Header icon/business analysis.png" > Business Book  &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none"   href="#" data-toggle="modal" data-target="#GST_model"  ><img src="/static/img/Header icon/gst calculator.png" > GST Calculator &nbsp; &nbsp; &nbsp;</li>
+               <li class="nav-item d-flex align-items-center"><a class="text-decoration-none" href="#" data-toggle="modal" data-target="#Calculator_model "  ><img src="/static/img/Header icon/calculator.png" > Calculator &nbsp; &nbsp; &nbsp;</li>
+
+
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i style="font-size:27px;position: relative;top:-10px" class="fa fa-bell-o"></i><span class="badge bg-red badge-corner" style="position: relative;top:-20px;">..NotificationsLength..</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu" ng-show="NotificationsLength!=0">
+                    <li  ng-repeat="noti in Notifications"><a rel="nofollow" href="#" class="dropdown-item">
+                        <div class="notification row">
+                        <div>  <i class="fa fa-bell  ml-2" style="background:red" ng-show="noti.NOTIFICATION_TYPE=='reminder'"></i> <i class="fa fa-birthday-cake  ml-2" style="background:#1ad453" ng-show="noti.NOTIFICATION_TYPE=='birthday'"></i> </div>  <div class="col notification-content text-wrap text-justify" >..noti.NOTIFICATION_MESG.. </div>
+                     </div></a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1 pr-1 " ><img  src="/static/img/Header icon/online.png"  ng-show="online"> <img  src="/static/img/Header icon/offline.png"  ng-show="!online" style="width:30px;height:30px"></li>
+
+
+               <!-- battery-->
+                  <li class="nav-item">
+                         <div class="battery mx-3" >
+                           <div class="level">
+                             <div class="percentage"></div>
+                           </div>
+                           <div class="cindtr">
+                             <i id="bolt" class="fa fa-bolt boltcolor">
+                             </i>
+                           </div>
+                         </div>
+                         <!-- <div class="percent"></div>
+                         <div class="ntfn"></div> -->
+                </li>
+
+
+                <li class="nav-item d-flex align-items-center"><a class="text-decoration-none pl-1  " data-toggle="popover" id="Information"  data-trigger="hover" data-html="true" data-placement="bottom"   data-template='<div class="popover " role="tooltip"  style="background:#000"><div class="arrow " ></div><div class="popover-body"></div></div>'  ><img  src="/static/img/Header icon/info.png" > </li>
+                  <div id="InformationTemplate" class="d-none">
+                   
+
+                  </div>
+
+
+                <!-- Setting    -->
+                  <li class="nav-item d-flex align-items-center dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="/static/img/Header icon/settings.png"></a>
+                    <ul aria-labelledby="notifications" class="dropdown-menu" style="top:60px">
+                      <li><a rel="nofollow" href="/Setting/User Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-user" style="background:#05a586"></i>User Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Shop Profile" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-building" style="background:#e8c902"></i>Shop Profile</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Subscription" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-shopping-cart" style="background:#02b811"></i>Subscription</p>
+                      </a></li>
+                      <li><a rel="nofollow" href="/Setting/Terms & Condition" class="dropdown-item py-0 my-0">
+                            <p><i class="fa fa-bandcamp" style="background:#0244b8"></i>Set Terms & Condition</p>
+                      </a></li>
+                    </ul>
+                  </li>
+
+                <li class="nav-item"><a href="#" class="nav-link logout" ng-click="shutdownServer()"  ><img src="/static/img/Header icon/power.png"></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- ================================================================= Header End =================================================================== -->
+      <!-- ================================================================================================================================================= -->
+
+      <div class="page-content d-flex align-items-stretch">
+        <!-- ================================================================================================================================================= -->
+        <!-- ================================================================= Menu Start =================================================================== -->
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+               <a href="/Setting/User Profile" class="text-decoration-none"><div class="avatar"><img src="/static/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div></a>
+              <div class="title">
+              <a href="/Setting/User Profile" class="text-decoration-none"><h1 class="h4 text-capitalize" id="OWNER_NAME"></h1></a>
+                <p>Owner </p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+            <ul class="list-unstyled">
+              <li class=" list_color"><a href="/"> <i class="icon-home"></i><b>Home </b></a></li>
+              <li class="active list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Sale"> <i class="icon icon-check"></i><b>Sale</b></a>
+                <ul id="Sale" class="collapse list-unstyled Drop_list_color ">
+                  <li class="active"><a href="/AddNewInvoice.do">Add New Invoice</a></li>
+                  <li><a href="/ManageInvoice.do">Manage Invoices</a></li>
+                  <li><a href="/SaleAnalysis/1998">Sale Analysis <i class="icon icon-presentation pl-4"></i> </a></a></li>
+                  <li><a href="/ManageQuotation.do">Manage Quotation</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Purchase"> <i class="icon icon-bill"></i><b>Purchase</b></a>
+                <ul id="Purchase" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/AddNewPurchase.do">Add Purchase Bill</a></li>
+                  <li><a href="/ManagePurchaseBill.do">Manage Purchase Bill</a></li>
+                  <li><a href="/PurchaseAnalysis/1998">Purchase Analysis<i class="icon icon-presentation pl-1"></i> </a></a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Client"> <i class="icon icon-user"></i><b>Client / Suppliers</b></a>
+                <ul id="Client" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ClientDashboard">Client Dashboard</a></li>
+                  <li><a href="/ClientAnalysis/1998">Client Analysis <i class="icon icon-presentation pl-4"></i> </a></li>
+                  <li><a href="/SupplierDashboard">Supplier Dashboard</a></li>
+                      <li><a href="/SupplierAnalysis/1998">Supplier Analysis <i class="icon icon-presentation pl-2"></i> </a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Inventory"> <i class="icon icon-grid"></i><b>Inventory</b></a>
+                <ul id="Inventory" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/StockDashboard">Stock Dashboard</a></li>
+                  <li><a href="/InventoryDashboard">Inventory Dashboard</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Report"> <i class="fa fa-bar-chart"></i><b>Report</b></a>
+                <ul id="Report" class="collapse list-unstyled Drop_list_color">
+                  <li><a href="/PaymentReport">Payment</a></li>
+                  <li><a href="/StockReport">Stock</a></li>
+                  <li><a href="/SaleReport">Sales</a></li>
+                  <li><a href="/PurchaseReport">Purchase</a></li>
+                  <li><a href="/ClientReport">Client</a></li>
+                  <li><a href="/SupplierReport">Supplier</a></li>
+                  <li><a href="/TransactionReport">Transaction</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#Staff"> <i class="icon icon-user"></i><b>Staff</b></a>
+                <ul id="Staff" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/StaffDashboard">Staff Dashboard</a></li>
+                  <li><a href="/SalaryDashboard">Salary Dashboard</a></li>
+                </ul>
+              </li>
+              <li class="list_color"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse" data-target="#GST"> <i class="icon icon-bars"></i><b>Miscellaneous</b></a>
+                <ul id="GST" class="collapse list-unstyled Drop_list_color ">
+                  <li><a href="/ExpenseDashboard">Expense Dashboard</a></li>
+                  <li><a href="/ReminderDashboard">Reminder Dashboard</a></li>
+<li><a href="/CustomInvoiceMaker">Custom Invoice Maker</a></li>
+                </ul>
+              </li>
+
+              <li class="list_color bg-grey" ><a href="#" > <i class="icon icon-mail"></i><b>Email Marketing</b> </a></li>
+            </ul>
+
+            <div class="calendar">
+          <p id="monthName"></p>
+          <p id="dayName"></p>
+          <p id="dayNumber"></p>
+          <p id="year"></p>
+         </div>
+          </nav>
+
+          <!-- ================================================================= Menu END =================================================================== -->
+          <!-- ================================================================================================================================================= -->
+
+
+
+ <!-- >>>>>>>>>>> Main Container <<<<<<<<<<<  -->
+ <div class="content-inner" style="background:#f5f5f5; overflow: scroll;height:1px" >
+     <form id="Invoice_Form" autocomplete="off">
+<input type="hidden"  id="InvoiceID" value="{{InvoiceID}}">
+<!-- ================================================= First Row START ================================================= -->
+<div class="container-fluid" style="background:#f5f5f5;">
+  <p class="row  mt-2   mb-1" ><span style="border-radius:2px 5px 5px 2px;font-size:12px" class="bg-dark text-light px-3 py-1 ">Invoice Information : </span></p>
+<div class="row " >
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="InvoiceNumber" class="form-control-sm lable_define" >Invoice No.<span class="required">*</span></label>
+  <div class="input-group" >
+  <div class="input-group-prepend input_box_height " >
+  <div class="input-group-text rounded-left">#</div>
+  <input type="text" class="form-control form-control-sm rounded-right" id="InvoiceNumber"  ng-model="Invoice.InvoiceNumber"  style="width:240px" disabled>
+</div>  </div> </div>
+</div>
+
+<div class="col ">
+  <div class="form-group cols_pad">
+  <label for="Invoice_Type" class="form-control-sm lable_define" > Invoice Type <span class="required">*</span></label>
+  <div class="input-group">
+    <div class="input-group-prepend input_box_height" >
+    <div class="input-group-text rounded-left" ><i class="fa fa-file-o" aria-hidden="true"></i></div>
+  <select class="form-control form-control-sm rounded-right" ng-model="Invoice.it" id="Invoice_Type" ng-options="item for item in Invoice_TYPE"  style="font-size:15px;width:150px"></select>
+</div></div></div>
+</div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="Invoice_DATE" class="form-control-sm lable_define" >Invoice Date <span class="required">*</span></label>
+  <input  class="form-control form-control-sm rounded" type="date" id="Invoice_DATE" ng-model="Invoice.InvoiceDate" >
+</div>
+</div>
+
+<div class="col ">
+  <div class="form-group cols_pad">
+  <label for="Invoice_POS" class="form-control-sm lable_define" >Place of supply <span class="required">*</span></label>
+  <div class="input-group">
+    <div class="input-group-prepend input_box_height" >
+    <div class="input-group-text rounded-left"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
+  <select class="form-control form-control-sm rounded-right" ng-model="Invoice.POS" id="Invoice_POS" ng-options="state for state in States"  style="font-size:15px;width:150px"></select>
+</div></div></div>
+</div>
+
+<div class="col ">
+  <div class="form-group cols_pad">
+  <label for="SoldBy" class="form-control-sm lable_define" >Sold by</label>
+  <div class="input-group">
+    <div class="input-group-prepend input_box_height" >
+    <div class="input-group-text rounded-left"><i class="fa fa-user" aria-hidden="true"></i></div>
+  <select class="form-control form-control-sm rounded-right" ng-model="Invoice.SoldBy" id="SoldBy" ng-options="item for item in StaffNamelist"  style="font-size:15px;width:200px"></select>
+</div></div></div>
+</div>
+
+  </div>
+</div>
+<!-- =================================================  First Row END ========================================================= -->
+
+<!-- ===================================================== Second Row START ==================================================== -->
+<div class="container-fluid" style="background:#f5f5f5;">
+  <p class="row  mt-2" style="  color:#949494"><span style="border-radius:2px 5px 5px 2px;font-size:12px" class="bg-dark text-light px-3 py-1 ">Client Information : &nbsp;</span></p>
+<div class="row" > <!-- First row-->
+  <div class="col">
+    <div class="form-group cols_pad">
+    <label for="ClientName" class="form-control-sm lable_define" >Client Name <span class="required">*</span></label>
+    <div class="input-group" >
+    <div class="input-group-prepend input_box_height" >
+    <div class="input-group-text rounded-left"><i class="fa fa-user" aria-hidden="true"></i></div>
+    <input type="text" class="form-control form-control-sm rounded-right" id="ClientName"  ng-model="Invoice.ClientName"  style="width:240px" disabled>
+  </div>  </div> </div>
+  </div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="contactNo" class="form-control-sm lable_define" >Contact No. <span class="required">*</span></label>
+  <div class="input-group" >
+  <div class="input-group-prepend input_box_height" >
+  <div class="input-group-text rounded-left"><i class="fa fa-phone" aria-hidden="true"></i></div>
+  <input type="tel" maxlength="10" class="form-control form-control-sm" id="contactNo" disabled ng-model="Invoice.contactNo"  style="width:195px;" ><button type="button" ng-click="SearchClient()" class="btn btn-warning  text-white rounded-right" style="font-size:14px; background-image: linear-gradient(to bottom right, #e6da09 , #bf5a0d);border:#000" data-toggle="tooltip" data-placement="bottom" title='Enter client name or contact number to search .' data-trigger="hover" ><i class="fa fa-search" style="position: relative;top:-2px" aria-hidden="true"></i></button>
+</div>  </div> </div>
+</div>
+
+<div class="col-6">
+  <div class="form-group cols_pad">
+  <label for="Address" class="form-control-sm lable_define" >Address<span class="required">*</span></label>
+  <div class="input-group" >
+  <input type="text" class="form-control form-control-sm rounded"  id="Address"  ng-model="Invoice.Address"  style="width:550px"  disabled>
+ </div> </div>
+</div>
+</div>
+<!-- =================================================  Second Row END ========================================================= -->
+
+<!-- ===================================================== Third Row START ==================================================== -->
+<div class="row" >
+
+  <div class="col">
+    <div class="form-group cols_pad">
+    <label for="state" class="form-control-sm lable_define" >State<span class="required">*</span></label>
+    <div class="input-group" >
+   <input type="text" class="form-control form-control-sm rounded"  id="state"  ng-model="Invoice.state"   disabled>
+
+  </div></div></div>
+
+  <div class="col">
+    <div class="form-group cols_pad">
+    <label for="city" class="form-control-sm lable_define" >City<span class="required">*</span></label>
+    <div class="input-group" >
+   <input type="text" class="form-control form-control-sm rounded"  id="state"  ng-model="Invoice.city"  disabled >
+  </div></div></div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="Pincode" class="form-control-sm lable_define" >Pincode </label>
+  <div class="input-group" >
+  <input type="text" class="form-control form-control-sm rounded" id="Pincode"  ng-model="Invoice.Pincode"   disabled>
+</div> </div>
+</div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="PAN" class="form-control-sm lable_define" >PAN Number</label>
+  <div class="input-group" >
+  <input type="text" class="form-control form-control-sm rounded" id="PAN"  ng-model="Invoice.PAN"  disabled>
+</div>  </div>
+</div>
+
+<div class="col">
+  <div class="form-group cols_pad">
+  <label for="Email" class="form-control-sm lable_define" >Email</label>
+  <div class="input-group" >
+  <input type="email" class="form-control form-control-sm rounded" id="Email"  ng-model="Invoice.Email"  disabled>
+</div>  </div>
+</div>
+
+</div>
+</div>
+<!-- =================================================  Third Row END ========================================================= -->
+
+<!-- ===================================================== Fourth Row START ==================================================== -->
+
+          <div class="container-fluid" style="background:#f5f5f5;">
+          <div class="row" >
+
+          <div class="col" >
+          <div class="form-group cols_pad" style="width:295px">
+
+          <label for="SelectedItem" class="form-control-sm lable_define " >Item</label>
+
+          <input class="form-control form-control-sm rounded-left"  list=text_editors ng-model="Item_Name.selectedItemName" id="SelectedItem" style="width:254px;" placeholder="Search"  autocomplete="off" ng-disabled="Disabled_Field">
+          <datalist id="text_editors"  >
+              <select >
+                <option ng-repeat="i in FETCH_ITEM_NAME_LIST" value="..i.Item_name.." autocomplete="off" >..i.Item_name..</option>
+              </select>
+            </datalist>
+
+          <button type="button" id="add_Item_details" class="btn btn-warning text-white rounded-right" ng-click="SelectedItem(Item_Name,Invoice)" style="width:36px;position:relative;top:-32px;font-size:14px;left:253px;background-image: linear-gradient(to bottom right, #e6da09 , #bf5a0d);border:none"  ng-disabled="Disabled_Field"><i class="fa fa-search" ></i></button>
+          </div>
+          </div>
+
+
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="Invoice_qty" class="form-control-sm lable_define" >Quantity</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_qty" ng-change="TotalItemAmount()"  ng-model="Invoice.qty" ng-disabled="makeItOff"  min=1 >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad" >
+          <label for="Invoice_SP" class="form-control-sm lable_define" >S. Price</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_SP"  ng-change="TotalItemAmount()"  ng-model="Invoice.sp"  ng-disabled="makeItOff"  style="width:100px"  min=0 >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="Invoice_dsic" class="form-control-sm lable_define" >Discount</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_dsic" ng-change="TotalItemAmount()"  step=".1" ng-model="Invoice.disc"  ng-disabled="makeItOff"  min=0  >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="cgst" class="form-control-sm lable_define" >CGST</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_cgst" ng-change="TotalItemAmount()"  step=".1"  ng-model="Invoice.cgst" ng-disabled="makeItOff"  min=0   >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="sgst" class="form-control-sm lable_define" >SGST</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_sgst" ng-change="TotalItemAmount()"  step=".1"  ng-model="Invoice.sgst" ng-disabled="makeItOff"  min=0 >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="sgst" class="form-control-sm lable_define" >IGST</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_igst" ng-change="TotalItemAmount()"  step=".1" ng-model="Invoice.igst" ng-disabled="makeItOff"  min=0  >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="Invoice_cess" class="form-control-sm lable_define" >Cess</label>
+          <input type="number" class="form-control form-control-sm rounded" id="Invoice_cess" ng-change="TotalItemAmount()"  step=".1" ng-model="Invoice.cess" ng-disabled="makeItOff" min=0  >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+          <label for="Invoice_amt" class="form-control-sm lable_define" >Amount</label>
+          <input type="text" class="form-control form-control-sm rounded" id="Invoice_amt" ng-model="Invoice.amt"  style="width:100px" ng-disabled=true >
+          </div>
+          </div>
+          <div class="col">
+          <div class="form-group cols_pad">
+            <button type="button" class="btn btn-warning text-white " id="Add_Stock_TO_Bucket_Button" ng-click="Add_Stock_TO_Bucket(Item_Name,Invoice,FETCH_ITEM_NAME_LIST)" ng-disabled="Plus_Button" style="position:relative;top:19px;font-size:19px;background-image: linear-gradient(to bottom right, #e6da09 , #bf5a0d);border:none">+</button>
+          </div>
+          </div>
+          </div>
+          <!-- ===================================================== Fourth Row END ==================================================== -->
+
+          <!-- ===================================================== Fifth Row START (TABLE)  =========================================  -->
+          <div class="mt-0" style="background:#f5f5f5;"> <!-- third row ##Table-->
+            <table class="table table-borderless table-sm" style="text-align:center;">
+              <thead>
+                <tr style="background:#2f333e;color:white">
+                  <th scope="col" style="border-radius:7px 0px 0px 0px">S.No</th>
+                  <th scope="col" class="float-left">Item Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">CGST</th>
+                  <th scope="col">SGST</th>
+                  <th scope="col">IGST</th>
+                  <th scope="col">Cess</th>
+                  <th scope="col">Discount</th>
+                  <th scope="col" >Total Price</th>
+                  <th style="border-radius:0px 7px 0px 0px"></th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#FFFFE1;" ng-repeat="i in Bucket">
+                  <th scope="row">..i.SrNo..</th>
+                  <th class="float-left">..i.Stock_Name..</th>
+                  <td>  ..i.Qty..</td>
+                  <td> <i class="fa fa-inr " ></i> ..i.Sell_Price..</td>
+                  <td>..i.CGST.. %</td>
+                  <td>..i.SGST.. %</td>
+                  <td>..i.IGST.. %</td>
+                  <td>..i.Cess.. %</td>
+                  <td class="text-danger">..i.Discount.. %</td>
+                  <td><i class="fa fa-inr " ></i> ..i.Amount..</td>
+                  <td><i class="fa fa-trash" style="color:red;font-size:20px" ng-click="Delete_Item_From_Bucket(i.ID,Invoice)"  ng-show="!Disabled_Field"></i></td>
+                </tr>
+                <tr ng-show="BucketSize==0">
+                  <th colspan="11" style="background:#FFFFE1;" > Empty Bucket !!!</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+          <!-- ===================================================== Fifth Row END ==================================================== -->
+
+
+<!-- ===================================================== BOTTOM START  =========================================  -->
+<div class="container-fluid mt-2" style="background:#f5f5f5;">
+<hr>
+<table class="table table-borderless table-sm">
+  <tbody>
+    <!-- FIRST ROW-->
+    <tr>
+      <th scope="row" ><input type="checkbox"  id="Apply_Discount"  ng-model="Invoice.Apply_Discount"  ng-click="ZERO_BOTH_FIELD(Invoice)" style="position:relative;top:22px"  ng-disabled="Shipping || BucketSize<1 || Disabled_Field"></th>
+      <td  style="width:180px;vertical-align: middle;">
+        <label  for="Apply_Discount" class="form-control-sm  "  >Apply Discount</label>
+      </td>
+      <td  style="width: 10%;">
+        <label for="Disc_in_percentage" class="form-control-sm lable_define"  >Dis. in Percent</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">%</div>
+        <input type="number" class="form-control form-control-sm rounded-right" id="Disc_in_percentage"  ng-change="FinalAmount(Invoice)"   ng-model="Invoice.Disc_in_percentage" ng-click="ZERO_AMOUNT_FIELD(Invoice)"  ng-disabled="!Invoice.Apply_Discount || BucketSize<1 || Disabled_Field" >
+        </div>
+      </td>
+      <td style="vertical-align: middle;width:5%;text-align:center" >or</td>
+      <td  style="width: 11%;">
+        <label for="Disc_in_amt" class="form-control-sm lable_define"  >Dis. in Amount</label>
+        <input type="number" class="form-control form-control-sm rounded" id="Disc_in_amt"  ng-change="FinalAmount(Invoice)"  ng-model="Invoice.Disc_in_amt" ng-click="ZERO_PERCENT_FIELD(Invoice)"  ng-disabled="!Invoice.Apply_Discount || BucketSize<1 || Disabled_Field"  >
+      </td>
+
+      <td colspan="2" style="width:22%;">
+        <div class="col ">
+          <div class="form-group cols_pad">
+          <label for="staff_gender" class="form-control-sm lable_define" >Payment Mode</label>
+          <div class="input-group">
+            <div class="input-group-prepend input_box_height" >
+            <div class="input-group-text rounded-left"><i class="fa fa-cc-visa" aria-hidden="true"></i></div>
+          <select class="form-control form-control-sm rounded-right" ng-model="Invoice.payment_mode" id="payment_mode" ng-options="item for item in PAYMENT_MODE"  style="font-size:15px;width:185px" ng-change="ChnageInPaymentMode(Invoice)" ng-disabled="Disabled_Field"></select>
+        </div></div></div>
+      </div>
+      </td>
+
+      <td style="background:#FFFFE1;padding:0px;">
+      <p style="position:relative;top:11px;left:35px"><span style="font-size:15px;font-weight: 600;">Total  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;Rs. ..Invoice.Fixed_Sub_Total..</span> <br>
+       <span style="font-size:15px;font-weight: 600;">Discount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; ..Discount_String.. </span> <br>
+        <span style="font-size:15px;font-weight: 600;">Shipping Amt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; Rs. ..Shipping_String.. </span>
+      </p>
+    </td>
+
+    </tr>
+
+    <!-- 2nd ROW-->
+    <tr>
+      <td scope="row"><input type="checkbox" id="Shipping" style="position:relative;top:17px" ng-change="FinalAmount(Invoice)" ng-model="Invoice.Apply_Shipping" ng-disabled="Shipping || BucketSize<1 || Disabled_Field" ></td>
+      <td style="vertical-align: middle;"><label  for="Shipping" class="form-control-sm  ">Add Shipping</label></td>
+      <td colspan="2">
+        <label for="ShippingAmt" class="form-control-sm lable_define" ng-show="Invoice.Apply_Shipping" >Shipping Amount</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" ng-show="Invoice.Apply_Shipping">
+        <div class="input-group-text rounded-left">₹</div>
+        <input type="number" class="form-control form-control-sm rounded-right" id="ShippingAmt" ng-change="FinalAmount(Invoice)" ng-model="Invoice.ShippingAmt" min=0  style="width:98px" onfocus="this.value=null" ng-disabled="Disabled_Field">
+        </div></div>
+      </td>
+      <td></td>
+
+
+      <td colspan="2">
+        <label for="TxnNo" class="form-control-sm lable_define GO_RIGHT"  ng-if="Invoice.payment_mode==''">Transaction ID </label>
+                <label for="TxnNo" class="form-control-sm lable_define GO_RIGHT"  ng-if="Invoice.payment_mode!=''">..Invoice.payment_mode.. Transaction ID </label>
+        <div class="input-group GO_RIGHT" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">#</div>
+        <input type="text" class="form-control form-control-sm rounded-right" id="TxnNo" ng-model="Invoice.TxnNo" ng-disabled="Disabled_Field"></div></div>
+      </td>
+      <td style="background:#FFFFE1;padding:0px;">
+      <p style="position:relative;top:11px;left:35px"><span style="font-size:17px;font-weight: 600;">Sub Total  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;Rs. ..Invoice.SubTotal..</span> <br>
+       <span style="font-size:21px;font-weight:600">Net Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;Rs. ..Invoice.TotalAmount...0</span>
+      </p>
+    </td>
+    </tr>
+
+
+    <!-- #3rd ROW-->
+    <tr>
+      <td scope="row"><input type="checkbox" id="EMI" style="position:relative;top:22px"  ng-model="Invoice.Apply_EMI" ng-change="FinalAmount(Invoice)"  disabled></td>
+      <td style="vertical-align: middle;"><label  for="EMI" class="form-control-sm lable_define" >Convert To EMI</label></td>
+      <td  colspan="2" style="padding:0px" >
+        <label for="EMI_Months" class="form-control-sm lable_define" ng-show="Invoice.Apply_EMI" >EMI Month's  <i style="font-size:22px;position:relative;left:37px;color:#0e14b5" class="fa fa-info-circle" aria-hidden="true" ng-show="Invoice.EMI_Months>0 && Invoice.EMI_PERCENT !== null && (Invoice.DP_in_Amount!==null && Invoice.DP_in_Percent!==null)" data-toggle="modal" data-target="#EMI_Breakup" ></i></label>
+        <select class="browser-default custom-select custom-select-sm rounded" style="font-size:14px;width:140px" ng-model="Invoice.EMI_Months" id="EMI_Months" ng-show="Invoice.Apply_EMI"  ng-change="FinalAmount(Invoice)"  ng-disabled="Disabled_Field">
+           <option selected disabled>..Invoice.EMI_Months.. Months</option>
+           <option value=3>3 Months</option>
+           <option value=6>6 Months</option>
+           <option value=9>9 Months</option>
+           <option value=12>12 Months</option>
+      </select>
+      </td>
+
+      <td>
+        <label for="EMI_PERCENT" class="form-control-sm lable_define" ng-show="Invoice.Apply_EMI">EMI %</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" ng-show="Invoice.Apply_EMI">
+        <div class="input-group-text rounded-left">%</div>
+        <input type="number" min=0 class="form-control form-control-sm rounded-right" id="EMI_PERCENT" ng-model="Invoice.EMI_PERCENT"  ng-click="On_Click_EMI_value_Zero(Invoice)" ng-change="FinalAmount(Invoice)"  ng-disabled="Disabled_Field"></div></div>
+      </td>
+
+      <td colspan="2">
+        <label for="Amount_Paid" class="form-control-sm lable_define GO_RIGHT" >Amount Paid</label>
+        <div class="input-group GO_RIGHT" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">₹</div>
+        <input type="number"  class="form-control form-control-sm rounded-right" id="Amount_Paid" ng-model="Invoice.Amount_Paid"  ng-change="PaidAmount(Invoice)"  ng-click="ZERO_AMOUNT_PAID_FIELD(Invoice)" ng-disabled="Invoice.Apply_EMI || BucketSize<1 || Disabled_Field"   required  ></div></div>
+      </td>
+
+<td style="vertical-align:bottom">&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-dark" style="position:relative;top:10px;height:50px;width:347px;left:8px;font-size:19px;background:black" ng-click="Submit(Invoice)">Submit</button>
+</td>
+    </tr>
+
+
+
+
+    <!-- #4TH ROW-->
+    <tr>
+      <td scope="row"></td>
+        <td style="vertical-align: middle;"><span ng-show="Invoice.Apply_EMI" >Down Payment</span></td>
+      <td  style="width: 12%;">
+        <label for="Disc_in_percentage" class="form-control-sm lable_define" ng-show="Invoice.Apply_EMI"  >in Percent</label>
+        <div class="input-group" >
+        <div class="input-group-prepend input_box_height" ng-show="Invoice.Apply_EMI" >
+        <div class="input-group-text rounded-left">%</div>
+        <input type="number" class="form-control form-control-sm rounded-right"  id="Disc_in_percentage" ng-model="Invoice.DP_in_Percent" ng-click="ZERO_AMOUNT_FIELD_FOR_DP(Invoice)"  ng-change="FinalAmount(Invoice)"  ng-disabled="Disabled_Field" >
+        </div>
+      </td>
+      <td style="vertical-align: middle;text-align:center" ><span ng-show="Invoice.Apply_EMI">or</span></td>
+
+      <td>
+        <label for="Disc_in_amt" class="form-control-sm lable_define"  ng-show="Invoice.Apply_EMI" >in Amount</label>
+        <input type="number" min=0 class="form-control form-control-sm rounded" id="Disc_in_amt" ng-model="Invoice.DP_in_Amount" ng-click="ZERO_PERCENT_FIELD_FOR_DP(Invoice)"  ng-show="Invoice.Apply_EMI" ng-change="FinalAmount(Invoice)"    ng-disabled="Disabled_Field">
+      </td>
+
+      <td colspan="2">
+        <label for="BalanceAmount" class="form-control-sm lable_define GO_RIGHT" >Balance Amount<span class="required">*</span></label>
+        <div class="input-group GO_RIGHT" >
+        <div class="input-group-prepend input_box_height" >
+        <div class="input-group-text rounded-left">₹</div>
+        <input type="text" class="form-control form-control-sm rounded-right" id="BalanceAmount" ng-model="Invoice.BalanceAmount" ng-disabled="true" required></div></div>
+        <td style="vertical-align:bottom;">
+         <button type="button" class="btn btn-warning ml-4 mt-2 mb-0"  style="width:347px;height:50px;font-size:18px;background:#dede31;" title="Button is disabled"  disabled>Create New</button>
+        </td>
+
+  </tbody>
+</table>
+
+</div>
+
+<div class="container-fluid" style=" width: 100%; background: #2f333e; color: #fff; padding: 20px 55px;font-size:13px">
+  <div class="row">
+    <div class="col-sm-12">
+    <p>This computer software is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this Software , or any portion of it  may result in severe civil and criminal penalties , and will be prosecuted to maximum extend possible under the law . <span style="color:#39FF14">Karan Thakare &copy; 2021-2020</span></p>
+    </div>
+    <div class="col-sm-6 text-right">
+    </div>
+  </div>
+</div>
+
+
+          </div>
+        </div>
+      </form>
+
+
+ ======================================================================================================================================
+     ****************************************************************  Show EMI Breakup *************************************************************
+     ============================================================================================================================================= -->
+
+       <div class="modal fade" id="EMI_Breakup" role="dialog" >
+         <div class="modal-dialog" style="top:100px;right:150px">
+           <!-- Modal content-->
+           <div class="modal-content border-0" style="width:850px !important;border-radius:25px;">
+             <div class="modal-header border-0">
+               <h5 class="text-white py-2 px-3" style="border-radius:50px 50px 50px 50px;background:linear-gradient(to right,#000428,#004e92);" >EMI BREAKOUT</h5>
+
+               <button type="button" class="close" data-dismiss="modal" >&times;</button>
+             </div>
+           <form id="AddStockForm">
+           <div class="modal-body">
+        <!-- Page Header-->
+        <!-- First container -->
+       <div class="container-fluid">
+         <table class="table table-bordered table-hover " style="text-align:center" >
+           <thead>
+            <th scope="col" colspan="5" >OVERALL BREAKOUT</th>
+             <tr>
+               <th scope="col">Total Amount</th>
+               <th scope="col">Down payment</th>
+               <th scope="col" colspan="2">EMI Amount</th>
+               <th scope="col">Overall Cost</th>
+             </tr>
+           </thead>
+
+           <tbody>
+             <tr>
+               <td>₹..Invoice.TotalAmount..</td>
+               <td ng-if="Invoice.DP_in_Amount!==null && Invoice.DP_in_Amount!=0">₹..Invoice.DP_in_Amount..</td>
+               <td ng-if="Invoice.DP_in_Percent!==null && Invoice.DP_in_Percent!=0">..Invoice.DP_in_Percent..% (₹..Invoice.TotalAmount*Invoice.DP_in_Percent*0.01..)</td>
+               <td ng-if="Invoice.DP_in_Percent==0 && Invoice.DP_in_Amount==0">₹0</td>
+               <td colspan="2">Rs. ..Invoice.x.. @..Invoice.EMI_PERCENT..% For ..Invoice.EMI_Months.. Month's</td>
+               <td>Rs. ..Invoice.y.. </td>
+             </tr>
+             <tr>
+               <tr>
+                  <th scope="col" colspan="5" style="background:black;color:#fff">MONTH'S WISE BREAKOUT</th>
+               </tr>
+               <tr ng-repeat="each in breakout track by $index">
+                 <td colspan="4" >Month .. $index + 1 .. </td>
+                 <td>Rs. ..each..</td>
+               </tr>
+               <tr style="background:#d4d4d4;color:#000">
+                 <td colspan="4" >Extra Amount to be paid </td>
+                 <td>Rs. ..Invoice.z..</td>
+               </tr>
+           </tbody>
+
+         </table>
+             </div>
+           </div>
+          </form>
+         </div>
+      </div>
+    </div>
+     <!-- ============================================================================================================================================
+      *********************************************************** END  Show EMI Breakup END ********************************************************
+      ============================================================================================================================================= -->
+
+    </div>
+<script type="text/javascript">
+    $('#contactNo ').keyup(function () {
+      this.value = this.value.replace(/[^0-9\.]/g,'');
+    });
+    document.getElementById('Pincode').addEventListener('input', function (e) {
+    e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{3})/g, '$1 ').trim();
+   });
+
+</script>
+
+{% endblock %}
